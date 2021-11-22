@@ -8,8 +8,8 @@ CREATE TABLE IF NOT EXISTS user (
 CREATE TABLE IF NOT EXISTS project (
 	id INT PRIMARY KEY AUTO_INCREMENT,
     name VARCHAR(40) NOT NULL,
-    category ENUM('IT') NOT NULL,
-    description VARCHAR(200) NOT NULL,
+    category ENUM('IT'),
+    description VARCHAR(200),
 	UNIQUE (id, name)
 );
 
