@@ -1,4 +1,4 @@
-package pl.edu.pw.dto;
+package pl.edu.pw.domain.api.dto;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -11,7 +11,7 @@ import javax.validation.constraints.Size;
 @Data
 @Setter(AccessLevel.NONE)
 @AllArgsConstructor
-public class ProjectDTO {
+public class ProjectSaveRequest {
 
     @NotNull
     @Size(max=40)
@@ -22,12 +22,12 @@ public class ProjectDTO {
     @Size(max=200)
     private String description;
 
-    public ProjectDTO(String name, String category) {
+    public ProjectSaveRequest(String name, String category) {
         this.name = name;
         this.category = category;
     }
 
-    public ProjectDTO(String name) {
+    public ProjectSaveRequest(String name) {
         this.name=name;
     }
 

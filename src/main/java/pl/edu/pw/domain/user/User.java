@@ -1,14 +1,15 @@
-package pl.edu.pw.domain;
+package pl.edu.pw.domain.user;
 
 import lombok.*;
-import pl.edu.pw.domain.security.PasswordSecurity;
+import pl.edu.pw.security.PasswordSecurity;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 
 @NoArgsConstructor
 @Entity
 @Table(name="user")
+@Setter(AccessLevel.PUBLIC)
+@Getter(AccessLevel.PUBLIC)
 public class User implements PasswordSecurity {
     public void setId(int id) {
         this.id = id;
@@ -32,7 +33,7 @@ public class User implements PasswordSecurity {
         return null;
     }
 
-    public User(String email, String password, String name){
+    public User(String email, String password, String name) {
         this.email=email;
         this.password=password;
         this.name=name;
