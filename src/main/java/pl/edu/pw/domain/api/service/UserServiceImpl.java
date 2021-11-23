@@ -3,7 +3,7 @@ package pl.edu.pw.domain.api.service;
 import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import pl.edu.pw.domain.api.dto.UserUpdateRequest;
+import pl.edu.pw.domain.api.dto.userDTO.UserUpdateRequest;
 import pl.edu.pw.domain.repository.UserRepository;
 import pl.edu.pw.domain.user.User;
 

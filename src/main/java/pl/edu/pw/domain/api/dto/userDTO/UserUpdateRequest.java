@@ -1,17 +1,16 @@
-package pl.edu.pw.domain.api.dto;
+package pl.edu.pw.domain.api.dto.userDTO;
 
 import lombok.AccessLevel;
 import lombok.Data;
+import lombok.Getter;
 import lombok.Setter;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-@Data
-@Setter(AccessLevel.PUBLIC)
+@Getter
 public class UserUpdateRequest {
 
-    @NotNull
     @Size(max=50)
     private String email;
 

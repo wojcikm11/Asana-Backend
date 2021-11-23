@@ -8,8 +8,8 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Entity
 @Table(name="user")
-@Setter(AccessLevel.PUBLIC)
-@Getter(AccessLevel.PUBLIC)
+@Setter
+@Getter
 public class User implements PasswordSecurity {
     public void setId(int id) {
         this.id = id;
