@@ -1,10 +1,25 @@
+use asana;
+
+
 CREATE TABLE IF NOT EXISTS user (
 	id INT PRIMARY KEY AUTO_INCREMENT,
     email VARCHAR(50) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
     name VARCHAR(30) NOT NULL,
     enabled BOOLEAN,
-    disabled BOOLEAN
+    locked BOOLEAN
+);
+
+CREATE TABLE IF NOT EXISTS token (
+	id INT PRIMARY KEY AUTO_INCREMENT,
+    token VARCHAR(255) NOT NULL,
+    created_at DATETIME NOT NULL,
+    expires_at DATETIME NOT NULL,
+    confirmed_at DATETIME,
+    user_id INT NOT NULL,
+	FOREIGN KEY (user_id) REFERENCES user (id)
+    
+    
 );
 
 CREATE TABLE IF NOT EXISTS project (

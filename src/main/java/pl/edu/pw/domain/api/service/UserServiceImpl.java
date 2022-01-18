@@ -17,6 +17,7 @@ import pl.edu.pw.security.token.ConfirmationToken;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -80,9 +81,10 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     public String signUpUser(User user){
-        boolean userExists = userRepository.findByEmail(user.getEmail()).isPresent();
+       boolean userExists = userRepository.findByEmail(user.getEmail()).isPresent();
+        System.out.println("\n"+userExists+"\n");
         if(userExists ){
-            throw new IllegalStateException("User with this email already exists");
+            throw new IllegalStateException("User with this email already exists: "+user.getEmail());
         }
 
         String psw = bCryptPasswordEncoder.encode(user.getPassword());
@@ -101,7 +103,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public int enableUser(String email) {
-        return userRepository.enableAppUser(email);
+        return userRepository.enableUser(email);
     }
 
     private static class UserMapper {

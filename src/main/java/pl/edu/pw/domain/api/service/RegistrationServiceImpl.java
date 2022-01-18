@@ -29,16 +29,17 @@ public class RegistrationServiceImpl implements RegistrationService {
 
         String token = userService.signUpUser(
                 new User(
-                        request.getName(),
+
                         request.getEmail(),
-                        request.getPassword()
+                        request.getPassword(),
+                        request.getName()
                 )
         );
 
         String link = "http://localhost:8080/api/registration/confirm?token="+token;
         emailSenderService.send(request.getEmail(),buildEmail(request.getEmail(),link));
 
-        return userService.signUpUser(new User(request.getEmail(),request.getPassword(),request.getName()));
+        return token;
     }
 
     @Override
