@@ -1,19 +1,33 @@
 package pl.edu.pw.domain.api.service;
 
 import javassist.NotFoundException;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import pl.edu.pw.domain.api.dto.userDTO.UserUpdateRequest;
+import pl.edu.pw.domain.repository.ConfirmationTokenRepository;
 import pl.edu.pw.domain.repository.UserRepository;
 import pl.edu.pw.domain.user.User;
+import pl.edu.pw.security.token.ConfirmationToken;
 
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 @Service
-public class UserServiceImpl implements UserService {
+@AllArgsConstructor
+public class UserServiceImpl implements UserService, UserDetailsService {
 
     private UserRepository userRepository;
+    @Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
+    @Autowired
+    private ConfirmationTokenServiceImpl confirmationTokenService;
 
     @Autowired
     public UserServiceImpl(UserRepository userRepository) {
@@ -56,6 +70,38 @@ public class UserServiceImpl implements UserService {
         user.setName(userUpdateRequest.getName());
         user.setPassword(userUpdateRequest.getPassword());
         userRepository.save(user);
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+
+        return userRepository.findByEmail(email).orElseThrow(()->
+                new UsernameNotFoundException("User with email: "+email+" not found"));
+    }
+
+    public String signUpUser(User user){
+        boolean userExists = userRepository.findByEmail(user.getEmail()).isPresent();
+        if(userExists ){
+            throw new IllegalStateException("User with this email already exists");
+        }
+
+        String psw = bCryptPasswordEncoder.encode(user.getPassword());
+        user.setPassword(psw);
+
+
+        userRepository.save(user);
+
+        String token = UUID.randomUUID().toString();
+        ConfirmationToken confirmationToken = new ConfirmationToken(token, LocalDateTime.now(),LocalDateTime.now().plusMinutes(15),user);
+        confirmationTokenService.saveConfirmationToken(confirmationToken);
+
+
+        return token;
+    }
+
+    @Override
+    public int enableUser(String email) {
+        return userRepository.enableAppUser(email);
     }
 
     private static class UserMapper {

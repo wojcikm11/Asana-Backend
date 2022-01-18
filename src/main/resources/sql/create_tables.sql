@@ -1,8 +1,10 @@
 CREATE TABLE IF NOT EXISTS user (
 	id INT PRIMARY KEY AUTO_INCREMENT,
     email VARCHAR(50) NOT NULL UNIQUE,
-    password VARCHAR(40) NOT NULL,
-    name VARCHAR(30) NOT NULL
+    password VARCHAR(255) NOT NULL,
+    name VARCHAR(30) NOT NULL,
+    enabled BOOLEAN,
+    disabled BOOLEAN
 );
 
 CREATE TABLE IF NOT EXISTS project (
