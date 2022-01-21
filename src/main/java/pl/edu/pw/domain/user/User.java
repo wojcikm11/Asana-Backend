@@ -9,6 +9,7 @@ import pl.edu.pw.security.token.ConfirmationToken;
 import javax.persistence.*;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 @NoArgsConstructor
 @Entity
@@ -17,13 +18,10 @@ import java.util.List;
 @Getter
 @EqualsAndHashCode
 public class User implements PasswordSecurity, UserDetails {
-    public void setId(int id) {
-        this.id = id;
-    }
 
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
-    private int id;
+    private Long id;
 
     @Column(nullable = false, length=50, unique = true)
     private String email;
@@ -40,7 +38,23 @@ public class User implements PasswordSecurity, UserDetails {
     @Column
     private boolean enabled;
 
+    @OneToMany(
+            mappedBy="user",
+            cascade=CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private List<TeamMember> teams;
 
+    @ManyToMany(cascade = {
+            CascadeType.PERSIST,
+            CascadeType.MERGE
+    })
+    @JoinTable(
+            name="favorites",
+            joinColumns = @JoinColumn(name="user_id"),
+            inverseJoinColumns = @JoinColumn(name="project_id")
+    )
+    private Set<Project> favoriteProjects;
 
     @Override
     public String encrypt(String password) {
@@ -53,6 +67,22 @@ public class User implements PasswordSecurity, UserDetails {
         this.name=name;
         this.locked = false;
         this.enabled = false;
+    }
+
+    public void addTeam(Team team) {
+        TeamMember teamMember = new TeamMember(this, team, TeamMember.Role.MEMBER);
+        teams.add(teamMember);
+        team.getMembers().add(teamMember);
+    }
+
+    public void addToFavorite(Project favoriteProject) {
+        favoriteProjects.add(favoriteProject);
+        favoriteProject.getUsersFavouritePosts().add(this);
+    }
+
+    public void removeFromFavorites(Project favoriteProject) {
+        favoriteProjects.remove(favoriteProject);
+        favoriteProject.getUsersFavouritePosts().remove(this);
     }
 
     @Override

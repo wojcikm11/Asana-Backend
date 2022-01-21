@@ -44,6 +44,14 @@ CREATE TABLE IF NOT EXISTS team_member (
     FOREIGN KEY (team_id) REFERENCES team (id)
 );
 
+CREATE TABLE IF NOT EXISTS project_team (
+    team_id INT NOT NULL,
+    project_id INT NOT NULL,
+    PRIMARY KEY (team_id, project_id),
+    FOREIGN KEY (team_id) REFERENCES team (id),
+    FOREIGN KEY (project_id) REFERENCES project (id)
+);
+
 CREATE TABLE IF NOT EXISTS favorites (
 	user_id INT NOT NULL,
     project_id INT NOT NULL,
