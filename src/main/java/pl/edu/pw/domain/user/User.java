@@ -7,9 +7,7 @@ import pl.edu.pw.security.config.PasswordSecurity;
 import pl.edu.pw.security.token.ConfirmationToken;
 
 import javax.persistence.*;
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @NoArgsConstructor
 @Entity
@@ -39,11 +37,11 @@ public class User implements PasswordSecurity, UserDetails {
     private boolean enabled;
 
     @OneToMany(
-            mappedBy="user",
-            cascade=CascadeType.ALL,
+            mappedBy = "user",
+            cascade = CascadeType.ALL,
             orphanRemoval = true
     )
-    private List<TeamMember> teams;
+    private List<TeamMember> teams = new ArrayList<>();
 
     @ManyToMany(cascade = {
             CascadeType.PERSIST,
@@ -54,7 +52,14 @@ public class User implements PasswordSecurity, UserDetails {
             joinColumns = @JoinColumn(name="user_id"),
             inverseJoinColumns = @JoinColumn(name="project_id")
     )
-    private Set<Project> favoriteProjects;
+    private Set<Project> favoriteProjects = new HashSet<>();
+
+    @OneToMany(
+            mappedBy = "user",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private List<ProjectMember> projects = new ArrayList<>();
 
     @Override
     public String encrypt(String password) {
