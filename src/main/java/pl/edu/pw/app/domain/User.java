@@ -73,21 +73,21 @@ public class User implements PasswordSecurity, UserDetails {
         this.enabled = false;
     }
 
-//    public void addTeam(Team team) {
-//        TeamMember teamMember = new TeamMember(this, team, TeamMember.Role.MEMBER);
-//        teams.add(teamMember);
-//        team.getMembers().add(teamMember);
-//    }
-//
-//    public void addToFavorite(Project favoriteProject) {
-//        favoriteProjects.add(favoriteProject);
-//        favoriteProject.getUsersFavouritePosts().add(this);
-//    }
-//
-//    public void removeFromFavorites(Project favoriteProject) {
-//        favoriteProjects.remove(favoriteProject);
-//        favoriteProject.getUsersFavouritePosts().remove(this);
-//    }
+    public void addTeam(Team team) {
+        TeamMember teamMember = new TeamMember(this, team, TeamMember.Role.MEMBER);
+        teams.add(teamMember);
+        team.getMembers().add(teamMember);
+    }
+
+    public void addToFavorite(Project favoriteProject) {
+        favoriteProjects.add(favoriteProject);
+        favoriteProject.getUsersFavouritePosts().add(this);
+    }
+
+    public void removeFromFavorites(Project favoriteProject) {
+        favoriteProjects.remove(favoriteProject);
+        favoriteProject.getUsersFavouritePosts().remove(this);
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

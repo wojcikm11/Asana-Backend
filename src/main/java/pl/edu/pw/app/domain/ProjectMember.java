@@ -29,16 +29,16 @@ public class ProjectMember {
 
     private String role;
 
-//    @ManyToMany(mappedBy = "projectMembers")
-//    private Set<Task> task = new HashSet<>();
-//
-//    @ManyToMany(mappedBy = "projectMembers")
-//    private Set<Subtask> subtasks = new HashSet<>();
+    @ManyToMany(mappedBy = "projectMembers")
+    private Set<Task> task = new HashSet<>();
 
-//    @OneToMany(
-//            mappedBy = "projectMember",
-//            cascade = CascadeType.ALL,
-//            orphanRemoval = true
-//    )
-//    private List<Message> messages = new ArrayList<>();
+    @ManyToMany(mappedBy = "projectMembers")
+    private Set<Subtask> subtasks = new HashSet<>();
+
+    @OneToMany(
+            mappedBy = "projectMember",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private List<Message> messages = new ArrayList<>();
 }
