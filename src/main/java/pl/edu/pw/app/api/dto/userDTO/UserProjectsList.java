@@ -1,8 +1,8 @@
-package pl.edu.pw.domain.api.dto.userDTO;
+package pl.edu.pw.app.api.dto.userDTO;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import pl.edu.pw.domain.model.Project;
+import pl.edu.pw.app.domain.Project;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;

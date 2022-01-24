@@ -1,4 +1,4 @@
-package pl.edu.pw.domain.model;
+package pl.edu.pw.app.domain;
 
 import lombok.*;
 

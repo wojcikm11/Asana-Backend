@@ -1,10 +1,10 @@
-package pl.edu.pw.domain.api.rest;
+package pl.edu.pw.app.api.rest;
 
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import pl.edu.pw.domain.api.dto.userDTO.UserCreateRequest;
-import pl.edu.pw.domain.api.service.RegistrationService;
-import pl.edu.pw.domain.api.service.UserService;
+import pl.edu.pw.app.api.dto.userDTO.UserCreateRequest;
+import pl.edu.pw.app.api.service.RegistrationService;
+import pl.edu.pw.app.api.service.UserService;
 
 @AllArgsConstructor
 @RestController

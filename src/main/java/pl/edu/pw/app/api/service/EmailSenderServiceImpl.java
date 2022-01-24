@@ -1,4 +1,4 @@
-package pl.edu.pw.domain.api.service;
+package pl.edu.pw.app.api.service;
 
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;

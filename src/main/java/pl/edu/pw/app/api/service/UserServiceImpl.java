@@ -1,4 +1,4 @@
-package pl.edu.pw.domain.api.service;
+package pl.edu.pw.app.api.service;
 
 import javassist.NotFoundException;
 import lombok.AllArgsConstructor;
@@ -8,9 +8,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import pl.edu.pw.domain.api.dto.userDTO.UserUpdateRequest;
-import pl.edu.pw.domain.repository.UserRepository;
-import pl.edu.pw.domain.model.User;
+import pl.edu.pw.app.api.dto.userDTO.UserUpdateRequest;
+import pl.edu.pw.app.repository.UserRepository;
+import pl.edu.pw.app.domain.User;
 import pl.edu.pw.security.token.ConfirmationToken;
 
 import java.sql.SQLException;

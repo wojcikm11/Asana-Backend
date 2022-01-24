@@ -1,9 +1,9 @@
-package pl.edu.pw.domain.api.service;
+package pl.edu.pw.app.api.service;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-import pl.edu.pw.domain.api.dto.userDTO.UserCreateRequest;
-import pl.edu.pw.domain.model.User;
+import pl.edu.pw.app.api.dto.userDTO.UserCreateRequest;
+import pl.edu.pw.app.domain.User;
 import pl.edu.pw.security.token.ConfirmationToken;
 import pl.edu.pw.security.validator.EmailValidator;
 

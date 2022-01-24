@@ -1,9 +1,9 @@
-package pl.edu.pw.domain.api.service;
+package pl.edu.pw.app.api.service;
 
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-import pl.edu.pw.domain.repository.ConfirmationTokenRepository;
+import pl.edu.pw.app.repository.ConfirmationTokenRepository;
 import pl.edu.pw.security.token.ConfirmationToken;
 
 import java.time.LocalDateTime;

@@ -9,7 +9,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import pl.edu.pw.domain.api.service.UserServiceImpl;
+import pl.edu.pw.app.api.service.UserServiceImpl;
 
 @Configuration
 @EnableWebSecurity

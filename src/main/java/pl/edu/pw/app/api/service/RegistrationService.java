@@ -1,6 +1,6 @@
-package pl.edu.pw.domain.api.service;
+package pl.edu.pw.app.api.service;
 
-import pl.edu.pw.domain.api.dto.userDTO.UserCreateRequest;
+import pl.edu.pw.app.api.dto.userDTO.UserCreateRequest;
 
 public interface RegistrationService {
 

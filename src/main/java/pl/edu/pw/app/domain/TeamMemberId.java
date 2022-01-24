@@ -1,4 +1,4 @@
-package pl.edu.pw.domain.model;
+package pl.edu.pw.app.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -12,10 +12,10 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
-public class ProjectMemberId implements Serializable {
+public class TeamMemberId implements Serializable {
 
-    @Column(name = "project_id")
-    private Long projectId;
+    @Column(name = "team_id")
+    private Long teamId;
 
     @Column(name = "user_id")
     private Long memberId;

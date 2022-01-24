@@ -1,4 +1,4 @@
-package pl.edu.pw.domain.api.dto.projectDTO;
+package pl.edu.pw.app.api.dto.projectDTO;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
