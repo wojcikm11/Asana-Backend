@@ -29,8 +29,9 @@ public class ProjectMember {
 
     private String role;
 
+
     @ManyToMany(mappedBy = "projectMembers")
-    private Set<Task> task = new HashSet<>();
+    private Set<Task> tasks = new HashSet<>();
 
     @ManyToMany(mappedBy = "projectMembers")
     private Set<Subtask> subtasks = new HashSet<>();

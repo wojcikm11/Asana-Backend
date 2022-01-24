@@ -18,7 +18,10 @@ public class Message {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @JoinColumns({
+            @JoinColumn(name = "user_id", insertable = false, updatable = false),
+            @JoinColumn(name = "project_id", insertable = false, updatable = false)
+    })
     private ProjectMember projectMember;
 
     @ManyToOne(fetch = FetchType.LAZY)

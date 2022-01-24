@@ -46,14 +46,6 @@ public class Task {
     })
     @JoinTable(name = "task_assignees",
             joinColumns = @JoinColumn(name = "task_id"),
-            inverseJoinColumns = @JoinColumn(name="user_id"))
+            inverseJoinColumns = { @JoinColumn(name="user_id"), @JoinColumn(name = "project_id") })
     private Set<ProjectMember> projectMembers = new HashSet<>();
-
-    public enum Priority {
-        LOW, MEDIUM, HIGH, VERY_HIGH
-    }
-
-    public enum Status {
-        UNDONE, DOING, DONE
-    }
 }

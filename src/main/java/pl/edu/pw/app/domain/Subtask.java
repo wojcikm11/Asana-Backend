@@ -3,6 +3,7 @@ package pl.edu.pw.app.domain;
 import lombok.*;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -27,6 +28,18 @@ public class Subtask {
     })
     @JoinTable(name = "subtask_assignees",
             joinColumns = @JoinColumn(name = "subtask_id"),
-            inverseJoinColumns = @JoinColumn(name="user_id"))
+            inverseJoinColumns = { @JoinColumn(name="user_id"), @JoinColumn(name = "project_id") })
     private Set<ProjectMember> projectMembers = new HashSet<>();
+
+    private String name;
+
+    private String description;
+
+    private LocalDateTime startDate;
+
+    private LocalDateTime deadLine;
+
+    private Priority priority;
+
+    private Status status;
 }
