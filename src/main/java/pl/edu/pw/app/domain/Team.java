@@ -10,11 +10,10 @@ import java.util.Set;
 
 @Entity
 @Table
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode
+
 public class Team {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
@@ -38,6 +37,16 @@ public class Team {
             joinColumns = @JoinColumn(name = "team_id"),
             inverseJoinColumns = @JoinColumn(name="project_id"))
     private Set<Project> projects = new HashSet<>();
+
+    public Team(String name,User user) {
+        TeamMember teamMember = new TeamMember(user, this, TeamMember.Role.MEMBER);
+        members.add(teamMember);
+        this.name=name;
+    }
+
+    public Team(String name){
+        this.name=name;
+    }
 
     public void addMember(User user) {
         TeamMember teamMember = new TeamMember(user, this, TeamMember.Role.MEMBER);
