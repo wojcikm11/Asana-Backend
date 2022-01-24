@@ -17,7 +17,7 @@ import java.util.Set;
 @EqualsAndHashCode
 public class ProjectMember {
     @EmbeddedId
-    private ProjectMemberId id;
+    private ProjectMemberId id = new ProjectMemberId();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("memberId")

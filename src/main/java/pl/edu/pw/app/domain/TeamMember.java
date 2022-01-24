@@ -13,7 +13,7 @@ import javax.persistence.*;
 public class TeamMember {
 
     @EmbeddedId
-    private TeamMemberId id;
+    private TeamMemberId id = new TeamMemberId();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("memberId")
@@ -28,6 +28,11 @@ public class TeamMember {
     public TeamMember(User user, Team team, Role role) {
         this.user = user;
         this.team = team;
+        this.role = role;
+    }
+
+    public TeamMember(User user, Role role) {
+        this.user = user;
         this.role = role;
     }
 
