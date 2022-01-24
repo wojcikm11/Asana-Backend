@@ -1,8 +1,8 @@
-package pl.edu.pw.app.api.service;
+package pl.edu.pw.domain.api.service;
 
-import pl.edu.pw.app.api.dto.userDTO.UserUpdateRequest;
+import pl.edu.pw.domain.api.dto.userDTO.UserUpdateRequest;
 import javassist.NotFoundException;
-import pl.edu.pw.app.domain.User;
+import pl.edu.pw.domain.model.User;
 
 import java.sql.SQLException;
 import java.util.List;

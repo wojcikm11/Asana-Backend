@@ -1,4 +1,4 @@
-package pl.edu.pw.app.api.dto.projectDTO;
+package pl.edu.pw.domain.api.dto.projectDTO;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -8,20 +8,17 @@ import javax.validation.constraints.Size;
 
 @AllArgsConstructor
 @Getter
-public class ProjectCompleteInfo {
+public class ProjectBasicInfo {
 
     @NotNull
     private int id;
 
     @NotNull
-    @Size(max = 40)
+    @Size(max=40)
     private String name;
-
-    private String category;
-
-    @Size(max = 200)
-    private String description;
 
     @NotNull
     private String owner;
+
+
 }

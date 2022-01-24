@@ -1,21 +1,22 @@
-package pl.edu.pw.app.api.dto.userDTO;
+package pl.edu.pw.domain.api.dto.userDTO;
+
 import lombok.*;
+
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 @Getter
 @AllArgsConstructor
-public class UserBasicInfo {
+public class UserUpdateRequest {
+
+    @Size(max=50)
+    private String email;
 
     @NotNull
-    private int id;
+    @Size(max=40)
+    private String password;
 
     @NotNull
     @Size(max=30)
     private String name;
-
-    @NotNull
-    @Size(max=50)
-    private String email;
-
 }

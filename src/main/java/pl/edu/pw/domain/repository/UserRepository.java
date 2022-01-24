@@ -1,10 +1,10 @@
-package pl.edu.pw.app.repository;
+package pl.edu.pw.domain.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
-import pl.edu.pw.app.domain.User;
+import pl.edu.pw.domain.model.User;
 
 import javax.transaction.Transactional;
 import java.util.Optional;

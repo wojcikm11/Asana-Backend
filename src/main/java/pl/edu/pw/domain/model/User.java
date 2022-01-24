@@ -1,4 +1,4 @@
-package pl.edu.pw.app.domain;
+package pl.edu.pw.domain.model;
 
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
