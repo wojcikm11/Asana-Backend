@@ -39,6 +39,11 @@ public class Team {
             inverseJoinColumns = @JoinColumn(name="project_id"))
     private Set<Project> projects = new HashSet<>();
 
+
+    public Team(String name){
+        this.name =name;
+    }
+
     public void addMember(User user) {
         TeamMember teamMember = new TeamMember(user, this, TeamMember.Role.MEMBER);
         members.add(teamMember);

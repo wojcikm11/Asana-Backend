@@ -39,17 +39,17 @@ public class Project {
     )
     private List<ProjectMember> members = new ArrayList<>();
 
-    @OneToMany(
-            mappedBy = "project",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true
-    )
-    private List<Task> tasks = new ArrayList<>();
+//    @OneToMany(
+//            mappedBy = "project",
+//            cascade = CascadeType.ALL,
+//            orphanRemoval = true
+//    )
+//    private List<Task> tasks = new ArrayList<>();
 
-    @OneToMany(
-            mappedBy = "project",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true
-    )
-    private List<Message> messages = new ArrayList<>();
+//    @OneToMany(
+//            mappedBy = "project",
+//            cascade = CascadeType.ALL,
+//            orphanRemoval = true
+//    )
+//    private List<Message> messages = new ArrayList<>();
 }
