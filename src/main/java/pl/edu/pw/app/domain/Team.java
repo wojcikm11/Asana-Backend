@@ -1,12 +1,11 @@
 package pl.edu.pw.app.domain;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table
@@ -15,8 +14,9 @@ import java.util.Set;
 @AllArgsConstructor
 
 public class Team {
+
     @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String name;
@@ -24,7 +24,9 @@ public class Team {
     @OneToMany(
             mappedBy = "team",
             cascade = CascadeType.ALL,
-            orphanRemoval = true
+            orphanRemoval = true,
+            fetch = FetchType.LAZY
+
     )
     private List<TeamMember> members = new ArrayList<>();
 
@@ -35,21 +37,30 @@ public class Team {
     })
     @JoinTable(name = "project_team",
             joinColumns = @JoinColumn(name = "team_id"),
-            inverseJoinColumns = @JoinColumn(name="project_id"))
+            inverseJoinColumns = @JoinColumn(name = "project_id"))
     private Set<Project> projects = new HashSet<>();
 
-    public Team(String name,User user) {
+
+
+
+    public Team(String name, User user) {
         TeamMember teamMember = new TeamMember(user, this, TeamMember.Role.MEMBER);
         members.add(teamMember);
-        this.name=name;
+        this.name = name;
     }
 
-    public Team(String name){
-        this.name=name;
+    public Team(String name) {
+        this.name = name;
     }
 
     public void addMember(User user) {
         TeamMember teamMember = new TeamMember(user, this, TeamMember.Role.MEMBER);
+        members.add(teamMember);
+        user.getTeams().add(teamMember);
+    }
+
+    public void addMember(User user, TeamMember.Role role) {
+        TeamMember teamMember = new TeamMember(user, this, role);
         members.add(teamMember);
         user.getTeams().add(teamMember);
     }
@@ -61,4 +72,19 @@ public class Team {
         teamMember.setTeam(null);
         teamMember.setUser(null);
     }
+
+    public boolean isOwner(String email) {
+        TeamMember member =
+                members
+                .stream().filter(
+                m-> m.getUser().getEmail().equals(email))
+                .findFirst()
+                .orElseThrow(()-> new IllegalArgumentException(ErrorMessage.NOT_PROJECT_MEMBER_EXCEPTION));
+        return member.getRole()== TeamMember.Role.OWNER;
+
+    }
+
+    private class ErrorMessage{
+        private static final String NOT_PROJECT_MEMBER_EXCEPTION ="User with the given email is not a member of this project";
+     }
 }

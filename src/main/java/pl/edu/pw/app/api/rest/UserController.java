@@ -1,6 +1,7 @@
 package pl.edu.pw.app.api.rest;
 
 import lombok.AllArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import pl.edu.pw.app.api.dto.userDTO.UserCreateRequest;
 import pl.edu.pw.app.api.service.RegistrationService;
@@ -25,4 +26,11 @@ public class UserController {
     public String confirm(@RequestParam("token") String token){
         return registrationService.confirmToken(token);
     }
+
+
+    @GetMapping("whoami")
+    public String elo(){
+        return  SecurityContextHolder.getContext().getAuthentication().getName();
+    }
+
 }
