@@ -11,7 +11,7 @@ import javax.validation.constraints.Size;
 public class ProjectCompleteInfo {
 
     @NotNull
-    private int id;
+    private Long id;
 
     @NotNull
     @Size(max = 40)

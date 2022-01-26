@@ -19,6 +19,12 @@ public class ProjectMember {
     @EmbeddedId
     private ProjectMemberId id = new ProjectMemberId();
 
+    public ProjectMember(User user, Project project, Role role) {
+        this.user = user;
+        this.project = project;
+        this.role = role;
+    }
+
     @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("memberId")
     private User user;
@@ -27,8 +33,7 @@ public class ProjectMember {
     @MapsId("projectId")
     private Project project;
 
-    private String role;
-
+    private Role role;
 
     @ManyToMany(mappedBy = "projectMembers")
     private Set<Task> tasks = new HashSet<>();
@@ -42,4 +47,8 @@ public class ProjectMember {
             orphanRemoval = true
     )
     private List<Message> messages = new ArrayList<>();
+
+    public enum Role {
+        OWNER, MEMBER;
+    }
 }
