@@ -1,9 +1,6 @@
 package pl.edu.pw.app.api.dto.projectDTO;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.Setter;
+import lombok.*;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -11,6 +8,7 @@ import javax.validation.constraints.Size;
 @Data
 @Setter(AccessLevel.NONE)
 @AllArgsConstructor
+@NoArgsConstructor
 public class ProjectCreateRequest {
 
     @NotNull

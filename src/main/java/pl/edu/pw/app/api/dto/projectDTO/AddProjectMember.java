@@ -2,21 +2,19 @@ package pl.edu.pw.app.api.dto.projectDTO;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 
 @AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @Setter
-public class ProjectUpdateRequest {
+public class AddProjectMember {
+    @NotNull
+    private Long projectId;
 
-    @Size(max=40)
-    private String name;
-
-    private String category;
-
-    @Size(max=200)
-    private String description;
+    @NotNull
+    private Long userId;
 }

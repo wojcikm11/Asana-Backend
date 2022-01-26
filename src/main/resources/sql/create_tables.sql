@@ -25,7 +25,7 @@ CREATE TABLE IF NOT EXISTS token (
 CREATE TABLE IF NOT EXISTS project (
 	id INT PRIMARY KEY AUTO_INCREMENT,
     name VARCHAR(40) NOT NULL,
-    category ENUM('IT'),
+    category VARCHAR(40),
     description VARCHAR(200),
 	UNIQUE (id, name)
 );
@@ -38,7 +38,7 @@ CREATE TABLE IF NOT EXISTS team (
 CREATE TABLE IF NOT EXISTS team_member (
 	user_id INT NOT NULL,
     team_id INT NOT NULL,
-    role ENUM('owner', 'member') NOT NULL,
+    role ENUM('OWNER', 'MEMBER') NOT NULL,
     PRIMARY KEY (user_id, team_id),
     FOREIGN KEY (user_id) REFERENCES user (id),
     FOREIGN KEY (team_id) REFERENCES team (id)
@@ -63,7 +63,7 @@ CREATE TABLE IF NOT EXISTS favorites (
 CREATE TABLE IF NOT EXISTS project_member (
 	user_id INT NOT NULL,
     project_id INT NOT NULL,
-    role VARCHAR(20),
+    role ENUM('OWNER', 'MEMBER') NOT NULL,
     PRIMARY KEY (user_id, project_id),
     FOREIGN KEY (user_id) REFERENCES user (id),
     FOREIGN KEY (project_id) REFERENCES project (id)
@@ -118,3 +118,7 @@ CREATE TABLE IF NOT EXISTS message (
     FOREIGN KEY (user_id) REFERENCES user (id),
     FOREIGN KEY (project_id) REFERENCES project (id)
 );
+
+
+ALTER TABLE project
+MODIFY COLUMN category VARCHAR(40)
