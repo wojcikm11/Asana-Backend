@@ -12,7 +12,7 @@ import java.util.List;
 public interface TeamService {
 
 //    user id
-    void addTeam(TeamCreateRequest team, Long id);
+    void addTeam(TeamCreateRequest team);
 //    team id
     void deleteTeam(Long id);
 

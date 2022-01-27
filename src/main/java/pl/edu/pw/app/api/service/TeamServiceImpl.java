@@ -28,7 +28,7 @@ public class TeamServiceImpl implements TeamService {
 
 
     @Override
-    public void addTeam(TeamCreateRequest team, Long id) {
+    public void addTeam(TeamCreateRequest team ){
         if (team.getName() == null || team.getName().isBlank()) {
             throw new IllegalArgumentException(EMPTY_TEAM_NAME_EXCEPTION);
         }
@@ -38,8 +38,8 @@ public class TeamServiceImpl implements TeamService {
             throw new IllegalArgumentException(USER_NOT_FOUND_EXCEPTION);
         });
 
-            Team newTeam = new Team(team.getName());
-            newTeam.addMember(user, TeamMember.Role.OWNER);
+            Team newTeam = new Team(team.getName(),user);
+//            newTeam.addMember(user, TeamMember.Role.OWNER);
             teamRepository.save(newTeam);
     }
 

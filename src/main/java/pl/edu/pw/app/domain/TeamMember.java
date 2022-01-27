@@ -1,6 +1,7 @@
 package pl.edu.pw.app.domain;
 
 import lombok.*;
+import org.springframework.context.annotation.Configuration;
 
 import javax.persistence.*;
 
@@ -23,7 +24,8 @@ public class TeamMember {
     @MapsId("teamId")
     private Team team;
 
-    @Enumerated(EnumType.STRING)
+//    @Enumerated(EnumType.STRING)
+//    @Column(name="role")
     private Role role;
 
     public TeamMember(User user, Team team, Role role) {

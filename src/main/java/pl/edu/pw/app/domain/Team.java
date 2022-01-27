@@ -44,9 +44,10 @@ public class Team {
 
 
     public Team(String name, User user) {
-        TeamMember teamMember = new TeamMember(user, this, TeamMember.Role.MEMBER);
-        members.add(teamMember);
         this.name = name;
+        TeamMember teamMember = new TeamMember(user, this, TeamMember.Role.OWNER);
+        this.members.add(teamMember);
+
     }
 
     public Team(String name) {
