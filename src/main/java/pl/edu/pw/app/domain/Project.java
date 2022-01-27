@@ -1,7 +1,6 @@
 package pl.edu.pw.app.domain;
 
 import lombok.*;
-import org.springframework.security.core.parameters.P;
 
 import javax.persistence.*;
 import java.util.ArrayList;

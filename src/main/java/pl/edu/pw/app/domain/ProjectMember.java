@@ -33,6 +33,8 @@ public class ProjectMember {
     @MapsId("projectId")
     private Project project;
 
+    @Column(name = "role")
+    @Enumerated(EnumType.STRING)
     private Role role;
 
     @ManyToMany(mappedBy = "projectMembers")
