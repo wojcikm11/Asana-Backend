@@ -69,6 +69,13 @@ public class ProjectService implements IProjectService {
         project.addTeamMember(userToAdd);
     }
 
+    @Override
+    public void removeProjectMember(Long projectId, Long userId) {
+        User member = userRepository.findById(userId).orElseThrow();
+        Project project = projectRepository.findById(projectId).orElseThrow();
+        project.removeTeamMember(member);
+    }
+
     private ProjectCompleteInfo map(Project project) {
         return new ProjectCompleteInfo(
                 project.getId(),

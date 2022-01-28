@@ -17,7 +17,6 @@ public class ProjectController {
 
     private IProjectService projectService;
 
-//    todo dodac odawani uzytkownika ktory tworzy projekt jako czlonka
     @Autowired
     public ProjectController(IProjectService projectService) {
         this.projectService = projectService;
@@ -46,6 +45,11 @@ public class ProjectController {
     @PutMapping("/{id}")
     public void updateProject(@Valid @RequestBody ProjectUpdateRequest projectUpdateRequest, @PathVariable Long id) {
         projectService.update(id, projectUpdateRequest);
+    }
+
+    @DeleteMapping("/{projectId}/delete_member/{memberId}")
+    public void deleteProjectMember(@PathVariable Long projectId, @PathVariable Long memberId) {
+        projectService.removeProjectMember(projectId, memberId);
     }
 
     @DeleteMapping("/{id}")

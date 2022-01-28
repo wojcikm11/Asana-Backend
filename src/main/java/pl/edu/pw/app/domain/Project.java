@@ -66,12 +66,22 @@ public class Project {
         return members.stream().filter(member -> member.getRole() == ProjectMember.Role.OWNER).findAny().orElse(null);
     }
 
+    public ProjectMember getProjectMemberByUserId(Long userId) {
+        return members.stream().filter(member -> member.getId().getMemberId().equals(userId)).findAny().orElse(null);
+    }
+
     public void addTeamMember(User user) {
         if (user != null) {
             ProjectMember projectMember = new ProjectMember(user, this, ProjectMember.Role.MEMBER);
             members.add(projectMember);
             user.getProjects().add(projectMember);
         }
+    }
+
+    public void removeTeamMember(User user) {
+        ProjectMember projectMember = getProjectMemberByUserId(user.getId());
+        members.remove(projectMember);
+        user.getProjects().remove(projectMember);
     }
 
     public void addTask(Task task){
