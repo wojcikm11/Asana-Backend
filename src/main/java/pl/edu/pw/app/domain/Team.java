@@ -1,8 +1,6 @@
 package pl.edu.pw.app.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.*;
@@ -12,7 +10,8 @@ import java.util.*;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-
+@Getter
+@Setter
 public class Team {
 
     @Id
@@ -26,7 +25,6 @@ public class Team {
             cascade = CascadeType.ALL,
             orphanRemoval = true,
             fetch = FetchType.LAZY
-
     )
     private List<TeamMember> members = new ArrayList<>();
 
@@ -40,14 +38,11 @@ public class Team {
             inverseJoinColumns = @JoinColumn(name = "project_id"))
     private Set<Project> projects = new HashSet<>();
 
-
-
-
     public Team(String name, User user) {
         this.name = name;
         TeamMember teamMember = new TeamMember(user, this, TeamMember.Role.OWNER);
         this.members.add(teamMember);
-
+        user.getTeams().add(teamMember);
     }
 
     public Team(String name) {

@@ -30,7 +30,9 @@ public class Project {
         this.name = name;
         this.category = category;
         this.description = description;
-        this.members.add(new ProjectMember(user, this, ProjectMember.Role.OWNER));
+        ProjectMember projectMember = new ProjectMember(user, this, ProjectMember.Role.OWNER);
+        this.members.add(projectMember);
+        user.getProjects().add(projectMember);
     }
 
     @ManyToMany(mappedBy = "favoriteProjects")
@@ -49,8 +51,7 @@ public class Project {
     @OneToMany(
             fetch = FetchType.EAGER,
             mappedBy = "project",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true
+            cascade = CascadeType.ALL
     )
     private List<Task> tasks = new ArrayList<>();
 
