@@ -32,7 +32,8 @@ public class ProjectService implements IProjectService {
     @Override
     public void create(ProjectCreateRequest project) {
         User owner = UserUtils.getLoggedUser();
-        projectRepository.save(map(project, owner));
+        Project map = map(project, owner);
+        projectRepository.save(map);
     }
 
     @Override
@@ -42,9 +43,9 @@ public class ProjectService implements IProjectService {
     }
 
     @Override
-    public List<ProjectCompleteInfo> getAll(Long ownerId) {
+    public List<ProjectCompleteInfo> getUserProjects(Long userId) {
         return projectRepository.findAll().stream()
-                .filter(project -> project.getOwnerProjectMember().getUser().getId().equals(ownerId))
+                .filter(project -> project.getOwnerProjectMember().getUser().getId().equals(userId))
                 .map(this::map).toList();
     }
 

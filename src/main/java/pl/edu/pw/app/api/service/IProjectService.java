@@ -14,7 +14,7 @@ import java.util.List;
 public interface IProjectService {
     void create(ProjectCreateRequest project);
     ProjectCompleteInfo get(Long id);
-    List<ProjectCompleteInfo> getAll(Long ownerId);
+    List<ProjectCompleteInfo> getUserProjects(Long userId);
     void update(Long projectId, ProjectUpdateRequest project);
     void delete(Long id);
     void addUserToProject(AddProjectMember addProjectMember);

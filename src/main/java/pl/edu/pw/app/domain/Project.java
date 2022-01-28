@@ -32,7 +32,6 @@ public class Project {
         this.description = description;
         ProjectMember projectMember = new ProjectMember(user, this, ProjectMember.Role.OWNER);
         this.members.add(projectMember);
-        user.getProjects().add(projectMember);
     }
 
     @ManyToMany(mappedBy = "favoriteProjects")
@@ -79,9 +78,11 @@ public class Project {
     }
 
     public void removeTeamMember(User user) {
-        ProjectMember projectMember = getProjectMemberByUserId(user.getId());
-        members.remove(projectMember);
-        user.getProjects().remove(projectMember);
+        if (user != null) {
+            ProjectMember projectMember = getProjectMemberByUserId(user.getId());
+            members.remove(projectMember);
+            user.getProjects().remove(projectMember);
+        }
     }
 
     public void addTask(Task task){

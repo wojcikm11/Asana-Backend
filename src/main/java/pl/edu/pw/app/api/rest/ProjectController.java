@@ -29,7 +29,7 @@ public class ProjectController {
 
     @GetMapping("/owner/{id}")
     public List<ProjectCompleteInfo> getOwnerProjects(@PathVariable Long id){
-        return projectService.getAll(id);
+        return projectService.getUserProjects(id);
     }
 
     @PostMapping

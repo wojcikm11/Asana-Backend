@@ -36,10 +36,10 @@ public class ProjectMember {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @ManyToMany(mappedBy = "projectMembers",fetch = FetchType.LAZY)
+    @ManyToMany(mappedBy = "projectMembers")
     private Set<Task> tasks = new HashSet<>();
 
-    @ManyToMany(mappedBy = "projectMembers",fetch = FetchType.LAZY)
+    @ManyToMany(mappedBy = "projectMembers")
     private Set<Subtask> subtasks = new HashSet<>();
 
     @OneToMany(
