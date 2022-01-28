@@ -1,6 +1,7 @@
 package pl.edu.pw.app.api.dto.teamDTO;
 
 import lombok.*;
+import pl.edu.pw.app.api.dto.teamMemberDTO.TeamMemberBasicInfo;
 import pl.edu.pw.app.domain.TeamMember;
 
 import java.util.List;
@@ -11,5 +12,5 @@ import java.util.List;
 public class TeamBasicInfo {
     private Long id;
     private String name;
-    private List<TeamMember> members;
+    private List<TeamMemberBasicInfo> members;
 }

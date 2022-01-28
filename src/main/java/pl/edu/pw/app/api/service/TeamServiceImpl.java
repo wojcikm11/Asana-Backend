@@ -89,7 +89,7 @@ public class TeamServiceImpl implements TeamService {
     }
 
     private TeamBasicInfo map(Team team) {
-        return new TeamBasicInfo(team.getId(), team.getName(), team.getMembers());
+        return new TeamBasicInfo(team.getId(), team.getName(), map(team.getMembers()));
     }
 
     private List<TeamMemberBasicInfo> map(List<TeamMember> members){

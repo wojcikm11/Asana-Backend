@@ -23,8 +23,7 @@ public class Team {
     @OneToMany(
             mappedBy = "team",
             cascade = CascadeType.ALL,
-            orphanRemoval = true,
-            fetch = FetchType.LAZY
+            orphanRemoval = true
     )
     private List<TeamMember> members = new ArrayList<>();
 
