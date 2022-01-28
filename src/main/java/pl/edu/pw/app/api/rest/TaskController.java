@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import pl.edu.pw.app.api.dto.taskDTO.AddAssigneeRequest;
 import pl.edu.pw.app.api.dto.taskDTO.TaskBasicInfo;
 import pl.edu.pw.app.api.dto.taskDTO.TaskCreateRequest;
 import pl.edu.pw.app.api.dto.taskDTO.TaskDetails;
@@ -37,5 +38,18 @@ public class TaskController {
   @GetMapping(path="{id}/tasks/details")
     public List<TaskDetails> getProjectTasksDetails(@PathVariable Long id){
         return taskService.getTasksDetails(id);
+  }
+
+  @PostMapping("task/add/assignee")
+    public ResponseEntity addAssignee(@RequestBody AddAssigneeRequest assignee){
+        taskService.addAssignee(assignee);
+      return new ResponseEntity(HttpStatus.CREATED);
+  }
+
+  @RequestMapping("task/delete/{id}")
+    public ResponseEntity deleteTask(@PathVariable Long id){
+        taskService.deleteTask(id);
+      return new ResponseEntity(HttpStatus.NO_CONTENT);
+
   }
 }

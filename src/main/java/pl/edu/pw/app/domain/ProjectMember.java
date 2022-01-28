@@ -43,6 +43,7 @@ public class ProjectMember {
     private Set<Subtask> subtasks = new HashSet<>();
 
     @OneToMany(
+            fetch = FetchType.LAZY,
             mappedBy = "projectMember",
             cascade = CascadeType.ALL,
             orphanRemoval = true

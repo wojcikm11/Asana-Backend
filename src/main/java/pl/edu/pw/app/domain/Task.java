@@ -22,6 +22,7 @@ public class Task {
     private Project project;
 
     @OneToMany(
+            fetch = FetchType.LAZY,
             mappedBy="task",
             cascade=CascadeType.ALL,
             orphanRemoval = true
@@ -48,7 +49,9 @@ public class Task {
     @Enumerated(EnumType.STRING)
     private Status status = Status.UNDONE;
 
-    @ManyToMany(cascade = {
+    @ManyToMany(
+            fetch = FetchType.EAGER,
+            cascade = {
             CascadeType.PERSIST,
             CascadeType.MERGE
     })

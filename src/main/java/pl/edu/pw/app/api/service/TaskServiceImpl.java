@@ -2,6 +2,7 @@ package pl.edu.pw.app.api.service;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import pl.edu.pw.app.api.dto.taskDTO.AddAssigneeRequest;
 import pl.edu.pw.app.api.dto.taskDTO.TaskBasicInfo;
 import pl.edu.pw.app.api.dto.taskDTO.TaskCreateRequest;
 import pl.edu.pw.app.api.dto.taskDTO.TaskDetails;
@@ -25,23 +26,17 @@ public class TaskServiceImpl implements TaskService {
     private ProjectRepository projectRepository;
     private TaskRepository taskRepository;
 
+
     private final String NO_PROJECT_FOUND = "Project with the given id not found";
+    private final String NO_TASK_FOUND = "Task with the given id not found";
+    private final String NO_PROJECT_MEMBER_FOUND = "Member with given id was not find in this project ";
 
     @Override
     public void addTask(TaskCreateRequest task) {
         Task newTask = map(task);
         taskRepository.save(newTask);
 //        todo spr. czy projekt istnieje
-//        Project project = projectRepository.getById(task.getProjectId());
-//        project.getTasks().add(newTask);
-//        Long id = UserUtils.getLoggedUser().getId();
-//        project.getTasks().add(newTask);
-//       project.getMembers().stream().forEach((m)->{
-//           if(m.getUser().getId()==id){
-//               m.getTasks().add(newTask);
-//               return;
-//           }
-//       });
+
 
 
     }
@@ -57,6 +52,7 @@ public class TaskServiceImpl implements TaskService {
 
     }
 
+//    todo naprawic
     @Override
     public List<TaskDetails> getTasksDetails(Long id) {
         Project project = projectRepository.findById(id).orElseThrow(() -> {
@@ -65,6 +61,35 @@ public class TaskServiceImpl implements TaskService {
 
         return project.getTasks().stream().map(this::mapTaskDetails).toList();
 
+    }
+
+    @Override
+    public void addAssignee(AddAssigneeRequest assignee) {
+        Project project = projectRepository.findById(assignee.getProjectId()).orElseThrow(()->{
+            throw new IllegalArgumentException(NO_PROJECT_FOUND);
+        });
+
+        project.getMembers().stream().forEach(m->{
+            if(m.getId().getMemberId()==assignee.getUserId()) {
+                return;
+            }
+            throw new RuntimeException(NO_PROJECT_MEMBER_FOUND);
+        });
+
+        Task task = taskRepository.findById(assignee.getTaskId()).orElseThrow(()->{
+            throw new IllegalArgumentException(NO_TASK_FOUND);
+        });
+        project.addTask(task);
+
+    }
+
+    @Override
+    public void deleteTask(Long id) {
+        Task task = taskRepository.findById(id).orElseThrow(()->{
+            throw new IllegalArgumentException(NO_TASK_FOUND);
+        });
+        task.getProject().getTasks().remove(task);
+        taskRepository.delete(task);
     }
 
     private Task map(TaskCreateRequest task) {
@@ -90,13 +115,16 @@ public class TaskServiceImpl implements TaskService {
 
     private TaskDetails mapTaskDetails(Task task) {
         List<UserBasicInfo> assignees = new ArrayList<>();
-        task.getProjectMembers().stream().forEach(m->{
-            assignees.add(new UserBasicInfo(
-                    m.getUser().getId(),
-                    m.getUser().getName(),
-                    m.getUser().getEmail()
-            ));
-        });
+        for(ProjectMember p: task.getProjectMembers() ){
+            System.out.println(p.getUser().getEmail());
+        }
+//        task.getProjectMembers().stream().forEach(m->{
+//            assignees.add(new UserBasicInfo(
+//                    m.getUser().getId(),
+//                    m.getUser().getName(),
+//                    m.getUser().getEmail()
+//            ));
+//        });
         return new TaskDetails(
                 task.getName(),
                 task.getDescription(),
