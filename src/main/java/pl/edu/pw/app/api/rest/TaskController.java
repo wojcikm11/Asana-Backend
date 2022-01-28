@@ -25,7 +25,6 @@ public class TaskController {
 
     @PostMapping("task/add")
     public ResponseEntity addTask(@RequestBody @Valid TaskCreateRequest task){
-        System.out.println(task.getProjectId());
         taskService.addTask(task);
         return new ResponseEntity(HttpStatus.CREATED);
     }

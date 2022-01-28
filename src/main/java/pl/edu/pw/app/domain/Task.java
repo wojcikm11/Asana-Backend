@@ -49,16 +49,14 @@ public class Task {
     @Enumerated(EnumType.STRING)
     private Status status = Status.UNDONE;
 
-    @ManyToMany(
-            fetch = FetchType.EAGER,
-            cascade = {
-            CascadeType.PERSIST,
-            CascadeType.MERGE
+    @ManyToMany(cascade = {
+        CascadeType.PERSIST,
+        CascadeType.MERGE
     })
     @JoinTable(name = "task_assignees",
             joinColumns = @JoinColumn(name = "task_id"),
             inverseJoinColumns = { @JoinColumn(name="user_id"), @JoinColumn(name = "project_id") })
-    private Set<ProjectMember> projectMembers = new HashSet<>();
+    private Set<ProjectMember> taskAssignees = new HashSet<>();
 
     public Task(Project project, String name, String description, LocalDateTime startDate, LocalDateTime deadLine, Priority priority) {
         this.project=project;

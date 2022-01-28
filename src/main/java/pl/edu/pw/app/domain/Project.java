@@ -41,7 +41,6 @@ public class Project {
     private Set<Team> teams = new HashSet<>();
 
     @OneToMany(
-            fetch = FetchType.LAZY,
             mappedBy = "project",
             cascade = { CascadeType.MERGE, CascadeType.DETACH, CascadeType.REMOVE },
             orphanRemoval = true
@@ -49,9 +48,9 @@ public class Project {
     private List<ProjectMember> members = new ArrayList<>();
 
     @OneToMany(
-            fetch = FetchType.EAGER,
             mappedBy = "project",
-            cascade = CascadeType.ALL
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
     )
     private List<Task> tasks = new ArrayList<>();
 

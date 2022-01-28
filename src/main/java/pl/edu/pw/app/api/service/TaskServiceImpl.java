@@ -115,7 +115,7 @@ public class TaskServiceImpl implements TaskService {
 
     private TaskDetails mapTaskDetails(Task task) {
         List<UserBasicInfo> assignees = new ArrayList<>();
-        for(ProjectMember p: task.getProjectMembers() ){
+        for(ProjectMember p: task.getTaskAssignees() ){
             System.out.println(p.getUser().getEmail());
         }
 //        task.getProjectMembers().stream().forEach(m->{

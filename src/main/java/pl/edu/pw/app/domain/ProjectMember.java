@@ -36,7 +36,7 @@ public class ProjectMember {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @ManyToMany(mappedBy = "projectMembers")
+    @ManyToMany(mappedBy = "taskAssignees")
     private Set<Task> tasks = new HashSet<>();
 
     @ManyToMany(mappedBy = "projectMembers")
