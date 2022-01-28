@@ -24,8 +24,7 @@ public class TeamMember {
     @MapsId("teamId")
     private Team team;
 
-//    @Enumerated(EnumType.STRING)
-//    @Column(name="role")
+    @Enumerated(EnumType.STRING)
     private Role role;
 
     public TeamMember(User user, Team team, Role role) {

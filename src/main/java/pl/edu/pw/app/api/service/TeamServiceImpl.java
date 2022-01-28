@@ -39,7 +39,7 @@ public class TeamServiceImpl implements TeamService {
         });
 
             Team newTeam = new Team(team.getName(),user);
-//            newTeam.addMember(user, TeamMember.Role.OWNER);
+            newTeam.addMember(user, TeamMember.Role.OWNER);
             teamRepository.save(newTeam);
     }
 

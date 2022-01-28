@@ -17,6 +17,7 @@ public class ProjectController {
 
     private IProjectService projectService;
 
+//    todo dodac odawani uzytkownika ktory tworzy projekt jako czlonka
     @Autowired
     public ProjectController(IProjectService projectService) {
         this.projectService = projectService;
@@ -51,4 +52,8 @@ public class ProjectController {
     public void deleteProject(@PathVariable Long id) {
         projectService.delete(id);
     }
+
+//    @GetMapping("/tasks")
+
+
 }

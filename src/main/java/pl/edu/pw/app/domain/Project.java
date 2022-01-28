@@ -48,6 +48,7 @@ public class Project {
     private List<ProjectMember> members = new ArrayList<>();
 
     @OneToMany(
+            fetch = FetchType.EAGER,
             mappedBy = "project",
             cascade = CascadeType.ALL,
             orphanRemoval = true
@@ -70,6 +71,12 @@ public class Project {
             ProjectMember projectMember = new ProjectMember(user, this, ProjectMember.Role.MEMBER);
             members.add(projectMember);
             user.getProjects().add(projectMember);
+        }
+    }
+
+    public void addTask(Task task){
+        if(task!=null){
+
         }
     }
 }
