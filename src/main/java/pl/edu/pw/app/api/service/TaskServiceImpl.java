@@ -114,10 +114,10 @@ public class TaskServiceImpl implements TaskService {
     }
 
     private TaskDetails mapTaskDetails(Task task) {
-        List<UserBasicInfo> assignees = new ArrayList<>();
-        for(ProjectMember p: task.getTaskAssignees() ){
-            System.out.println(p.getUser().getEmail());
-        }
+//        List<UserBasicInfo> assignees = new ArrayList<>();
+//        for(ProjectMember p: task.getTaskAssignees() ){
+//            System.out.println(p.getUser().getEmail());
+//        }
 //        task.getProjectMembers().stream().forEach(m->{
 //            assignees.add(new UserBasicInfo(
 //                    m.getUser().getId(),
@@ -125,6 +125,17 @@ public class TaskServiceImpl implements TaskService {
 //                    m.getUser().getEmail()
 //            ));
 //        });
+
+        List<UserBasicInfo> assignees = new ArrayList<>();
+        task.getTaskAssignees().forEach((taskAssignee) -> {
+                    assignees.add(new UserBasicInfo(
+                            taskAssignee.getUser().getId(),
+                            taskAssignee.getUser().getName(),
+                            taskAssignee.getUser().getEmail()
+            ));
+                }
+        );
+
         return new TaskDetails(
                 task.getName(),
                 task.getDescription(),
@@ -133,7 +144,6 @@ public class TaskServiceImpl implements TaskService {
                 task.getStatus().toString(),
                 task.getPriority().toString(),
                 assignees
-
         );
     }
 }

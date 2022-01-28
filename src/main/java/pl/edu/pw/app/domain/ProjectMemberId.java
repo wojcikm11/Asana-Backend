@@ -1,9 +1,6 @@
 package pl.edu.pw.app.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
@@ -14,6 +11,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @EqualsAndHashCode
 @Getter
+@Setter
 public class ProjectMemberId implements Serializable {
 
     @Column(name = "project_id")

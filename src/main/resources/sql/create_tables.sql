@@ -84,9 +84,11 @@ CREATE TABLE IF NOT EXISTS task (
 CREATE TABLE IF NOT EXISTS task_assignees (
 	user_id INT NOT NULL,
 	task_id INT NOT NULL,
-	PRIMARY KEY (user_id, task_id),
-	FOREIGN KEY (user_id) REFERENCES user (id),
-	FOREIGN KEY (task_id) REFERENCES task (id)
+    project_id INT NOT NULL,
+	PRIMARY KEY (user_id, task_id, project_id),
+	FOREIGN KEY (user_id) REFERENCES project_member (user_id),
+	FOREIGN KEY (task_id) REFERENCES task (id),
+    FOREIGN KEY (project_id) REFERENCES project_member (project_id)
 );
 
 CREATE TABLE IF NOT EXISTS subtask (
@@ -104,9 +106,11 @@ CREATE TABLE IF NOT EXISTS subtask (
 CREATE TABLE IF NOT EXISTS subtask_assignees (
 	user_id INT NOT NULL,
 	subtask_id INT NOT NULL,
-	PRIMARY KEY (user_id, subtask_id),
-	FOREIGN KEY (user_id) REFERENCES user (id),
-	FOREIGN KEY (subtask_id) REFERENCES subtask (id)
+    project_id INT NOT NULL,
+	PRIMARY KEY (user_id, subtask_id, project_id),
+	FOREIGN KEY (user_id) REFERENCES project_member (user_id),
+	FOREIGN KEY (subtask_id) REFERENCES subtask (id),
+    FOREIGN KEY (project_id) REFERENCES project_member (project_id)
 );
 
 CREATE TABLE IF NOT EXISTS message (
@@ -118,7 +122,3 @@ CREATE TABLE IF NOT EXISTS message (
     FOREIGN KEY (user_id) REFERENCES user (id),
     FOREIGN KEY (project_id) REFERENCES project (id)
 );
-
-
-ALTER TABLE project
-MODIFY COLUMN category VARCHAR(40)

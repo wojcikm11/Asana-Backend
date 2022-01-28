@@ -55,7 +55,7 @@ public class Task {
     })
     @JoinTable(name = "task_assignees",
             joinColumns = @JoinColumn(name = "task_id"),
-            inverseJoinColumns = { @JoinColumn(name="user_id"), @JoinColumn(name = "project_id") })
+            inverseJoinColumns = { @JoinColumn(name = "user_id"), @JoinColumn(name = "project_id") })
     private Set<ProjectMember> taskAssignees = new HashSet<>();
 
     public Task(Project project, String name, String description, LocalDateTime startDate, LocalDateTime deadLine, Priority priority) {
@@ -66,8 +66,4 @@ public class Task {
         this.deadLine = deadLine;
         this.priority = priority;
     }
-
-
-
-
 }
