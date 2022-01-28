@@ -2,6 +2,7 @@ package pl.edu.pw.app.api.service;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import pl.edu.pw.app.api.dto.projectDTO.ProjectBasicInfo;
 import pl.edu.pw.app.api.dto.teamDTO.TeamBasicInfo;
 import pl.edu.pw.app.api.dto.teamDTO.TeamCreateRequest;
 import pl.edu.pw.app.api.dto.teamMemberDTO.AddTeamMemberRequest;
@@ -37,7 +38,6 @@ public class TeamServiceImpl implements TeamService {
             throw new IllegalArgumentException(EMPTY_TEAM_NAME_EXCEPTION);
         }
 
-
         User user = userRepository.findByEmail(UtilityService.getCurrentUser()).orElseThrow(()->{
             throw new IllegalArgumentException(USER_NOT_FOUND_EXCEPTION);
         });
@@ -46,8 +46,7 @@ public class TeamServiceImpl implements TeamService {
         teamRepository.save(newTeam);
     }
 
-    public void deleteTeam(Long id){
-
+    public void deleteTeam(Long id) {
         Team team = teamRepository.getById(id);
         boolean isOwner = team.isOwner(UtilityService.getCurrentUser());
         if(isOwner){
@@ -58,9 +57,15 @@ public class TeamServiceImpl implements TeamService {
     }
 
     @Override
-    public List<TeamMemberBasicInfo> getMembers(Long id) {
-        Team team = teamRepository.getById(id);
+    public List<TeamMemberBasicInfo> getTeamMembers(Long teamId) {
+        Team team = teamRepository.getById(teamId);
         return map(team.getMembers());
+    }
+
+    @Override
+    public List<TeamBasicInfo> getUserTeams(Long userId) {
+        User user = userRepository.findById(userId).orElseThrow();
+        return user.getTeams().stream().map(this::map).toList();
     }
 
     @Override
@@ -92,13 +97,17 @@ public class TeamServiceImpl implements TeamService {
         return new TeamBasicInfo(team.getId(), team.getName(), map(team.getMembers()));
     }
 
+    private TeamBasicInfo map(TeamMember teamMember) {
+        Team userTeam = teamMember.getTeam();
+        return new TeamBasicInfo(userTeam.getId(), userTeam.getName(), map(userTeam.getMembers()));
+    }
+
     private List<TeamMemberBasicInfo> map(List<TeamMember> members){
         List<TeamMemberBasicInfo> users = new ArrayList<>();
-        members.stream().forEach(m->{
+        members.forEach(m-> {
             users.add(
                     new TeamMemberBasicInfo(m.getUser().getId(),m.getUser().getName(),m.getUser().getEmail(),m.getRole())
             );
-
         });
         return users;
     }

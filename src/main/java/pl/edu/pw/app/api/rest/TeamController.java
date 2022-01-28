@@ -41,7 +41,12 @@ public class TeamController {
 
     @GetMapping("/members")
     public List<TeamMemberBasicInfo> getTeamMembers(@RequestParam Long id) {
-        return teamService.getMembers(id);
+        return teamService.getTeamMembers(id);
+    }
+
+    @GetMapping("/user/{id}/teams")
+    public List<TeamBasicInfo> getUserTeams(@PathVariable Long id) {
+        return teamService.getUserTeams(id);
     }
 
     @PostMapping("/addMember")

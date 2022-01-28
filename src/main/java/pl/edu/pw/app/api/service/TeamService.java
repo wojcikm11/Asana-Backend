@@ -12,7 +12,8 @@ import java.util.List;
 public interface TeamService {
     void addTeam(TeamCreateRequest team);
     void deleteTeam(Long id);
-    List<TeamMemberBasicInfo> getMembers(Long id);
+    List<TeamMemberBasicInfo> getTeamMembers(Long teamId);
+    List<TeamBasicInfo> getUserTeams(Long userId);
     void addMember(AddTeamMemberRequest addTeamMember);
     List<TeamBasicInfo> getAll();
 }
