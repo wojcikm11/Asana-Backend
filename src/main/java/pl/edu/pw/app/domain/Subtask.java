@@ -29,7 +29,7 @@ public class Subtask {
     @JoinTable(name = "subtask_assignees",
             joinColumns = @JoinColumn(name = "subtask_id"),
             inverseJoinColumns = { @JoinColumn(name="user_id"), @JoinColumn(name = "project_id") })
-    private Set<ProjectMember> projectMembers = new HashSet<>();
+    private Set<ProjectMember> subtaskAssignees = new HashSet<>();
 
     private String name;
 

@@ -22,7 +22,6 @@ public class Task {
     private Project project;
 
     @OneToMany(
-            fetch = FetchType.LAZY,
             mappedBy="task",
             cascade=CascadeType.ALL,
             orphanRemoval = true

@@ -39,11 +39,10 @@ public class ProjectMember {
     @ManyToMany(mappedBy = "taskAssignees")
     private Set<Task> tasks = new HashSet<>();
 
-    @ManyToMany(mappedBy = "projectMembers")
+    @ManyToMany(mappedBy = "subtaskAssignees")
     private Set<Subtask> subtasks = new HashSet<>();
 
     @OneToMany(
-            fetch = FetchType.LAZY,
             mappedBy = "projectMember",
             cascade = CascadeType.ALL,
             orphanRemoval = true
