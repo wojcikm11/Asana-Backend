@@ -76,8 +76,8 @@ CREATE TABLE IF NOT EXISTS task (
 	description VARCHAR(200),
 	start_date DATETIME NOT NULL,
 	deadline DATETIME NOT NULL,
-    priority ENUM('LOW', 'MEDIUM', 'HIGH') NOT NULL,
-    status ENUM('UNDONE', 'DOING','DONE') NOT NULL DEFAULT 'Undone',
+    priority ENUM('LOW', 'MEDIUM', 'HIGH') NOT NULL DEFAULT 'LOW',
+    status ENUM('UNDONE', 'DOING','DONE') NOT NULL DEFAULT 'UNDONE',
     FOREIGN KEY (project_id) REFERENCES project (id)
 );
 
@@ -96,10 +96,10 @@ CREATE TABLE IF NOT EXISTS subtask (
     task_id INT NOT NULL,
     name VARCHAR(50) NOT NULL,
 	description VARCHAR(200),
-	start_date DATETIME NOT NULL,
-	deadline DATETIME NOT NULL,
-    priority ENUM('Low', 'Medium', 'High') NOT NULL,
-    status ENUM('In_progress', 'Finished') NOT NULL DEFAULT 'In_progress',
+	start_date DATETIME,
+	deadline DATETIME,
+    priority ENUM('LOW', 'MEDIUM', 'HIGH'),
+    status ENUM('UNDONE', 'DOING','DONE') NOT NULL DEFAULT 'UNDONE',
     FOREIGN KEY (task_id) REFERENCES task (id)
 );
 

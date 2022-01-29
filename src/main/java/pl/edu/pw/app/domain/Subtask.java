@@ -22,7 +22,8 @@ public class Subtask {
     @ManyToOne(fetch = FetchType.LAZY)
     private Task task;
 
-    @ManyToMany(cascade = {
+    @ManyToMany(
+            cascade = {
             CascadeType.PERSIST,
             CascadeType.MERGE
     })
@@ -31,15 +32,32 @@ public class Subtask {
             inverseJoinColumns = { @JoinColumn(name="user_id"), @JoinColumn(name = "project_id") })
     private Set<ProjectMember> subtaskAssignees = new HashSet<>();
 
+    @Column
     private String name;
-
+    @Column
     private String description;
-
+    @Column
     private LocalDateTime startDate;
 
+    @Column(name="deadline")
     private LocalDateTime deadLine;
 
+    @Column
+    @Enumerated(EnumType.STRING)
     private Priority priority;
 
-    private Status status;
+    @Column
+    @Enumerated(EnumType.STRING)
+    private Status status =Status.UNDONE;
+
+
+    public Subtask(Task task, String name, String description, LocalDateTime startDate, LocalDateTime deadLine, Priority priority) {
+        this.task = task;
+        this.name = name;
+        this.description = description;
+        this.startDate = startDate;
+        this.deadLine = deadLine;
+        this.priority = priority;
+
+    }
 }
