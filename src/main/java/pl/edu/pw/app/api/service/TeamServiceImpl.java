@@ -27,7 +27,7 @@ public class TeamServiceImpl implements TeamService {
     private UserRepository userRepository;
 
     private final String EMPTY_TEAM_NAME_EXCEPTION = "Team's name cannot be empty";
-    private final String USER_NOT_FOUND_EXCEPTION = "User with given id does not exists";
+    private final String USER_NOT_FOUND_EXCEPTION = "User with given id does not exist";
     private final String TEAM_NOT_FOUND_EXCEPTION = "Team with the given id not found";
     private final String NO_PERMISSION_EXCEPTION = "You do not have permission to execute this action";
 

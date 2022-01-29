@@ -1,6 +1,8 @@
 package pl.edu.pw.app.api.rest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.edu.pw.app.api.dto.projectDTO.AddProjectMember;
 import pl.edu.pw.app.api.dto.projectDTO.ProjectCompleteInfo;
@@ -33,28 +35,32 @@ public class ProjectController {
     }
 
     @PostMapping
-    public void addProject(@Valid @RequestBody ProjectCreateRequest project) {
+    public ResponseEntity<?> addProject(@Valid @RequestBody ProjectCreateRequest project) {
         projectService.create(project);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @PostMapping("/member")
-    public void addProjectMember(@Valid @RequestBody AddProjectMember addProjectMember) {
+    public ResponseEntity<?> addProjectMember(@Valid @RequestBody AddProjectMember addProjectMember) {
         projectService.addUserToProject(addProjectMember);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public void updateProject(@Valid @RequestBody ProjectUpdateRequest projectUpdateRequest, @PathVariable Long id) {
+    public ResponseEntity<?> updateProject(@Valid @RequestBody ProjectUpdateRequest projectUpdateRequest, @PathVariable Long id) {
         projectService.update(id, projectUpdateRequest);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @DeleteMapping("/{projectId}/delete_member/{memberId}")
-    public void deleteProjectMember(@PathVariable Long projectId, @PathVariable Long memberId) {
+    public ResponseEntity<?> deleteProjectMember(@PathVariable Long projectId, @PathVariable Long memberId) {
         projectService.removeProjectMember(projectId, memberId);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteProject(@PathVariable Long id) {
+    public ResponseEntity<?> deleteProject(@PathVariable Long id) {
         projectService.delete(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
-
 }

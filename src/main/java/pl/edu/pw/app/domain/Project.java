@@ -42,7 +42,7 @@ public class Project {
 
     @OneToMany(
             mappedBy = "project",
-            cascade = { CascadeType.MERGE, CascadeType.DETACH, CascadeType.REMOVE },
+            cascade = CascadeType.ALL,
             orphanRemoval = true
     )
     private List<ProjectMember> members = new ArrayList<>();

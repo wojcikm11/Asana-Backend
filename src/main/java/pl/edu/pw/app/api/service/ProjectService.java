@@ -6,7 +6,6 @@ import pl.edu.pw.app.api.dto.projectDTO.AddProjectMember;
 import pl.edu.pw.app.api.dto.projectDTO.ProjectCompleteInfo;
 import pl.edu.pw.app.api.dto.projectDTO.ProjectCreateRequest;
 import pl.edu.pw.app.api.dto.projectDTO.ProjectUpdateRequest;
-import pl.edu.pw.app.common.UserUtils;
 import pl.edu.pw.app.domain.Project;
 import pl.edu.pw.app.domain.User;
 import pl.edu.pw.app.repository.ProjectRepository;
@@ -31,9 +30,10 @@ public class ProjectService implements IProjectService {
 
     @Override
     public void create(ProjectCreateRequest project) {
-        User owner = UserUtils.getLoggedUser();
-        Project map = map(project, owner);
-        projectRepository.save(map);
+        User user = userRepository.findByEmail(UtilityService.getCurrentUser()).orElseThrow(()->{
+            throw new IllegalArgumentException("User with given id does not exist");
+        });
+        projectRepository.save(map(project, user));
     }
 
     @Override
