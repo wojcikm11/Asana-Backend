@@ -23,9 +23,9 @@ public class TeamController {
 
     @PostMapping(path="/add")
     @ResponseBody
-    public ResponseEntity addTeam(@RequestBody TeamCreateRequest team){
+    public ResponseEntity<?> addTeam(@RequestBody TeamCreateRequest team){
         teamService.addTeam(team);
-        return new ResponseEntity(HttpStatus.CREATED);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @GetMapping
@@ -33,14 +33,14 @@ public class TeamController {
         return teamService.getAll();
     }
 
-    @DeleteMapping("/delete")
-    public ResponseEntity deleteTeam(@RequestParam Long id){
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<?> deleteTeam(@PathVariable Long id){
         teamService.deleteTeam(id);
-        return new ResponseEntity(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @GetMapping("/members")
-    public List<TeamMemberBasicInfo> getTeamMembers(@RequestParam Long id) {
+    @GetMapping("/{id}/members")
+    public List<TeamMemberBasicInfo> getTeamMembers(@PathVariable Long id) {
         return teamService.getTeamMembers(id);
     }
 
@@ -50,8 +50,8 @@ public class TeamController {
     }
 
     @PostMapping("/addMember")
-    public ResponseEntity addMember(@RequestBody @Valid AddTeamMemberRequest addTeamMember){
+    public ResponseEntity<?> addMember(@RequestBody @Valid AddTeamMemberRequest addTeamMember){
         teamService.addMember(addTeamMember);
-        return new ResponseEntity(HttpStatus.CREATED);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 }

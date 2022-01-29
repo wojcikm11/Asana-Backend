@@ -13,7 +13,7 @@ import java.util.*;
 @Table(name="user")
 @Setter
 @Getter
-@EqualsAndHashCode
+@EqualsAndHashCode(exclude = "favoriteProjects")
 public class User implements PasswordSecurity, UserDetails {
 
     @Id
@@ -79,14 +79,18 @@ public class User implements PasswordSecurity, UserDetails {
         team.getMembers().add(teamMember);
     }
 
-    public void addToFavorite(Project favoriteProject) {
-        favoriteProjects.add(favoriteProject);
-        favoriteProject.getUsersFavouritePosts().add(this);
+    public void addToFavorites(Project favoriteProject) {
+        if (favoriteProject != null) {
+            favoriteProjects.add(favoriteProject);
+            favoriteProject.getUsersFavouritePosts().add(this);
+        }
     }
 
     public void removeFromFavorites(Project favoriteProject) {
-        favoriteProjects.remove(favoriteProject);
-        favoriteProject.getUsersFavouritePosts().remove(this);
+        if (favoriteProject != null) {
+            favoriteProjects.remove(favoriteProject);
+            favoriteProject.getUsersFavouritePosts().remove(this);
+        }
     }
 
     @Override

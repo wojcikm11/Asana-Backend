@@ -2,11 +2,10 @@ package pl.edu.pw.app.api.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import pl.edu.pw.app.api.dto.projectDTO.AddProjectMember;
-import pl.edu.pw.app.api.dto.projectDTO.ProjectCompleteInfo;
-import pl.edu.pw.app.api.dto.projectDTO.ProjectCreateRequest;
-import pl.edu.pw.app.api.dto.projectDTO.ProjectUpdateRequest;
+import pl.edu.pw.app.api.dto.projectDTO.*;
+import pl.edu.pw.app.api.dto.userDTO.UserBasicInfo;
 import pl.edu.pw.app.domain.Project;
+import pl.edu.pw.app.domain.ProjectMember;
 import pl.edu.pw.app.domain.User;
 import pl.edu.pw.app.repository.ProjectRepository;
 import pl.edu.pw.app.repository.UserRepository;
@@ -14,6 +13,7 @@ import pl.edu.pw.app.repository.UserRepository;
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
+
 
 @Service
 @Transactional
@@ -33,20 +33,20 @@ public class ProjectService implements IProjectService {
         User user = userRepository.findByEmail(UtilityService.getCurrentUser()).orElseThrow(()->{
             throw new IllegalArgumentException("User with given id does not exist");
         });
-        projectRepository.save(map(project, user));
+        projectRepository.save(ProjectMapper.map(project, user));
     }
 
     @Override
     public ProjectCompleteInfo get(Long id) {
         Optional<Project> project = projectRepository.findById(id);
-        return project.map(this::map).orElseThrow();
+        return project.map(ProjectMapper::map).orElseThrow();
     }
 
     @Override
     public List<ProjectCompleteInfo> getUserProjects(Long userId) {
         return projectRepository.findAll().stream()
-                .filter(project -> project.getOwnerProjectMember().getUser().getId().equals(userId))
-                .map(this::map).toList();
+                .filter(project -> project.getOwner().getUser().getId().equals(userId))
+                .map(ProjectMapper::map).toList();
     }
 
     @Override
@@ -77,22 +77,33 @@ public class ProjectService implements IProjectService {
         project.removeTeamMember(member);
     }
 
-    private ProjectCompleteInfo map(Project project) {
-        return new ProjectCompleteInfo(
-                project.getId(),
-                project.getName(),
-                project.getCategory(),
-                project.getDescription(),
-                project.getOwnerProjectMember().getUser().getName()
-        );
+    public static class ProjectMapper {
+        public static ProjectCompleteInfo map(Project project) {
+            return new ProjectCompleteInfo(
+                    project.getId(),
+                    project.getName(),
+                    project.getCategory(),
+                    project.getDescription(),
+                    project.getMembers().stream().map(ProjectMapper::map).toList()
+            );
+        }
+
+        public static ProjectMemberInfo map(ProjectMember projectMember) {
+            UserBasicInfo userBasicInfo = new UserBasicInfo(projectMember.getId().getMemberId(),
+                    projectMember.getUser().getName(),
+                    projectMember.getUser().getEmail());
+            return new ProjectMemberInfo(userBasicInfo, projectMember.getRole().name());
+        }
+
+        public static Project map(ProjectCreateRequest project, User owner) {
+            return new Project(
+                    owner,
+                    project.getName(),
+                    project.getCategory(),
+                    project.getDescription()
+            );
+        }
     }
 
-    private Project map(ProjectCreateRequest project, User owner) {
-        return new Project(
-            owner,
-            project.getName(),
-            project.getCategory(),
-            project.getDescription()
-        );
-    }
+
 }

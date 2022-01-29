@@ -61,7 +61,7 @@ public class Project {
     )
     private List<Message> messages = new ArrayList<>();
 
-    public ProjectMember getOwnerProjectMember() {
+    public ProjectMember getOwner() {
         return members.stream().filter(member -> member.getRole() == ProjectMember.Role.OWNER).findAny().orElse(null);
     }
 

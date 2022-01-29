@@ -8,7 +8,11 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import pl.edu.pw.app.api.dto.projectDTO.AddFavoriteProject;
+import pl.edu.pw.app.api.dto.projectDTO.ProjectCompleteInfo;
 import pl.edu.pw.app.api.dto.userDTO.UserUpdateRequest;
+import pl.edu.pw.app.domain.Project;
+import pl.edu.pw.app.repository.ProjectRepository;
 import pl.edu.pw.app.repository.UserRepository;
 import pl.edu.pw.app.domain.User;
 import pl.edu.pw.security.token.ConfirmationToken;
@@ -16,13 +20,21 @@ import pl.edu.pw.security.token.ConfirmationToken;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
 public class UserServiceImpl implements UserService, UserDetailsService {
 
     private UserRepository userRepository;
+
+    @Autowired
+    private ProjectRepository projectRepository;
+
+
+
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
     @Autowired
@@ -102,6 +114,34 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public int enableUser(String email) {
         return userRepository.enableUser(email);
+    }
+
+    @Override
+    public void addToFavorites(AddFavoriteProject project) {
+        User user = userRepository.findByEmail(UtilityService.getCurrentUser()).orElseThrow(()->{
+            throw new IllegalArgumentException("Could not find user with given id");
+        });
+        Project projectToAdd = projectRepository.findById(project.getProjectId()).orElseThrow();
+        user.addToFavorites(projectToAdd);
+        userRepository.save(user);
+    }
+
+    @Override
+    public void removeFromFavorites(Long projectId) {
+        User user = userRepository.findByEmail(UtilityService.getCurrentUser()).orElseThrow(()->{
+            throw new IllegalArgumentException("Could not find user with given id");
+        });
+        Project projectToRemove = projectRepository.findById(projectId).orElseThrow();
+        user.removeFromFavorites(projectToRemove);
+        userRepository.save(user);
+    }
+
+    @Override
+    public Set<ProjectCompleteInfo> getAllFavorites() {
+        User user = userRepository.findByEmail(UtilityService.getCurrentUser()).orElseThrow(()->{
+            throw new IllegalArgumentException("Could not find user with given id");
+        });
+        return user.getFavoriteProjects().stream().map(ProjectService.ProjectMapper::map).collect(Collectors.toSet());
     }
 
     private static class UserMapper {
