@@ -92,7 +92,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     public String signUpUser(User user){
        boolean userExists = userRepository.findByEmail(user.getEmail()).isPresent();
-        System.out.println("\n"+userExists+"\n");
         if(userExists ){
             throw new IllegalStateException("User with this email already exists: "+user.getEmail());
         }

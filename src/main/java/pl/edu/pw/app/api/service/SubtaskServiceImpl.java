@@ -135,6 +135,7 @@ public class SubtaskServiceImpl implements SubtaskService {
                 task.getSubtaskAssignees().stream().map(
 
                         a ->
+
                              new ProjectMemberBasicInfo(
                                     a.getUser().getId(),
                                     a.getUser().getName(),

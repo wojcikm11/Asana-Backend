@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import pl.edu.pw.app.api.dto.projectDTO.AddFavoriteProject;
 import pl.edu.pw.app.api.dto.projectDTO.ProjectCompleteInfo;
 import pl.edu.pw.app.api.dto.userDTO.UserCreateRequest;
+import pl.edu.pw.app.api.service.PasswordResetService;
 import pl.edu.pw.app.api.service.RegistrationService;
 import pl.edu.pw.app.api.service.UserService;
 
@@ -21,6 +22,7 @@ public class UserController {
 
     private UserService userService;
     private RegistrationService registrationService;
+    private PasswordResetService passwordResetService;
 
 
     @PostMapping("/registration")
@@ -55,6 +57,18 @@ public class UserController {
     public ResponseEntity<?> deleteFromFavorites(@PathVariable Long id) {
         userService.removeFromFavorites(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+
+    @PostMapping("password/forgot")
+    public ResponseEntity sendPasswordResetLink(@RequestParam String email){
+        passwordResetService.sendToken(email);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping("password/change")
+    public String showNewPasswordForm(@RequestParam String token){
+        return "reset password"+token;
     }
 
 }
