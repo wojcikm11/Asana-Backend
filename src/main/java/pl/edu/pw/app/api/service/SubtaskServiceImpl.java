@@ -11,6 +11,7 @@ import pl.edu.pw.app.repository.SubtaskRepository;
 import pl.edu.pw.app.repository.TaskRepository;
 import pl.edu.pw.app.repository.UserRepository;
 
+import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +19,7 @@ import java.util.Optional;
 
 @Service
 @AllArgsConstructor
+@Transactional
 public class SubtaskServiceImpl implements SubtaskService {
 
     private SubtaskRepository subtaskRepository;
@@ -85,7 +87,7 @@ public class SubtaskServiceImpl implements SubtaskService {
         subtask.getSubtaskAssignees().add(
                 project.getProjectMemberByUserId(assign.getUserId())
         );
-        subtaskRepository.save(subtask);
+//        subtaskRepository.save(subtask);
 
 
     }

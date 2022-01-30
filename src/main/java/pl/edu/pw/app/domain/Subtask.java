@@ -13,7 +13,7 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode
+@EqualsAndHashCode(exclude = "subtaskAssignees")
 public class Subtask {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
