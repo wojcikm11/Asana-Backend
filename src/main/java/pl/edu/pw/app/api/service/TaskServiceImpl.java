@@ -14,18 +14,18 @@ import pl.edu.pw.app.domain.Task;
 import pl.edu.pw.app.repository.ProjectRepository;
 import pl.edu.pw.app.repository.TaskRepository;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
 
 @AllArgsConstructor
 @Service
+@Transactional
 public class TaskServiceImpl implements TaskService {
-
 
     private ProjectRepository projectRepository;
     private TaskRepository taskRepository;
-
 
     private final String NO_PROJECT_FOUND = "Project with the given id not found";
     private final String NO_TASK_FOUND = "Task with the given id not found";
@@ -35,10 +35,7 @@ public class TaskServiceImpl implements TaskService {
     public void addTask(TaskCreateRequest task) {
         Task newTask = map(task);
         taskRepository.save(newTask);
-//        todo spr. czy projekt istnieje
-
-
-
+//      TODO spr. czy projekt istnieje
     }
 
     @Override
@@ -46,10 +43,7 @@ public class TaskServiceImpl implements TaskService {
         Project project = projectRepository.findById(id).orElseThrow(() -> {
             throw new IllegalArgumentException(NO_PROJECT_FOUND);
         });
-
-
         return project.getTasks().stream().map(this::map).toList();
-
     }
 
 //    todo naprawic
@@ -58,29 +52,23 @@ public class TaskServiceImpl implements TaskService {
         Project project = projectRepository.findById(id).orElseThrow(() -> {
             throw new IllegalArgumentException(NO_PROJECT_FOUND);
         });
-
         return project.getTasks().stream().map(this::mapTaskDetails).toList();
-
     }
 
     @Override
-    public void addAssignee(AddAssigneeRequest assignee) {
-        Project project = projectRepository.findById(assignee.getProjectId()).orElseThrow(()->{
-            throw new IllegalArgumentException(NO_PROJECT_FOUND);
-        });
-
-        project.getMembers().stream().forEach(m->{
-            if(m.getId().getMemberId()==assignee.getUserId()) {
-                return;
-            }
-            throw new RuntimeException(NO_PROJECT_MEMBER_FOUND);
-        });
-
-        Task task = taskRepository.findById(assignee.getTaskId()).orElseThrow(()->{
+    public void addAssignee(AddAssigneeRequest addAssignee) {
+        Task task = taskRepository.findById(addAssignee.getTaskId()).orElseThrow(()->{
             throw new IllegalArgumentException(NO_TASK_FOUND);
         });
-        project.addTask(task);
-
+        Project project = task.getProject();
+        project.getMembers().forEach(m-> {
+            if (!m.getId().getMemberId().equals(addAssignee.getUserId())) {
+                throw new RuntimeException(NO_PROJECT_MEMBER_FOUND);
+            }
+        });
+        ProjectMember taskAssignee = project.getProjectMemberByUserId(addAssignee.getUserId());
+        task.addAssignee(taskAssignee);
+        taskRepository.save(task);
     }
 
     @Override

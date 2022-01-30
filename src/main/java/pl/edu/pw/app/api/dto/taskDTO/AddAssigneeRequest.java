@@ -14,7 +14,4 @@ public class AddAssigneeRequest {
 
     @NotNull
     private Long userId;
-
-    @NotNull
-    private Long projectId;
 }

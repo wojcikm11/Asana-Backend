@@ -85,8 +85,6 @@ public class SubtaskServiceImpl implements SubtaskService {
                 project.getProjectMemberByUserId(assign.getUserId())
         );
         subtaskRepository.save(subtask);
-
-
     }
 
     @Override

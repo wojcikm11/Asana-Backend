@@ -12,7 +12,7 @@ import java.util.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode
+@EqualsAndHashCode(exclude = "taskAssignees")
 public class Task {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
@@ -64,5 +64,19 @@ public class Task {
         this.startDate = startDate;
         this.deadLine = deadLine;
         this.priority = priority;
+    }
+
+    public void addAssignee(ProjectMember taskAssignee) {
+        if (taskAssignee != null) {
+            this.taskAssignees.add(taskAssignee);
+            taskAssignee.getTasks().add(this);
+        }
+    }
+
+    public void removeAssignee(ProjectMember taskAssignee) {
+        if (taskAssignee != null) {
+            this.taskAssignees.remove(taskAssignee);
+            taskAssignee.getTasks().remove(this);
+        }
     }
 }

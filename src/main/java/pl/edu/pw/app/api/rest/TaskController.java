@@ -31,21 +31,20 @@ public class TaskController {
         return taskService.getTasks(id);
     }
 
-  @GetMapping(path="{id}/tasks/details")
-    public List<TaskDetails> getProjectTasksDetails(@PathVariable Long id){
+    @GetMapping(path="{id}/tasks/details")
+    public List<TaskDetails> getProjectTasksDetails(@PathVariable Long id) {
         return taskService.getTasksDetails(id);
-  }
+    }
 
-  @PostMapping("task/add/assignee")
-    public ResponseEntity<?> addAssignee(@RequestBody AddAssigneeRequest assignee){
+    @PostMapping("task/add/assignee")
+    public ResponseEntity<?> addAssignee(@RequestBody AddAssigneeRequest assignee) {
         taskService.addAssignee(assignee);
-      return new ResponseEntity<>(HttpStatus.CREATED);
-  }
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
 
-  @RequestMapping("task/delete/{id}")
-    public ResponseEntity<?> deleteTask(@PathVariable Long id){
+    @RequestMapping("task/delete/{id}")
+    public ResponseEntity<?> deleteTask(@PathVariable Long id) {
         taskService.deleteTask(id);
-      return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-
-  }
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
 }
