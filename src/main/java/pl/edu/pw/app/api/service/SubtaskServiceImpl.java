@@ -87,7 +87,7 @@ public class SubtaskServiceImpl implements SubtaskService {
         subtask.getSubtaskAssignees().add(
                 project.getProjectMemberByUserId(assign.getUserId())
         );
-//        subtaskRepository.save(subtask);
+        subtaskRepository.save(subtask);
 
 
     }
