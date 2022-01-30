@@ -7,6 +7,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import pl.edu.pw.app.api.dto.projectDTO.AddFavoriteProject;
 import pl.edu.pw.app.api.dto.projectDTO.ProjectCompleteInfo;
+import pl.edu.pw.app.api.dto.userDTO.ResetPasswordRequest;
 import pl.edu.pw.app.api.dto.userDTO.UserCreateRequest;
 import pl.edu.pw.app.api.service.PasswordResetService;
 import pl.edu.pw.app.api.service.RegistrationService;
@@ -67,8 +68,16 @@ public class UserController {
     }
 
     @GetMapping("password/change")
-    public String showNewPasswordForm(@RequestParam String token){
+    public String returnResetToken(@RequestParam String token){
         return "reset password"+token;
+    }
+
+    @PostMapping("password/change")
+    public ResponseEntity setNewPassword(@Valid @RequestBody ResetPasswordRequest
+                                                     newPassword){
+        passwordResetService.setNewPassword(newPassword);
+        return new ResponseEntity<>(HttpStatus.OK);
+
     }
 
 }

@@ -12,6 +12,7 @@ import java.util.Date;
 
 @Entity(name = "password_reset_token")
 @NoArgsConstructor
+@Data
 public class PasswordResetToken {
 
     @Id

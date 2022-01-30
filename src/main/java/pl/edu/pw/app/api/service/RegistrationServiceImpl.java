@@ -19,6 +19,10 @@ public class RegistrationServiceImpl implements RegistrationService {
     private ConfirmationTokenServiceImpl confirmationTokenService;
     private EmailSenderService emailSenderService;
 
+    private final String registrationMessage ="Thank you for registering. Please click on the below link to activate your account:";
+    private final String actionMsg = "Confirm your email";
+    private final String linkMsg ="Activate now";
+
 
     @Override
     public String register(UserCreateRequest request) {
@@ -37,7 +41,7 @@ public class RegistrationServiceImpl implements RegistrationService {
         );
 
         String link = "http://localhost:8080/api/registration/confirm?token="+token;
-        emailSenderService.send(request.getEmail(),emailSenderService.buildEmail(request.getEmail(),link));
+        emailSenderService.send(request.getEmail(),emailSenderService.buildEmail(request.getEmail(),link,registrationMessage,actionMsg,linkMsg));
 
         return token;
     }
