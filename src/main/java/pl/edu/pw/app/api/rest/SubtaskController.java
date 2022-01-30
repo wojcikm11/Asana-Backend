@@ -50,11 +50,16 @@ public class SubtaskController {
         return subtaskService.getSubtaskDetails(id);
     }
 
-    @PostMapping("assign")
+    @PostMapping("/assign")
     public ResponseEntity<?> addAssignee(@Valid @RequestBody AssignRequest assign ){
         subtaskService.addAssignee(assign);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
+    @DeleteMapping("/{subtaskId}/assignee/delete/{assigneeId}")
+    public ResponseEntity<?> deleteAssignee(@PathVariable Long subtaskId, @PathVariable Long assigneeId) {
+        subtaskService.removeAssignee(subtaskId, assigneeId);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
 
 }

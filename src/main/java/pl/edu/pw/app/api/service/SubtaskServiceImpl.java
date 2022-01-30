@@ -6,10 +6,7 @@ import pl.edu.pw.app.api.dto.ProjectMemberBasicInfo;
 import pl.edu.pw.app.api.dto.subtaskDTO.*;
 import pl.edu.pw.app.api.dto.teamMemberDTO.TeamMemberBasicInfo;
 import pl.edu.pw.app.domain.*;
-import pl.edu.pw.app.repository.ProjectRepository;
-import pl.edu.pw.app.repository.SubtaskRepository;
-import pl.edu.pw.app.repository.TaskRepository;
-import pl.edu.pw.app.repository.UserRepository;
+import pl.edu.pw.app.repository.*;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
@@ -98,6 +95,14 @@ public class SubtaskServiceImpl implements SubtaskService {
                 ()-> new IllegalArgumentException(SUBTASK_NOT_FOUND_EXCEPTION)
         );
         return mapDetails(subtask);
+    }
+
+    @Override
+    public void removeAssignee(Long subtaskId, Long assigneeId) {
+        Subtask subtask = subtaskRepository.findById(subtaskId).orElseThrow();
+        Project project = subtask.getTask().getProject();
+        subtask.removeAssignee(project.getProjectMemberByUserId(assigneeId));
+        subtaskRepository.save(subtask);
     }
 
     private Subtask map(SubtaskCreateRequest subtask) {

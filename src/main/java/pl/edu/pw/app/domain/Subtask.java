@@ -50,7 +50,6 @@ public class Subtask {
     @Enumerated(EnumType.STRING)
     private Status status =Status.UNDONE;
 
-
     public Subtask(Task task, String name, String description, LocalDateTime startDate, LocalDateTime deadLine, Priority priority) {
         this.task = task;
         this.name = name;
@@ -58,6 +57,12 @@ public class Subtask {
         this.startDate = startDate;
         this.deadLine = deadLine;
         this.priority = priority;
+    }
 
+    public void removeAssignee(ProjectMember subtaskAssignee) {
+        if (subtaskAssignee != null) {
+            this.subtaskAssignees.remove(subtaskAssignee);
+            subtaskAssignee.getSubtasks().remove(this);
+        }
     }
 }

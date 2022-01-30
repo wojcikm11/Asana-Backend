@@ -15,4 +15,5 @@ public interface SubtaskService {
     void addAssignee(AssignRequest assign);
 //    subtask id
     SubtaskCompleteInfo getSubtaskDetails(Long id);
+    void removeAssignee(Long subtaskId, Long assigneeId);
 }
