@@ -30,7 +30,7 @@ public class TaskController {
     }
 
     @PutMapping("/edit/{id}")
-    public ResponseEntity<?> updateSubtask(@Valid @RequestBody TaskUpdateRequest editedTask, @PathVariable Long id){
+    public ResponseEntity<?> updateTask(@Valid @RequestBody TaskUpdateRequest editedTask, @PathVariable Long id){
         taskService.updateTask(editedTask, id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

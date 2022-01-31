@@ -75,7 +75,7 @@ CREATE TABLE IF NOT EXISTS task (
     name VARCHAR(50) NOT NULL,
 	description VARCHAR(200),
 	start_date DATETIME NOT NULL,
-	deadline DATETIME NOT NULL,
+	deadline DATETIME,
     priority ENUM('LOW', 'MEDIUM', 'HIGH') NOT NULL DEFAULT 'LOW',
     status ENUM('UNDONE', 'DOING','DONE') NOT NULL DEFAULT 'UNDONE',
     FOREIGN KEY (project_id) REFERENCES project (id)
