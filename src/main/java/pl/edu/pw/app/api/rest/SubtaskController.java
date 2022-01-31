@@ -17,31 +17,31 @@ public class SubtaskController {
 
     private SubtaskService subtaskService;
 
-    @PostMapping("add")
+    @PostMapping("/add")
     public ResponseEntity<?> addSubtask(@Valid @RequestBody SubtaskCreateRequest subtask){
         subtaskService.addSubtask(subtask);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @DeleteMapping("delete/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> deleteSubtask(@PathVariable Long id){
         subtaskService.deleteSubtask(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @PutMapping("edit/{id}")
+    @PutMapping("/edit/{id}")
     public ResponseEntity<?> updateSubtask(@Valid @RequestBody SubtaskUpdateRequest editedSubtask, @PathVariable Long id){
         subtaskService.updateSubtask(editedSubtask, id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @GetMapping("/{id}")  // task id
-    public List<SubtaskBasicInfo> getSubtasks(@PathVariable Long id){
+    @GetMapping("/all/{id}")  // task id
+    public List<SubtaskBasicInfo> getProjectSubtasks(@PathVariable Long id){
         return subtaskService.getSubtasks(id);
     }
 
-    @GetMapping("all/details/{id}")
-    public List<SubtaskCompleteInfo> getSubtasksDetails(@PathVariable Long id){
+    @GetMapping("/all/details/{id}")
+    public List<SubtaskCompleteInfo> getProjectSubtasksDetails(@PathVariable Long id){
         return subtaskService.getSubtasksDetails(id);
     }
 
@@ -51,7 +51,7 @@ public class SubtaskController {
     }
 
     @PostMapping("/assign")
-    public ResponseEntity<?> addAssignee(@Valid @RequestBody AssignRequest assign ){
+    public ResponseEntity<?> addAssignee(@Valid @RequestBody AssignRequest assign){
         subtaskService.addAssignee(assign);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }

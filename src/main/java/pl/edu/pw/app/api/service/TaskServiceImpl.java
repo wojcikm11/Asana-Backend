@@ -2,15 +2,9 @@ package pl.edu.pw.app.api.service;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-import pl.edu.pw.app.api.dto.taskDTO.AddAssigneeRequest;
-import pl.edu.pw.app.api.dto.taskDTO.TaskBasicInfo;
-import pl.edu.pw.app.api.dto.taskDTO.TaskCreateRequest;
-import pl.edu.pw.app.api.dto.taskDTO.TaskDetails;
+import pl.edu.pw.app.api.dto.taskDTO.*;
 import pl.edu.pw.app.api.dto.userDTO.UserBasicInfo;
-import pl.edu.pw.app.domain.Priority;
-import pl.edu.pw.app.domain.Project;
-import pl.edu.pw.app.domain.ProjectMember;
-import pl.edu.pw.app.domain.Task;
+import pl.edu.pw.app.domain.*;
 import pl.edu.pw.app.repository.ProjectRepository;
 import pl.edu.pw.app.repository.TaskRepository;
 
@@ -24,6 +18,7 @@ import java.util.List;
 @Transactional
 public class TaskServiceImpl implements TaskService {
 
+    private static final String TASK_NOT_FOUND_EXCEPTION = "Task with given id not found";
     private ProjectRepository projectRepository;
     private TaskRepository taskRepository;
 
@@ -72,12 +67,33 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
+    public void removeAssignee(Long taskId, Long assigneeId) {
+        Task task = taskRepository.findById(taskId).orElseThrow();
+        Project project = task.getProject();
+        task.removeAssignee(project.getProjectMemberByUserId(assigneeId));
+        taskRepository.save(task);
+    }
+
+    @Override
     public void deleteTask(Long id) {
         Task task = taskRepository.findById(id).orElseThrow(()->{
             throw new IllegalArgumentException(NO_TASK_FOUND);
         });
         task.getProject().getTasks().remove(task);
         taskRepository.delete(task);
+    }
+
+    @Override
+    public void updateTask(TaskUpdateRequest updatedTask, Long id) {
+        Task task = taskRepository.findById(id).orElseThrow(()->
+                new IllegalArgumentException(TASK_NOT_FOUND_EXCEPTION));
+        task.setName(updatedTask.getName());
+        task.setDescription(updatedTask.getDescription());
+        task.setStartDate(updatedTask.getStartDate());
+        task.setDeadLine(updatedTask.getDeadLine());
+        task.setStatus(updatedTask.getStatus());
+        task.setPriority(updatedTask.getPriority());
+        taskRepository.save(task);
     }
 
     private Task map(TaskCreateRequest task) {
