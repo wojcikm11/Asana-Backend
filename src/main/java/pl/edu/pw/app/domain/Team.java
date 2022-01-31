@@ -64,8 +64,8 @@ public class Team {
         TeamMember teamMember = new TeamMember(user, this, TeamMember.Role.MEMBER);
         members.remove(teamMember);
         user.getTeams().remove(teamMember);
-        teamMember.setTeam(null);
-        teamMember.setUser(null);
+//        teamMember.setTeam(null);
+//        teamMember.setUser(null);
     }
 
     public boolean isOwner(String email) {
@@ -74,12 +74,13 @@ public class Team {
                 .stream().filter(
                 m-> m.getUser().getEmail().equals(email))
                 .findFirst()
-                .orElseThrow(()-> new IllegalArgumentException(ErrorMessage.NOT_PROJECT_MEMBER_EXCEPTION));
+                .orElseThrow(()-> new IllegalArgumentException(ErrorMessage.NOT_TEAM_MEMBER_EXCEPTION));
         return member.getRole()== TeamMember.Role.OWNER;
 
     }
 
     private class ErrorMessage{
+        public static final String NOT_TEAM_MEMBER_EXCEPTION = "User with the given email is not a member of this team";
         private static final String NOT_PROJECT_MEMBER_EXCEPTION ="User with the given email is not a member of this project";
      }
 }

@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import pl.edu.pw.app.api.dto.teamDTO.TeamBasicInfo;
 import pl.edu.pw.app.api.dto.teamDTO.TeamCreateRequest;
 import pl.edu.pw.app.api.dto.teamMemberDTO.AddTeamMemberRequest;
+import pl.edu.pw.app.api.dto.teamMemberDTO.DeleteTeamMemberRequest;
 import pl.edu.pw.app.api.dto.teamMemberDTO.TeamMemberBasicInfo;
 import pl.edu.pw.app.api.service.TeamService;
 
@@ -53,5 +54,11 @@ public class TeamController {
     public ResponseEntity<?> addMember(@RequestBody @Valid AddTeamMemberRequest addTeamMember){
         teamService.addMember(addTeamMember);
         return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    @DeleteMapping("/deleteMember")
+    public ResponseEntity<?> deleteMember(@RequestBody @Valid DeleteTeamMemberRequest deleteTeamMember){
+        teamService.deleteMember(deleteTeamMember);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

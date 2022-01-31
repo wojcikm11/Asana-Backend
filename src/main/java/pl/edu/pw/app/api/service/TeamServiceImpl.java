@@ -6,6 +6,7 @@ import pl.edu.pw.app.api.dto.projectDTO.ProjectBasicInfo;
 import pl.edu.pw.app.api.dto.teamDTO.TeamBasicInfo;
 import pl.edu.pw.app.api.dto.teamDTO.TeamCreateRequest;
 import pl.edu.pw.app.api.dto.teamMemberDTO.AddTeamMemberRequest;
+import pl.edu.pw.app.api.dto.teamMemberDTO.DeleteTeamMemberRequest;
 import pl.edu.pw.app.api.dto.teamMemberDTO.TeamMemberBasicInfo;
 import pl.edu.pw.app.domain.Team;
 import pl.edu.pw.app.domain.TeamMember;
@@ -37,7 +38,7 @@ public class TeamServiceImpl implements TeamService {
         if (team.getName() == null || team.getName().isBlank()) {
             throw new IllegalArgumentException(EMPTY_TEAM_NAME_EXCEPTION);
         }
-
+        System.out.println(UtilityService.getCurrentUser());
         User user = userRepository.findByEmail(UtilityService.getCurrentUser()).orElseThrow(()->{
             throw new IllegalArgumentException(USER_NOT_FOUND_EXCEPTION);
         });
@@ -87,6 +88,33 @@ public class TeamServiceImpl implements TeamService {
     @Override
     public List<TeamBasicInfo> getAll() {
         return teamRepository.findAll().stream().map(this::map).toList();
+    }
+
+    @Override
+    public void deleteMember(DeleteTeamMemberRequest deleteTeamMember) {
+        Team team = teamRepository.findById(deleteTeamMember.getTeamId()).orElseThrow(
+                () -> new EntityNotFoundException(TEAM_NOT_FOUND_EXCEPTION)
+        );
+
+        if(!team.isOwner(UtilityService.getCurrentUser())){
+            throw new EntityNotFoundException(NO_PERMISSION_EXCEPTION);
+        }
+        User user =userRepository.findById(deleteTeamMember.getMemberId()).orElseThrow(
+                () -> new EntityNotFoundException(USER_NOT_FOUND_EXCEPTION)
+        );
+      TeamMember member = team.getMembers().stream().filter(
+              m ->
+                 m.getUser().getId() == deleteTeamMember.getMemberId()
+      ).findFirst().orElseThrow(
+              ()-> new IllegalArgumentException(USER_NOT_FOUND_EXCEPTION)
+
+
+
+      );
+
+
+        team.getMembers().remove(member);
+        teamRepository.save(team);
     }
 
     private Team map(TeamCreateRequest team) {
