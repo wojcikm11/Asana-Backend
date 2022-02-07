@@ -3,6 +3,7 @@ package pl.edu.pw.app.api.rest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import pl.edu.pw.app.api.dto.projectDTO.AddProjectMember;
 import pl.edu.pw.app.api.dto.projectDTO.ProjectCompleteInfo;
@@ -41,6 +42,7 @@ public class ProjectController {
     }
 
     @PostMapping("/member")
+    @PreAuthorize("@projectSecurity.isProjectOwner(#addProjectMember.projectId)")
     public ResponseEntity<?> addProjectMember(@Valid @RequestBody AddProjectMember addProjectMember) {
         projectService.addUserToProject(addProjectMember);
         return new ResponseEntity<>(HttpStatus.CREATED);

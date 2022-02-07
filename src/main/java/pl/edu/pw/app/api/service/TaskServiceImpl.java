@@ -56,11 +56,11 @@ public class TaskServiceImpl implements TaskService {
             throw new IllegalArgumentException(NO_TASK_FOUND);
         });
         Project project = task.getProject();
-        project.getMembers().forEach(m-> {
-            if (!m.getId().getMemberId().equals(addAssignee.getUserId())) {
-                throw new RuntimeException(NO_PROJECT_MEMBER_FOUND);
-            }
-        });
+//        project.getMembers().forEach(m-> {
+//            if (!m.getId().getMemberId().equals(addAssignee.getUserId())) {
+//                throw new RuntimeException(NO_PROJECT_MEMBER_FOUND);
+//            }
+//        });
         ProjectMember taskAssignee = project.getProjectMemberByUserId(addAssignee.getUserId());
         task.addAssignee(taskAssignee);
         taskRepository.save(task);

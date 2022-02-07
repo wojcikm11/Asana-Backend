@@ -62,7 +62,7 @@ public class UserController {
 
 
     @PostMapping("password/forgot")
-    public ResponseEntity sendPasswordResetLink(@RequestParam String email){
+    public ResponseEntity<?> sendPasswordResetLink(@RequestParam String email){
         passwordResetService.sendToken(email);
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -73,7 +73,7 @@ public class UserController {
     }
 
     @PostMapping("password/change")
-    public ResponseEntity setNewPassword(@Valid @RequestBody ResetPasswordRequest
+    public ResponseEntity<?> setNewPassword(@Valid @RequestBody ResetPasswordRequest
                                                      newPassword){
         passwordResetService.setNewPassword(newPassword);
         return new ResponseEntity<>(HttpStatus.OK);
