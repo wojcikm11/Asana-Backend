@@ -16,7 +16,7 @@ import pl.edu.pw.app.api.service.UserServiceImpl;
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 @AllArgsConstructor
-public class WebSecurityConfig  extends WebSecurityConfigurerAdapter {
+public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private UserServiceImpl userService;
     private BCryptPasswordEncoder bCryptPasswordEncoder;

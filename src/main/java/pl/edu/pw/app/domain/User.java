@@ -73,6 +73,10 @@ public class User implements PasswordSecurity, UserDetails {
         this.enabled = false;
     }
 
+    public boolean inUserFavorites(Project project) {
+        return favoriteProjects.contains(project);
+    }
+
     public void addTeam(Team team) {
         TeamMember teamMember = new TeamMember(this, team, TeamMember.Role.MEMBER);
         teams.add(teamMember);

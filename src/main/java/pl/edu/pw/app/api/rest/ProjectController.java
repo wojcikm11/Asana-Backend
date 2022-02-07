@@ -42,25 +42,28 @@ public class ProjectController {
     }
 
     @PostMapping("/member")
-    @PreAuthorize("@projectSecurity.isProjectOwner(#addProjectMember.projectId)")
+    @PreAuthorize("@projectSecurity.isProjectMember(#addProjectMember.projectId)")
     public ResponseEntity<?> addProjectMember(@Valid @RequestBody AddProjectMember addProjectMember) {
         projectService.addUserToProject(addProjectMember);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("@projectSecurity.isProjectOwner(#id)")
     public ResponseEntity<?> updateProject(@Valid @RequestBody ProjectUpdateRequest projectUpdateRequest, @PathVariable Long id) {
         projectService.update(id, projectUpdateRequest);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @DeleteMapping("/{projectId}/delete_member/{memberId}")
+    @PreAuthorize("@projectSecurity.isProjectOwner(#projectId)")
     public ResponseEntity<?> deleteProjectMember(@PathVariable Long projectId, @PathVariable Long memberId) {
         projectService.removeProjectMember(projectId, memberId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("@projectSecurity.isProjectOwner(#id)")
     public ResponseEntity<?> deleteProject(@PathVariable Long id) {
         projectService.delete(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

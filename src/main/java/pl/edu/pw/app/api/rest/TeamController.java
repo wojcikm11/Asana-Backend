@@ -3,6 +3,7 @@ package pl.edu.pw.app.api.rest;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import pl.edu.pw.app.api.dto.teamDTO.TeamBasicInfo;
 import pl.edu.pw.app.api.dto.teamDTO.TeamCreateRequest;
@@ -35,6 +36,7 @@ public class TeamController {
     }
 
     @DeleteMapping("/delete/{id}")
+    @PreAuthorize("@teamSecurity.isTeamOwner(#id)")
     public ResponseEntity<?> deleteTeam(@PathVariable Long id){
         teamService.deleteTeam(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -51,12 +53,14 @@ public class TeamController {
     }
 
     @PostMapping("/addMember")
+    @PreAuthorize("@teamSecurity.isTeamMember(#addTeamMember.teamId)")
     public ResponseEntity<?> addMember(@RequestBody @Valid AddTeamMemberRequest addTeamMember){
         teamService.addMember(addTeamMember);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @DeleteMapping("/deleteMember")
+    @PreAuthorize("@teamSecurity.isTeamOwner(#deleteTeamMember.teamId)")
     public ResponseEntity<?> deleteMember(@RequestBody @Valid DeleteTeamMemberRequest deleteTeamMember){
         teamService.deleteMember(deleteTeamMember);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

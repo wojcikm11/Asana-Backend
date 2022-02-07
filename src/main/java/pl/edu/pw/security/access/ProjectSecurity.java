@@ -26,4 +26,10 @@ public class ProjectSecurity {
         Project project = projectRepository.findById(projectId).orElseThrow();
         return project.getOwner().getUser().getId().equals(user.getId());
     }
+
+    public boolean isProjectMember(Long projectId) {
+        User user = UtilityService.getLoggedUser();
+        Project project = projectRepository.findById(projectId).orElseThrow();
+        return project.getProjectMemberByUserId(user.getId()) != null;
+    }
 }
