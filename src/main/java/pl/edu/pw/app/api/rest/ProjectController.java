@@ -39,6 +39,7 @@ public class ProjectController {
     }
 
     @PostMapping("/team")
+    @PreAuthorize("@projectSecurity.isProjectMember(#addTeam.projectId) and @projectSecurity.isTeamMember(#addTeam.teamId)")
     public ResponseEntity<?> addTeam(@Valid @RequestBody AddTeam addTeam) {
         projectService.addTeam(addTeam);
         return new ResponseEntity<>(HttpStatus.CREATED);
