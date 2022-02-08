@@ -1,10 +1,7 @@
 package pl.edu.pw.app.api.service;
 
 import org.springframework.stereotype.Service;
-import pl.edu.pw.app.api.dto.projectDTO.AddProjectMember;
-import pl.edu.pw.app.api.dto.projectDTO.ProjectCompleteInfo;
-import pl.edu.pw.app.api.dto.projectDTO.ProjectCreateRequest;
-import pl.edu.pw.app.api.dto.projectDTO.ProjectUpdateRequest;
+import pl.edu.pw.app.api.dto.projectDTO.*;
 
 import javax.transaction.Transactional;
 import java.util.List;
@@ -19,4 +16,5 @@ public interface IProjectService {
     void delete(Long id);
     void addUserToProject(AddProjectMember addProjectMember);
     void removeProjectMember(Long projectId, Long userId);
+    void addTeam(AddTeam addTeam);
 }

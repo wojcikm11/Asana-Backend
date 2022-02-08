@@ -7,8 +7,10 @@ import pl.edu.pw.app.api.dto.projectDTO.*;
 import pl.edu.pw.app.api.dto.userDTO.UserBasicInfo;
 import pl.edu.pw.app.domain.Project;
 import pl.edu.pw.app.domain.ProjectMember;
+import pl.edu.pw.app.domain.Team;
 import pl.edu.pw.app.domain.User;
 import pl.edu.pw.app.repository.ProjectRepository;
+import pl.edu.pw.app.repository.TeamRepository;
 import pl.edu.pw.app.repository.UserRepository;
 
 import javax.transaction.Transactional;
@@ -22,11 +24,13 @@ public class ProjectService implements IProjectService {
 
     private ProjectRepository projectRepository;
     private UserRepository userRepository;
+    private TeamRepository teamRepository;
 
     @Autowired
-    public ProjectService(ProjectRepository projectRepository, UserRepository userRepository) {
+    public ProjectService(ProjectRepository projectRepository, UserRepository userRepository, TeamRepository teamRepository) {
         this.projectRepository = projectRepository;
         this.userRepository = userRepository;
+        this.teamRepository = teamRepository;
     }
 
     @Override
@@ -79,6 +83,13 @@ public class ProjectService implements IProjectService {
             throw new IllegalArgumentException("Project owner cannot remove himself from the project");
         }
         project.removeTeamMember(member);
+    }
+
+    @Override
+    public void addTeam(AddTeam addTeam) {
+        Team team = teamRepository.findById(addTeam.getTeamId()).orElseThrow();
+        Project project = projectRepository.findById(addTeam.getProjectId()).orElseThrow();
+        project.addTeam(team);
     }
 
     public static class ProjectMapper {

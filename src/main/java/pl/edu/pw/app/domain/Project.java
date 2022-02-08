@@ -90,4 +90,11 @@ public class Project {
 
         }
     }
+
+    public void addTeam(Team team) {
+        if (team != null) {
+            teams.add(team);
+            team.getProjects().add(this);
+        }
+    }
 }

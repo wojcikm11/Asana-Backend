@@ -5,10 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import pl.edu.pw.app.api.dto.projectDTO.AddProjectMember;
-import pl.edu.pw.app.api.dto.projectDTO.ProjectCompleteInfo;
-import pl.edu.pw.app.api.dto.projectDTO.ProjectCreateRequest;
-import pl.edu.pw.app.api.dto.projectDTO.ProjectUpdateRequest;
+import pl.edu.pw.app.api.dto.projectDTO.*;
 import pl.edu.pw.app.api.service.IProjectService;
 
 import javax.validation.Valid;
@@ -38,6 +35,12 @@ public class ProjectController {
     @PostMapping
     public ResponseEntity<?> addProject(@Valid @RequestBody ProjectCreateRequest project) {
         projectService.create(project);
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    @PostMapping("/team")
+    public ResponseEntity<?> addTeam(@Valid @RequestBody AddTeam addTeam) {
+        projectService.addTeam(addTeam);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 

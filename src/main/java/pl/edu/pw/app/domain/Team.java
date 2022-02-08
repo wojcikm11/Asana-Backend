@@ -7,11 +7,11 @@ import java.util.*;
 
 @Entity
 @Table
-@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
+@EqualsAndHashCode(exclude = "projects")
 public class Team {
 
     @Id
