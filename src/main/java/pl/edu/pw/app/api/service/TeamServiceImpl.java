@@ -96,6 +96,10 @@ public class TeamServiceImpl implements TeamService {
                 () -> new EntityNotFoundException(TEAM_NOT_FOUND_EXCEPTION)
         );
 
+        if (team.getOwner().getId().getMemberId().equals(deleteTeamMember.getMemberId())) {
+            throw new IllegalArgumentException("Team owner cannot remove himself from the team");
+        }
+
         if(!team.isOwner(UtilityService.getCurrentUser())){
             throw new EntityNotFoundException(NO_PERMISSION_EXCEPTION);
         }

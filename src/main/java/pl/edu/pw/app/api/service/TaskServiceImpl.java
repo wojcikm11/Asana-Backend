@@ -71,7 +71,6 @@ public class TaskServiceImpl implements TaskService {
         Task task = taskRepository.findById(taskId).orElseThrow();
         Project project = task.getProject();
         task.removeAssignee(project.getProjectMemberByUserId(assigneeId));
-        taskRepository.save(task);
     }
 
     @Override

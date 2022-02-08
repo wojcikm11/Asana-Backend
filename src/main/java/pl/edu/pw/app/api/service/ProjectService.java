@@ -1,5 +1,6 @@
 package pl.edu.pw.app.api.service;
 
+import org.hibernate.PropertyValueException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.edu.pw.app.api.dto.projectDTO.*;
@@ -74,6 +75,9 @@ public class ProjectService implements IProjectService {
     public void removeProjectMember(Long projectId, Long userId) {
         User member = userRepository.findById(userId).orElseThrow();
         Project project = projectRepository.findById(projectId).orElseThrow();
+        if (project.getOwner().getId().getMemberId().equals(userId)) {
+            throw new IllegalArgumentException("Project owner cannot remove himself from the project");
+        }
         project.removeTeamMember(member);
     }
 

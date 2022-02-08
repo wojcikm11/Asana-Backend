@@ -27,6 +27,8 @@ public class TeamSecurity {
     }
 
     public boolean isTeamMember(Long teamId) {
-        return !isTeamOwner(teamId);
+        User user = UtilityService.getLoggedUser();
+        Team team = teamRepository.findById(teamId).orElseThrow();
+        return team.getTeamMemberByUserId(user.getId()) != null;
     }
 }

@@ -53,7 +53,7 @@ public class TeamController {
     }
 
     @PostMapping("/addMember")
-    @PreAuthorize("@teamSecurity.isTeamMember(#addTeamMember.teamId)")
+    @PreAuthorize("@teamSecurity.isTeamOwner(#addTeamMember.teamId)")
     public ResponseEntity<?> addMember(@RequestBody @Valid AddTeamMemberRequest addTeamMember){
         teamService.addMember(addTeamMember);
         return new ResponseEntity<>(HttpStatus.CREATED);

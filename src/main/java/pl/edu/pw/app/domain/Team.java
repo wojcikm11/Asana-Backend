@@ -68,6 +68,14 @@ public class Team {
 //        teamMember.setUser(null);
     }
 
+    public TeamMember getTeamMemberByUserId(Long userId) {
+        return members.stream().filter(member -> member.getId().getMemberId().equals(userId)).findAny().orElse(null);
+    }
+
+    public TeamMember getOwner() {
+        return members.stream().filter(member -> member.getRole() == TeamMember.Role.OWNER).findAny().orElse(null);
+    }
+
     public boolean isOwner(String email) {
         TeamMember member =
                 members
