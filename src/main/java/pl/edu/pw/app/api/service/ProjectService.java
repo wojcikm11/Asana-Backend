@@ -1,14 +1,10 @@
 package pl.edu.pw.app.api.service;
 
-import org.hibernate.PropertyValueException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.edu.pw.app.api.dto.projectDTO.*;
 import pl.edu.pw.app.api.dto.userDTO.UserBasicInfo;
-import pl.edu.pw.app.domain.Project;
-import pl.edu.pw.app.domain.ProjectMember;
-import pl.edu.pw.app.domain.Team;
-import pl.edu.pw.app.domain.User;
+import pl.edu.pw.app.domain.*;
 import pl.edu.pw.app.repository.ProjectRepository;
 import pl.edu.pw.app.repository.TeamRepository;
 import pl.edu.pw.app.repository.UserRepository;
@@ -72,7 +68,7 @@ public class ProjectService implements IProjectService {
     public void addUserToProject(AddProjectMember addProjectMember) {
         User userToAdd = userRepository.findById(addProjectMember.getUserId()).orElseThrow();
         Project project = projectRepository.findById(addProjectMember.getProjectId()).orElseThrow();
-        project.addTeamMember(userToAdd);
+        project.addProjectMember(userToAdd);
     }
 
     @Override
@@ -82,14 +78,41 @@ public class ProjectService implements IProjectService {
         if (project.getOwner().getId().getMemberId().equals(userId)) {
             throw new IllegalArgumentException("Project owner cannot remove himself from the project");
         }
-        project.removeTeamMember(member);
+        project.removeProjectMember(member);
     }
 
     @Override
     public void addTeam(AddTeam addTeam) {
         Team team = teamRepository.findById(addTeam.getTeamId()).orElseThrow();
         Project project = projectRepository.findById(addTeam.getProjectId()).orElseThrow();
-        project.addTeam(team);
+        project.addTeam(team); // do usuniecia, jesli usuniemy tabele
+        addTeamMembersToProject(project, team);
+    }
+
+    @Override
+    public void removeTeam(RemoveTeamFromProject removeTeam) {
+        Team team = teamRepository.findById(removeTeam.getTeamId()).orElseThrow();
+        Project project = projectRepository.findById(removeTeam.getProjectId()).orElseThrow();
+        project.removeTeam(team); // do usuniecia, jesli usuniemy tabele
+        removeTeamMembersFromProject(project, team);
+    }
+
+    private void removeTeamMembersFromProject(Project project, Team team) {
+        for (TeamMember teamMember : team.getMembers()) {
+            ProjectMember projectMember = project.getProjectMemberByUserId(teamMember.getUser().getId());
+            if (projectMember != null && projectMember.getRole().equals(ProjectMember.Role.MEMBER)) {
+                project.removeProjectMember(teamMember.getUser());
+            }
+        }
+    }
+
+    private void addTeamMembersToProject(Project project, Team team) {
+        for (TeamMember teamMember : team.getMembers()) {
+            ProjectMember projectMember = project.getProjectMemberByUserId(teamMember.getUser().getId());
+            if (projectMember == null) {
+                project.addProjectMember(teamMember.getUser());
+            }
+        }
     }
 
     public static class ProjectMapper {
@@ -119,6 +142,4 @@ public class ProjectService implements IProjectService {
             );
         }
     }
-
-
 }

@@ -12,7 +12,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping(path="api/project")
+@RequestMapping(path="/api/project")
 public class ProjectController {
 
     private IProjectService projectService;
@@ -40,9 +40,17 @@ public class ProjectController {
 
     @PostMapping("/team")
     @PreAuthorize("@projectSecurity.isProjectMember(#addTeam.projectId) and @projectSecurity.isTeamMember(#addTeam.teamId)")
-    public ResponseEntity<?> addTeam(@Valid @RequestBody AddTeam addTeam) {
+    public ResponseEntity<?> addTeamToProject(@Valid @RequestBody AddTeam addTeam) {
         projectService.addTeam(addTeam);
         return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    @DeleteMapping("/{projectId}/team/remove/{teamId}")
+    @PreAuthorize("@projectSecurity.isProjectOwner(#projectId)")
+    public ResponseEntity<?> removeTeamFromProject(@PathVariable Long projectId, @PathVariable Long teamId) {
+        RemoveTeamFromProject removeTeam = new RemoveTeamFromProject(teamId, projectId);
+        projectService.removeTeam(removeTeam);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @PostMapping("/member")

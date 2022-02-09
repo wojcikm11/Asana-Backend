@@ -69,7 +69,7 @@ public class Project {
         return members.stream().filter(member -> member.getId().getMemberId().equals(userId)).findAny().orElse(null);
     }
 
-    public void addTeamMember(User user) {
+    public void addProjectMember(User user) {
         if (user != null) {
             ProjectMember projectMember = new ProjectMember(user, this, ProjectMember.Role.MEMBER);
             members.add(projectMember);
@@ -77,7 +77,7 @@ public class Project {
         }
     }
 
-    public void removeTeamMember(User user) {
+    public void removeProjectMember(User user) {
         if (user != null) {
             ProjectMember projectMember = getProjectMemberByUserId(user.getId());
             members.remove(projectMember);
@@ -95,6 +95,13 @@ public class Project {
         if (team != null) {
             teams.add(team);
             team.getProjects().add(this);
+        }
+    }
+
+    public void removeTeam(Team team) {
+        if (team != null) {
+            teams.remove(team);
+            team.getProjects().remove(this);
         }
     }
 }

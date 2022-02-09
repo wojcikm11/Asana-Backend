@@ -17,4 +17,5 @@ public interface IProjectService {
     void addUserToProject(AddProjectMember addProjectMember);
     void removeProjectMember(Long projectId, Long userId);
     void addTeam(AddTeam addTeam);
+    void removeTeam(RemoveTeamFromProject removeTeam);
 }
