@@ -1,4 +1,4 @@
-package pl.edu.pw.app.api.dto;
+package pl.edu.pw.app.api.dto.projectDTO;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

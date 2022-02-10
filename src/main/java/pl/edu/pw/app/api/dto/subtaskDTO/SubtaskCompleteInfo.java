@@ -2,11 +2,10 @@ package pl.edu.pw.app.api.dto.subtaskDTO;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import pl.edu.pw.app.api.dto.ProjectMemberBasicInfo;
+import pl.edu.pw.app.api.dto.projectDTO.ProjectMemberBasicInfo;
 import pl.edu.pw.app.domain.Priority;
 import pl.edu.pw.app.domain.Status;
 
-import javax.persistence.Column;
 import java.time.LocalDateTime;
 import java.util.List;
 @AllArgsConstructor

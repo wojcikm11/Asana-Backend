@@ -34,6 +34,15 @@ public class Project {
         this.members.add(projectMember);
     }
 
+    public Project(Project project) {
+        this.id = project.id;
+        this.name = project.name;
+        this.category = project.category;
+        this.description = project.description;
+        this.members = new ArrayList<>(project.getMembers());
+        this.teams = new HashSet<>(project.getTeams());
+    }
+
     @ManyToMany(mappedBy = "favoriteProjects")
     private Set<User> usersFavouritePosts = new HashSet<>();
 
@@ -83,6 +92,11 @@ public class Project {
             members.remove(projectMember);
             user.getProjects().remove(projectMember);
         }
+    }
+
+    public List<TeamMember> getTeamMembersByTeamId(Long teamId) {
+//        teams.stream().filter(team -> )
+        return null;
     }
 
     public void addTask(Task task){

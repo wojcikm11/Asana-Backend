@@ -3,6 +3,7 @@ package pl.edu.pw.app.api.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.edu.pw.app.api.dto.projectDTO.*;
+import pl.edu.pw.app.api.dto.teamDTO.TeamCompleteInfo;
 import pl.edu.pw.app.api.dto.userDTO.UserBasicInfo;
 import pl.edu.pw.app.domain.*;
 import pl.edu.pw.app.repository.ProjectRepository;
@@ -10,8 +11,13 @@ import pl.edu.pw.app.repository.TeamRepository;
 import pl.edu.pw.app.repository.UserRepository;
 
 import javax.transaction.Transactional;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import static pl.edu.pw.app.api.service.ProjectService.ProjectMapper.map;
 
 
 @Service
@@ -34,7 +40,7 @@ public class ProjectService implements IProjectService {
         User user = userRepository.findByEmail(UtilityService.getCurrentUser()).orElseThrow(()->{
             throw new IllegalArgumentException("User with given id does not exist");
         });
-        projectRepository.save(ProjectMapper.map(project, user));
+        projectRepository.save(map(project, user));
     }
 
     @Override
@@ -97,6 +103,31 @@ public class ProjectService implements IProjectService {
         removeTeamMembersFromProject(project, team);
     }
 
+    @Override
+    public Set<TeamCompleteInfo> getProjectTeamMembers(Long projectId) {
+        Project project = projectRepository.findById(projectId).orElseThrow();
+//        Set<TeamCompleteInfo> teamsCompleteInfo = project.getTeams().stream().map(ProjectMapper::map).collect(Collectors.toSet());
+//        for (TeamCompleteInfo team : teamsCompleteInfo) {
+//            team.getMembers().forEach(me);
+//        }
+
+        Set<Team> filteredProjectTeams = new HashSet<>(project.getTeams());
+        for (Team filteredTeam : filteredProjectTeams) {
+            filteredTeam.getMembers().removeIf(teamMember -> !teamMember.getUser().getProjects().contains(project.getProjectMemberByUserId(teamMember.getId().getMemberId())));
+//            teamMemberStream = filteredTeam.getMembers().stream().filter(teamMember -> !teamMember.getUser().getProjects().contains(project.getProjectMemberByUserId(teamMember.getId().getMemberId()))).collect(Collectors.toSet());
+        }
+        return filteredProjectTeams.stream().map(ProjectMapper::map).collect(Collectors.toSet());
+
+//        return filteredProjectTeams.stream().map(ProjectMapper::map).collect(Collectors.toSet());
+//        = projectTeams.stream().map(Team::getMembers).map(teamMembers -> teamMembers.stream().filter(teamMember -> teamMember.getUser().getProjects().contains(project))).collect(Collectors.toSet());
+//
+//        Set<Team> collect = projectTeams.stream().filter(team -> filterTeamMembersWhoAreProjectMembers(team, project))
+//                            .collect(Collectors.toSet());
+//
+//        Set<TeamCompleteInfo> projectTeamsDisplay = projectTeams.stream().map(ProjectMapper::map).collect(Collectors.toSet());
+    }
+
+
     private void removeTeamMembersFromProject(Project project, Team team) {
         for (TeamMember teamMember : team.getMembers()) {
             ProjectMember projectMember = project.getProjectMemberByUserId(teamMember.getUser().getId());
@@ -139,6 +170,14 @@ public class ProjectService implements IProjectService {
                     project.getName(),
                     project.getCategory(),
                     project.getDescription()
+            );
+        }
+
+        public static TeamCompleteInfo map(Team team) {
+            return new TeamCompleteInfo(
+                team.getId(),
+                team.getName(),
+                team.getMembers().stream().map(TeamServiceImpl.TeamMapper::map).collect(Collectors.toList())
             );
         }
     }

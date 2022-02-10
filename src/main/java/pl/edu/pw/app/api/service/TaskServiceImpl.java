@@ -3,6 +3,7 @@ package pl.edu.pw.app.api.service;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import pl.edu.pw.app.api.dto.taskDTO.*;
+import pl.edu.pw.app.api.dto.teamMemberDTO.TeamMemberBasicInfo;
 import pl.edu.pw.app.api.dto.userDTO.UserBasicInfo;
 import pl.edu.pw.app.domain.*;
 import pl.edu.pw.app.repository.ProjectRepository;

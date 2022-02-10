@@ -2,17 +2,13 @@ package pl.edu.pw.app.api.service;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-import pl.edu.pw.app.api.dto.ProjectMemberBasicInfo;
+import pl.edu.pw.app.api.dto.projectDTO.ProjectMemberBasicInfo;
 import pl.edu.pw.app.api.dto.subtaskDTO.*;
-import pl.edu.pw.app.api.dto.teamMemberDTO.TeamMemberBasicInfo;
 import pl.edu.pw.app.domain.*;
 import pl.edu.pw.app.repository.*;
 
 import javax.transaction.Transactional;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @AllArgsConstructor

@@ -143,4 +143,15 @@ public class TeamServiceImpl implements TeamService {
         });
         return users;
     }
+
+    public static class TeamMapper {
+        public static TeamMemberBasicInfo map(TeamMember teamMember) {
+            return new TeamMemberBasicInfo(
+                    teamMember.getId().getMemberId(),
+                    teamMember.getUser().getName(),
+                    teamMember.getUser().getEmail(),
+                    teamMember.getRole()
+            );
+        }
+    }
 }

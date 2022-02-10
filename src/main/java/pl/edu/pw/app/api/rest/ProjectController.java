@@ -6,10 +6,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import pl.edu.pw.app.api.dto.projectDTO.*;
+import pl.edu.pw.app.api.dto.teamDTO.TeamCompleteInfo;
+import pl.edu.pw.app.api.dto.teamMemberDTO.TeamMemberBasicInfo;
 import pl.edu.pw.app.api.service.IProjectService;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping(path="/api/project")
@@ -53,6 +56,13 @@ public class ProjectController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    @GetMapping("/{projectId}/teams")
+    @PreAuthorize("@projectSecurity.isProjectMember(#projectId)")
+    public Set<TeamCompleteInfo> getProjectTeams(@PathVariable Long projectId) {
+        Set<TeamCompleteInfo> projectTeamMembers = projectService.getProjectTeamMembers(projectId);
+        return projectTeamMembers;
+    }
+
     @PostMapping("/member")
     @PreAuthorize("@projectSecurity.isProjectMember(#addProjectMember.projectId)")
     public ResponseEntity<?> addProjectMember(@Valid @RequestBody AddProjectMember addProjectMember) {
@@ -70,6 +80,7 @@ public class ProjectController {
     @DeleteMapping("/{projectId}/delete_member/{memberId}")
     @PreAuthorize("@projectSecurity.isProjectOwner(#projectId)")
     public ResponseEntity<?> deleteProjectMember(@PathVariable Long projectId, @PathVariable Long memberId) {
+        // TODO: sprawdzić, czy członek projektu był ostatnią osobą w zespole, który pracował nad projektem, jeśli tak to usuwamy zespół
         projectService.removeProjectMember(projectId, memberId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
