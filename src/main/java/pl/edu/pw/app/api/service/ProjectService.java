@@ -86,6 +86,18 @@ public class ProjectService implements IProjectService {
             throw new IllegalArgumentException("Project owner cannot remove himself from the project");
         }
         project.removeProjectMember(member);
+        removeTeamFromProjectIfNoTeamMembersLeft(project, member);
+    }
+
+    private void removeTeamFromProjectIfNoTeamMembersLeft(Project project, User removedProjectMember) {
+        for (Team team : project.getTeams()) {
+            if (team.getMembers().stream().noneMatch(teamMember -> teamMember.getUser().equals(removedProjectMember))) {
+                project.removeTeam(team);
+            }
+//            for (TeamMember teamMember : teamMembers) {
+//                if (project.getMembers().stream().noneMatch(projectMember -> projectMember.getUser().equals(teamMember.getUser()))) {
+//            }
+        }
     }
 
     @Override
@@ -117,7 +129,7 @@ public class ProjectService implements IProjectService {
         }
         return filteredTeamMembers.stream().map(ProjectMapper::map).collect(Collectors.toSet());
     }
-    
+
     private void removeTeamMembersFromProject(Project project, Team team) {
         for (TeamMember teamMember : team.getMembers()) {
             ProjectMember projectMember = project.getProjectMemberByUserId(teamMember.getUser().getId());
