@@ -12,10 +12,7 @@ import pl.edu.pw.app.repository.TeamRepository;
 import pl.edu.pw.app.repository.UserRepository;
 
 import javax.transaction.Transactional;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static pl.edu.pw.app.api.service.ProjectService.ProjectMapper.map;
@@ -94,9 +91,6 @@ public class ProjectService implements IProjectService {
             if (team.getMembers().stream().noneMatch(teamMember -> teamMember.getUser().equals(removedProjectMember))) {
                 project.removeTeam(team);
             }
-//            for (TeamMember teamMember : teamMembers) {
-//                if (project.getMembers().stream().noneMatch(projectMember -> projectMember.getUser().equals(teamMember.getUser()))) {
-//            }
         }
     }
 
@@ -128,6 +122,33 @@ public class ProjectService implements IProjectService {
             filteredTeamMembers.add(teamMembers);
         }
         return filteredTeamMembers.stream().map(ProjectMapper::map).collect(Collectors.toSet());
+    }
+
+    @Override
+    public Set<ProjectMemberInfo> getProjectNonTeamMembers(Long projectId) {
+        Project project = projectRepository.findById(projectId).orElseThrow();
+        Set<Team> projectTeams = project.getTeams();
+        List<ProjectMember> projectMembersFiltered = new ArrayList<>();
+        for (ProjectMember projectMember : project.getMembers()) {
+            boolean isInTeam = false;
+            for (Team team : projectTeams) {
+                if (team.getMembers().contains(team.getTeamMemberByUserId(projectMember.getId().getMemberId()))) {
+                    isInTeam = true;
+                    break;
+                }
+//                boolean projectMemberInNoTeam = team.getMembers().stream()
+//                        .noneMatch(teamMember -> teamMember.getUser().getProjects()
+//                        .contains(project.getProjectMemberByUserId(teamMember.getId().getMemberId())));
+//                if (projectMemberInNoTeam) {
+//                    projectMembersFiltered.add(projectMember);
+//                    break;
+//                }
+            }
+            if (!isInTeam) {
+                projectMembersFiltered.add(projectMember);
+            }
+        }
+        return projectMembersFiltered.stream().map(ProjectMapper::map).collect(Collectors.toSet());
     }
 
     private void removeTeamMembersFromProject(Project project, Team team) {

@@ -21,4 +21,5 @@ public interface IProjectService {
     void addTeam(AddTeam addTeam);
     void removeTeam(RemoveTeamFromProject removeTeam);
     Set<TeamCompleteInfo> getProjectTeamMembers(Long projectId);
+    Set<ProjectMemberInfo> getProjectNonTeamMembers(Long projectId);
 }

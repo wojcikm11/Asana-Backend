@@ -63,6 +63,13 @@ public class ProjectController {
         return projectTeamMembers;
     }
 
+    @GetMapping("/{projectId}/self_members")
+    @PreAuthorize("@projectSecurity.isProjectMember(#projectId)")
+    public Set<ProjectMemberInfo> getProjectMembersNotInTeam(@PathVariable Long projectId) {
+        Set<ProjectMemberInfo> projectNonTeamMembers = projectService.getProjectNonTeamMembers(projectId);
+        return projectNonTeamMembers;
+    }
+
     @PostMapping("/member")
     @PreAuthorize("@projectSecurity.isProjectMember(#addProjectMember.projectId)")
     public ResponseEntity<?> addProjectMember(@Valid @RequestBody AddProjectMember addProjectMember) {
