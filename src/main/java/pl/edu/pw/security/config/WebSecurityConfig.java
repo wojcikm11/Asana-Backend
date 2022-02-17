@@ -13,11 +13,14 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import pl.edu.pw.app.api.service.UserServiceImpl;
+import pl.edu.pw.security.filter.AuthenticationFilter;
+import pl.edu.pw.security.filter.AuthorizationFilter;
 
 import java.util.Arrays;
 
@@ -31,6 +34,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private BCryptPasswordEncoder bCryptPasswordEncoder;
     private UserDetailsService userDetailsService;
 
+
     @Bean
     public DaoAuthenticationProvider daoAuthenticationProvider(){
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
@@ -41,21 +45,32 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+
+        AuthenticationFilter authenticationFilter = new AuthenticationFilter(authenticationManagerBean());
+        authenticationFilter.setFilterProcessesUrl("/api/login");
        http
                .cors()
                .and()
                .csrf().disable()
                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                .and()
-               .authorizeRequests().antMatchers("/login").permitAll()
+               .authorizeRequests().antMatchers("/api/login").permitAll()
                .and()
                .authorizeRequests().antMatchers("/api/registration/**").permitAll()
                .and()
                .authorizeRequests().antMatchers("/api/password/**").permitAll()
                .and()
-               .authorizeRequests().antMatchers("/api/team/**").permitAll().anyRequest()
-//               .antMatchers("/api/registration/**").permitAll()
-               .authenticated();
+               .authorizeRequests().anyRequest().authenticated();
+
+
+
+        http.addFilterBefore(new AuthorizationFilter(),UsernamePasswordAuthenticationFilter.class);
+
+        http.addFilter(
+              authenticationFilter
+        );
+
+
 
 
 
