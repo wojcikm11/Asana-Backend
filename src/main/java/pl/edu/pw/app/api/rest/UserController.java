@@ -19,6 +19,7 @@ import java.util.Set;
 @AllArgsConstructor
 @RestController
 @RequestMapping(path="api")
+@CrossOrigin("*")
 public class UserController {
 
     private UserService userService;
@@ -38,10 +39,12 @@ public class UserController {
     }
 
 
-    @GetMapping("/whoami")
+    @GetMapping("/registration/whoami")
     public String elo(){
         return SecurityContextHolder.getContext().getAuthentication().getName();
     }
+
+    
 
     @GetMapping("/user/favorites")
     public Set<ProjectCompleteInfo> getAllFavorites() {
