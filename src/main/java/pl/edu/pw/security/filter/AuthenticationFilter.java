@@ -38,13 +38,12 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
         String password = request.getParameter("password");
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username,password);
         return authenticationManager.authenticate(authenticationToken);
-
     }
 
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
+        // TODO: zabezpieczyć sekret
         User user = (User)authResult.getPrincipal();
-//        todo zabezpieczyc secret
         Algorithm algorithm = Algorithm.HMAC256("secret".getBytes());
         String token = JWT.create().withSubject(user.getUsername())
                 .withExpiresAt(new Date(System.currentTimeMillis()+1000*60*60))
@@ -62,8 +61,5 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
         tokens.put("refresh_token",refreshToken);
         response.setContentType(APPLICATION_JSON_VALUE);
         new ObjectMapper().writeValue(response.getOutputStream(),tokens);
-
-
-//
     }
 }

@@ -19,6 +19,7 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import pl.edu.pw.app.api.service.UserServiceImpl;
+import pl.edu.pw.app.repository.UserRepository;
 import pl.edu.pw.security.filter.AuthenticationFilter;
 import pl.edu.pw.security.filter.AuthorizationFilter;
 
@@ -32,8 +33,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private UserServiceImpl userService;
     private BCryptPasswordEncoder bCryptPasswordEncoder;
-    private UserDetailsService userDetailsService;
-
+    private UserRepository userRepository;
 
     @Bean
     public DaoAuthenticationProvider daoAuthenticationProvider(){
@@ -45,36 +45,26 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-
         AuthenticationFilter authenticationFilter = new AuthenticationFilter(authenticationManagerBean());
         authenticationFilter.setFilterProcessesUrl("/api/login");
-       http
-               .cors()
-               .and()
-               .csrf().disable()
-               .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-               .and()
-               .authorizeRequests().antMatchers("/api/login").permitAll()
-               .and()
-               .authorizeRequests().antMatchers("/api/registration/**").permitAll()
-               .and()
-               .authorizeRequests().antMatchers("/api/password/**").permitAll()
-               .and()
-               .authorizeRequests().anyRequest().authenticated();
+        AuthorizationFilter authorizationFilter = new AuthorizationFilter(userRepository);
 
+        http
+            .cors()
+            .and()
+            .csrf().disable()
+            .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+            .and()
+            .authorizeRequests().antMatchers("/api/login").permitAll()
+            .and()
+            .authorizeRequests().antMatchers("/api/registration/**").permitAll()
+            .and()
+            .authorizeRequests().antMatchers("/api/password/**").permitAll()
+            .and()
+            .authorizeRequests().anyRequest().authenticated();
 
-
-        http.addFilterBefore(new AuthorizationFilter(),UsernamePasswordAuthenticationFilter.class);
-
-        http.addFilter(
-              authenticationFilter
-        );
-
-
-
-
-
-
+        http.addFilterBefore(authorizationFilter, UsernamePasswordAuthenticationFilter.class);
+        http.addFilter(authenticationFilter);
     }
 
     @Bean

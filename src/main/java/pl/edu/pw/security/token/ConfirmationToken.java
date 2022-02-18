@@ -17,12 +17,16 @@ public class ConfirmationToken {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
+
     @Column(nullable = false)
     private String token;
+
     @Column(nullable = false, name="created_at")
     private LocalDateTime createdAt;
+
     @Column(nullable = false, name="expires_at")
     private LocalDateTime expiredAt;
+
     @Column(name="confirmed_at")
     private LocalDateTime confirmedAt;
 
@@ -34,6 +38,6 @@ public class ConfirmationToken {
         this.token = token;
         this.createdAt = createdAt;
         this.expiredAt = expiredAt;
-        this.user=user;
+        this.user = user;
     }
 }
