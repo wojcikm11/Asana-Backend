@@ -34,11 +34,13 @@ public class ProjectService implements IProjectService {
     }
 
     @Override
-    public void create(ProjectCreateRequest project) {
+    public ProjectCreateRequest create(ProjectCreateRequest project) {
         User user = userRepository.findByEmail(UtilityService.getCurrentUser()).orElseThrow(()->{
             throw new IllegalArgumentException("User with given id does not exist");
         });
-        projectRepository.save(map(project, user));
+        Long createdProjectId = projectRepository.save(map(project, user)).getId();
+        project.setId(createdProjectId);
+        return project;
     }
 
     @Override

@@ -11,7 +11,7 @@ import java.util.Set;
 @Service
 @Transactional
 public interface IProjectService {
-    void create(ProjectCreateRequest project);
+    ProjectCreateRequest create(ProjectCreateRequest project);
     ProjectCompleteInfo get(Long id);
     List<ProjectCompleteInfo> getUserProjects(Long userId);
     void update(Long projectId, ProjectUpdateRequest project);

@@ -6,10 +6,12 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 @Data
-@Setter(AccessLevel.NONE)
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class ProjectCreateRequest {
+
+    private Long id;
 
     @NotNull
     @Size(max=40)

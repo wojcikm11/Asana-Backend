@@ -53,15 +53,20 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
         // TODO: zabezpieczyć sekret
         User user = (User)authResult.getPrincipal();
         Algorithm algorithm = Algorithm.HMAC256("secret".getBytes());
-        String token = JWT.create().withSubject(user.getUsername())
+        String token = JWT.create()
+                .withSubject(user.getUsername())
                 .withExpiresAt(new Date(System.currentTimeMillis()+1000*60*60))
                 .withIssuer(request.getRequestURL().toString())
 //                .withClaim("roles",user.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
+                .withClaim("name", user.getName())
+                .withClaim("id", user.getId())
                 .sign(algorithm);
 
         String refreshToken = JWT.create().withSubject(user.getUsername())
                 .withExpiresAt(new Date(System.currentTimeMillis()+1000*60*60))
                 .withIssuer(request.getRequestURL().toString())
+                .withClaim("name", user.getName())
+                .withClaim("id", user.getId())
                 .sign(algorithm);
 
         Map<String, String> tokens = new HashMap<>();
