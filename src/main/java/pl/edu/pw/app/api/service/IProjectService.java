@@ -14,6 +14,7 @@ public interface IProjectService {
     ProjectCreateRequest create(ProjectCreateRequest project);
     ProjectCompleteInfo get(Long id);
     List<ProjectCompleteInfo> getUserProjects(Long userId);
+    List<ProjectCompleteInfo> getOwnerProjects(Long ownerId);
     void update(Long projectId, ProjectUpdateRequest project);
     void delete(Long id);
     void addUserToProject(AddProjectMember addProjectMember);

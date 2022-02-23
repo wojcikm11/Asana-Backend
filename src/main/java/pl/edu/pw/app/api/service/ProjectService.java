@@ -14,6 +14,7 @@ import pl.edu.pw.app.repository.UserRepository;
 import javax.transaction.Transactional;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static pl.edu.pw.app.api.service.ProjectService.ProjectMapper.map;
 
@@ -51,6 +52,13 @@ public class ProjectService implements IProjectService {
 
     @Override
     public List<ProjectCompleteInfo> getUserProjects(Long userId) {
+        return userRepository.findById(userId).orElseThrow().getProjects().stream()
+                .map(ProjectMember::getProject)
+                .map(ProjectMapper::map).toList();
+    }
+
+    @Override
+    public List<ProjectCompleteInfo> getOwnerProjects(Long userId) {
         return projectRepository.findAll().stream()
                 .filter(project -> project.getOwner().getUser().getId().equals(userId))
                 .map(ProjectMapper::map).toList();
@@ -138,13 +146,6 @@ public class ProjectService implements IProjectService {
                     isInTeam = true;
                     break;
                 }
-//                boolean projectMemberInNoTeam = team.getMembers().stream()
-//                        .noneMatch(teamMember -> teamMember.getUser().getProjects()
-//                        .contains(project.getProjectMemberByUserId(teamMember.getId().getMemberId())));
-//                if (projectMemberInNoTeam) {
-//                    projectMembersFiltered.add(projectMember);
-//                    break;
-//                }
             }
             if (!isInTeam) {
                 projectMembersFiltered.add(projectMember);
