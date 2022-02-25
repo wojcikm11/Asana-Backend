@@ -23,6 +23,7 @@ public class UserCreateRequest {
     @Size(max = 40)
     private String password;
 
+
     @NotNull
     @Size(max = 30)
     private String name;

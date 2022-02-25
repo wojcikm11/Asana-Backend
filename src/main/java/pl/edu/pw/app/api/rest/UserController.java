@@ -28,14 +28,15 @@ public class UserController {
 
 
     @PostMapping("/registration")
-    public String register(@Valid @RequestBody UserCreateRequest request){
-        return registrationService.register(request);
+    public ResponseEntity register(@Valid @RequestBody UserCreateRequest request){
+       registrationService.register(request);
+       return new ResponseEntity<>(HttpStatus.CREATED);
 
     }
 
     @GetMapping(path="/registration/confirm")
     public String confirm(@RequestParam("token") String token){
-        return registrationService.confirmToken(token);
+        return registrationService.confirmToken(token); 
     }
 
 
