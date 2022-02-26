@@ -13,6 +13,8 @@ import java.util.List;
 public class TaskDetails {
 
     @NotNull
+    private Long id;
+    @NotNull
     private String name;
     private String description;
     private LocalDateTime startDate;

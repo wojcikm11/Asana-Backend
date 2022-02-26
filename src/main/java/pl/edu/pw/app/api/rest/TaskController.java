@@ -39,6 +39,13 @@ public class TaskController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    @PutMapping("/edit/status/{id}")
+    @PreAuthorize("@taskSecurity.isProjectMember(#id)")
+    public ResponseEntity<?> updateTaskStatus(@Valid @RequestBody TaskStatusUpdateRequest taskStatus, @PathVariable Long id){
+        taskService.updateTaskStatus(taskStatus, id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
     @GetMapping(path="/all/{id}")
     public List<TaskBasicInfo> getProjectTasks(@PathVariable Long id){
         return taskService.getTasks(id);

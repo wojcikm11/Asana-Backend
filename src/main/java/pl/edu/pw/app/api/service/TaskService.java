@@ -10,6 +10,7 @@ public interface TaskService {
     List<TaskDetails> getTasksDetails(Long id);
     void deleteTask(Long id);
     void updateTask(TaskUpdateRequest updatedTask, Long id);
+    void updateTaskStatus(TaskStatusUpdateRequest taskStatus, Long id);
     void addAssignee(AddAssigneeRequest assignee);
     void removeAssignee(Long taskId, Long assigneeId);
 }

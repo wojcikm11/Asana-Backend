@@ -96,6 +96,14 @@ public class TaskServiceImpl implements TaskService {
         taskRepository.save(task);
     }
 
+    @Override
+    public void updateTaskStatus(TaskStatusUpdateRequest taskStatus, Long id) {
+        Task task = taskRepository.findById(id).orElseThrow(()->
+                new IllegalArgumentException(TASK_NOT_FOUND_EXCEPTION));
+        Status taskUpdatedStatus = Status.valueOf(taskStatus.getUpdatedTask());
+        task.setStatus(taskUpdatedStatus);
+    }
+
     private Task map(TaskCreateRequest task) {
         return new Task(
                 projectRepository.getById(task.getProjectId()),
@@ -141,6 +149,7 @@ public class TaskServiceImpl implements TaskService {
         );
 
         return new TaskDetails(
+                task.getId(),
                 task.getName(),
                 task.getDescription(),
                 task.getStartDate(),
