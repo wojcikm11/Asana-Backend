@@ -18,6 +18,7 @@ import java.util.List;
 
 @AllArgsConstructor
 @RestController
+@CrossOrigin("*")
 @RequestMapping(path="api/team")
 public class TeamController {
 

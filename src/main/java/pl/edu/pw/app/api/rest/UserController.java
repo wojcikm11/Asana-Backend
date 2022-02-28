@@ -5,6 +5,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
 import pl.edu.pw.app.api.dto.projectDTO.AddFavoriteProject;
 import pl.edu.pw.app.api.dto.projectDTO.ProjectCompleteInfo;
 import pl.edu.pw.app.api.dto.userDTO.ResetPasswordRequest;
@@ -13,7 +15,10 @@ import pl.edu.pw.app.api.service.PasswordResetService;
 import pl.edu.pw.app.api.service.RegistrationService;
 import pl.edu.pw.app.api.service.UserService;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.io.IOException;
+import java.net.URI;
 import java.util.Set;
 
 @AllArgsConstructor
@@ -35,8 +40,22 @@ public class UserController {
     }
 
     @GetMapping(path="/registration/confirm")
-    public String confirm(@RequestParam("token") String token){
-        return registrationService.confirmToken(token); 
+    public void confirm(@RequestParam("token") String token, HttpServletResponse response) throws IOException {
+        response.setStatus(302);
+        try {
+            registrationService.confirmToken(token);
+
+//        return ResponseEntity.status(HttpStatus.FOUND).location(URI.create("http:localhost:3000/confirm")).build();
+//        return new ModelAndView("redirect:" + "http:localhost:3000/confirm");
+
+            String externalUrl = "http://localhost:3000/confirm";
+            response.setHeader("Location", externalUrl);
+//            response.setStatus(200);
+        }catch(Exception e){
+            String externalUrl = "http://localhost:3000/confirm?error=" + e.getMessage();
+//            response.sendError(400, e.getMessage());
+            response.setHeader("Location", externalUrl);
+        }
     }
 
 
