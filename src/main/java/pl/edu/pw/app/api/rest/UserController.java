@@ -10,6 +10,7 @@ import org.springframework.web.servlet.view.RedirectView;
 import pl.edu.pw.app.api.dto.projectDTO.AddFavoriteProject;
 import pl.edu.pw.app.api.dto.projectDTO.ProjectCompleteInfo;
 import pl.edu.pw.app.api.dto.userDTO.ResetPasswordRequest;
+import pl.edu.pw.app.api.dto.userDTO.UserBasicInfo;
 import pl.edu.pw.app.api.dto.userDTO.UserCreateRequest;
 import pl.edu.pw.app.api.service.PasswordResetService;
 import pl.edu.pw.app.api.service.RegistrationService;
@@ -19,6 +20,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.net.URI;
+import java.util.List;
 import java.util.Set;
 
 @AllArgsConstructor
@@ -33,7 +35,7 @@ public class UserController {
 
 
     @PostMapping("/registration")
-    public ResponseEntity register(@Valid @RequestBody UserCreateRequest request){
+    public ResponseEntity<?> register(@Valid @RequestBody UserCreateRequest request){
        registrationService.register(request);
        return new ResponseEntity<>(HttpStatus.CREATED);
 
@@ -58,13 +60,15 @@ public class UserController {
         }
     }
 
+    @GetMapping("/user/all")
+    public List<UserBasicInfo> getAllUsers() {
+        return userService.getAll();
+    }
 
     @GetMapping("/registration/whoami")
     public String elo(){
         return SecurityContextHolder.getContext().getAuthentication().getName();
     }
-
-    
 
     @GetMapping("/user/favorites")
     public Set<ProjectCompleteInfo> getAllFavorites() {

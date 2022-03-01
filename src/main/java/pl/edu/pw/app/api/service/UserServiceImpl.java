@@ -10,6 +10,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import pl.edu.pw.app.api.dto.projectDTO.AddFavoriteProject;
 import pl.edu.pw.app.api.dto.projectDTO.ProjectCompleteInfo;
+import pl.edu.pw.app.api.dto.userDTO.UserBasicInfo;
 import pl.edu.pw.app.api.dto.userDTO.UserUpdateRequest;
 import pl.edu.pw.app.domain.Project;
 import pl.edu.pw.app.repository.ProjectRepository;
@@ -46,8 +47,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public List<UserUpdateRequest> getAll() {
-        return userRepository.findAll().stream().map(UserMapper::map).toList();
+    public List<UserBasicInfo> getAll() {
+        return userRepository.findAll().stream().map(UserMapper::mapToBasicInfo).toList();
     }
 
     @Override
@@ -143,8 +144,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         return user.getFavoriteProjects().stream().map(ProjectService.ProjectMapper::map).collect(Collectors.toSet());
     }
 
-    private static class UserMapper {
-        private static UserUpdateRequest map(User user) {
+    public static class UserMapper {
+        public static UserUpdateRequest map(User user) {
             return new UserUpdateRequest(
                 user.getEmail(),
                 user.getPassword(),
@@ -152,11 +153,19 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             );
         }
 
-        private static User map(UserUpdateRequest userUpdateRequest) {
+        public static User map(UserUpdateRequest userUpdateRequest) {
             return new User(
                 userUpdateRequest.getEmail(),
                 userUpdateRequest.getPassword(),
                 userUpdateRequest.getName()
+            );
+        }
+
+        public static UserBasicInfo mapToBasicInfo(User user) {
+            return new UserBasicInfo(
+                user.getId(),
+                user.getName(),
+                user.getEmail()
             );
         }
     }

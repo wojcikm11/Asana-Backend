@@ -2,6 +2,7 @@ package pl.edu.pw.app.api.service;
 
 import pl.edu.pw.app.api.dto.projectDTO.AddFavoriteProject;
 import pl.edu.pw.app.api.dto.projectDTO.ProjectCompleteInfo;
+import pl.edu.pw.app.api.dto.userDTO.UserBasicInfo;
 import pl.edu.pw.app.api.dto.userDTO.UserUpdateRequest;
 import javassist.NotFoundException;
 import pl.edu.pw.app.domain.User;
@@ -11,7 +12,7 @@ import java.util.List;
 import java.util.Set;
 
 public interface UserService {
-    List<UserUpdateRequest> getAll();
+    List<UserBasicInfo> getAll();
 
     UserUpdateRequest add(UserUpdateRequest userUpdateRequest) throws SQLException;
 
