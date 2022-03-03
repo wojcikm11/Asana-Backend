@@ -2,7 +2,6 @@ package pl.edu.pw.app.api.service;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-import pl.edu.pw.app.api.dto.projectDTO.ProjectBasicInfo;
 import pl.edu.pw.app.api.dto.teamDTO.TeamBasicInfo;
 import pl.edu.pw.app.api.dto.teamDTO.TeamCreateRequest;
 import pl.edu.pw.app.api.dto.teamMemberDTO.AddTeamMemberRequest;
@@ -15,7 +14,6 @@ import pl.edu.pw.app.repository.TeamRepository;
 import pl.edu.pw.app.repository.UserRepository;
 
 import javax.persistence.EntityNotFoundException;
-import javax.persistence.Table;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
@@ -38,13 +36,27 @@ public class TeamServiceImpl implements TeamService {
         if (team.getName() == null || team.getName().isBlank()) {
             throw new IllegalArgumentException(EMPTY_TEAM_NAME_EXCEPTION);
         }
-        System.out.println(UtilityService.getCurrentUser());
+
         User user = userRepository.findByEmail(UtilityService.getCurrentUser()).orElseThrow(()->{
             throw new IllegalArgumentException(USER_NOT_FOUND_EXCEPTION);
         });
 
+        List<Long> list = team.getMembers();
         Team newTeam = new Team(team.getName(), user);
         teamRepository.save(newTeam);
+
+        if(!list.isEmpty()){
+            for(Long member : list){
+                User u =userRepository.findById(member).orElseThrow(
+                        () -> new EntityNotFoundException(USER_NOT_FOUND_EXCEPTION)
+                );
+
+                newTeam.addMember(u);
+            }
+
+
+
+        }
     }
 
     public void deleteTeam(Long id) {

@@ -24,7 +24,7 @@ public class TeamController {
 
     private TeamService teamService;
 
-    @PostMapping(path="/add")
+    @PostMapping(path="/add",consumes="application/json")
     @ResponseBody
     public ResponseEntity<?> addTeam(@RequestBody TeamCreateRequest team){
         teamService.addTeam(team);
