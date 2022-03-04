@@ -16,6 +16,7 @@ public interface TeamService {
     List<TeamMemberBasicInfo> getTeamMembers(Long teamId);
     List<TeamBasicInfo> getUserTeams(Long userId);
     void addMember(AddTeamMemberRequest addTeamMember);
+    TeamBasicInfo getTeam(Long teamId);
     List<TeamBasicInfo> getAll();
     void deleteMember(DeleteTeamMemberRequest deleteTeamMember);
 }

@@ -82,6 +82,11 @@ public class TeamServiceImpl implements TeamService {
     }
 
     @Override
+    public TeamBasicInfo getTeam(Long teamId) {
+        return map(teamRepository.getById(teamId));
+    }
+
+    @Override
     public void addMember(AddTeamMemberRequest addTeamMember) {
         Team team = teamRepository.findById(addTeamMember.getTeamId()).orElseThrow(
                 () -> new EntityNotFoundException(TEAM_NOT_FOUND_EXCEPTION)

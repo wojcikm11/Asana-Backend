@@ -53,6 +53,11 @@ public class TeamController {
         return teamService.getUserTeams(id);
     }
 
+    @GetMapping("/{id}")
+    public TeamBasicInfo getTeam(@PathVariable Long id) {
+        return teamService.getTeam(id);
+    }
+
     @PostMapping("/addMember")
     @PreAuthorize("@teamSecurity.isTeamOwner(#addTeamMember.teamId)")
     public ResponseEntity<?> addMember(@RequestBody @Valid AddTeamMemberRequest addTeamMember){
