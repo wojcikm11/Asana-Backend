@@ -144,6 +144,15 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         return user.getFavoriteProjects().stream().map(ProjectService.ProjectMapper::map).collect(Collectors.toSet());
     }
 
+    @Override
+    public UserBasicInfo getUserById(Long id) {
+        User user = userRepository.findById(id).orElseThrow(()->
+                new IllegalArgumentException("Could not find user with given id")
+        );
+
+        return UserMapper.mapToBasicInfo(user);
+    }
+
     public static class UserMapper {
         public static UserUpdateRequest map(User user) {
             return new UserUpdateRequest(

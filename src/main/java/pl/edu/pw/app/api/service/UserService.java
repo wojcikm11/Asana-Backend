@@ -31,4 +31,6 @@ public interface UserService {
     void removeFromFavorites(Long projectId);
 
     Set<ProjectCompleteInfo> getAllFavorites();
+
+    UserBasicInfo getUserById(Long id);
 }

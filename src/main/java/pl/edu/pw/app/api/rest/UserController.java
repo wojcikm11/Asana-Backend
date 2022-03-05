@@ -65,6 +65,11 @@ public class UserController {
         return userService.getAll();
     }
 
+    @GetMapping("/user/{id}")
+    public UserBasicInfo getUserById(@PathVariable Long id){
+        return userService.getUserById(id);
+    }
+
     @GetMapping("/registration/whoami")
     public String elo(){
         return SecurityContextHolder.getContext().getAuthentication().getName();

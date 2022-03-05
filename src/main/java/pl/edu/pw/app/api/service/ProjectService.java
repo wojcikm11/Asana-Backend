@@ -154,6 +154,8 @@ public class ProjectService implements IProjectService {
         return projectMembersFiltered.stream().map(ProjectMapper::map).collect(Collectors.toSet());
     }
 
+
+
     private void removeTeamMembersFromProject(Project project, Team team) {
         for (TeamMember teamMember : team.getMembers()) {
             ProjectMember projectMember = project.getProjectMemberByUserId(teamMember.getUser().getId());

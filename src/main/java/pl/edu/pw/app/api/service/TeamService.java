@@ -1,5 +1,6 @@
 package pl.edu.pw.app.api.service;
 
+import pl.edu.pw.app.api.dto.projectDTO.ProjectCompleteInfo;
 import pl.edu.pw.app.api.dto.teamDTO.TeamBasicInfo;
 import pl.edu.pw.app.api.dto.teamDTO.TeamCreateRequest;
 import pl.edu.pw.app.api.dto.teamMemberDTO.AddTeamMemberRequest;
@@ -19,4 +20,5 @@ public interface TeamService {
     TeamBasicInfo getTeam(Long teamId);
     List<TeamBasicInfo> getAll();
     void deleteMember(DeleteTeamMemberRequest deleteTeamMember);
+    List<ProjectCompleteInfo> getTeamProjects(Long id);
 }

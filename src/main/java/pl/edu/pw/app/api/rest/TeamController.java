@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import pl.edu.pw.app.api.dto.projectDTO.ProjectCompleteInfo;
 import pl.edu.pw.app.api.dto.teamDTO.TeamBasicInfo;
 import pl.edu.pw.app.api.dto.teamDTO.TeamCreateRequest;
 import pl.edu.pw.app.api.dto.teamMemberDTO.AddTeamMemberRequest;
@@ -30,6 +31,13 @@ public class TeamController {
         teamService.addTeam(team);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
+
+    @GetMapping("/{id}/projects")
+//    @PreAuthorize("@teamSecurity.isTeamMember(#id)")
+    public List<ProjectCompleteInfo> getTeamProjects(@PathVariable Long id){
+        return teamService.getTeamProjects(id);
+    }
+
 
     @GetMapping
     public List<TeamBasicInfo> getAllTeams(){

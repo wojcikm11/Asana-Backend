@@ -12,6 +12,10 @@ import pl.edu.pw.app.repository.TaskRepository;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+import static pl.edu.pw.app.api.service.UserServiceImpl.UserMapper.mapToBasicInfo;
 
 
 @AllArgsConstructor
@@ -75,6 +79,13 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
+    public TaskDetails getTaskById(Long id) {
+        Task task = taskRepository.findById(id).orElseThrow(()->
+                new IllegalArgumentException(NO_TASK_FOUND));
+        return mapTaskDetails(task);
+    }
+
+    @Override
     public void deleteTask(Long id) {
         Task task = taskRepository.findById(id).orElseThrow(()->{
             throw new IllegalArgumentException(NO_TASK_FOUND);
@@ -126,27 +137,6 @@ public class TaskServiceImpl implements TaskService {
     }
 
     private TaskDetails mapTaskDetails(Task task) {
-//        List<UserBasicInfo> assignees = new ArrayList<>();
-//        for(ProjectMember p: task.getTaskAssignees() ){
-//            System.out.println(p.getUser().getEmail());
-//        }
-//        task.getProjectMembers().stream().forEach(m->{
-//            assignees.add(new UserBasicInfo(
-//                    m.getUser().getId(),
-//                    m.getUser().getName(),
-//                    m.getUser().getEmail()
-//            ));
-//        });
-
-        List<UserBasicInfo> assignees = new ArrayList<>();
-        task.getTaskAssignees().forEach((taskAssignee) -> {
-                    assignees.add(new UserBasicInfo(
-                            taskAssignee.getUser().getId(),
-                            taskAssignee.getUser().getName(),
-                            taskAssignee.getUser().getEmail()
-            ));
-                }
-        );
 
         return new TaskDetails(
                 task.getId(),
@@ -156,7 +146,9 @@ public class TaskServiceImpl implements TaskService {
                 task.getDeadLine(),
                 task.getStatus().toString(),
                 task.getPriority().toString(),
-                assignees
+                task.getTaskAssignees().stream().map(m->{
+                   return mapToBasicInfo(m.getUser());
+                }).collect(Collectors.toList())
         );
     }
 }

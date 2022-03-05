@@ -2,6 +2,7 @@ package pl.edu.pw.app.api.service;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import pl.edu.pw.app.api.dto.projectDTO.ProjectCompleteInfo;
 import pl.edu.pw.app.api.dto.teamDTO.TeamBasicInfo;
 import pl.edu.pw.app.api.dto.teamDTO.TeamCreateRequest;
 import pl.edu.pw.app.api.dto.teamMemberDTO.AddTeamMemberRequest;
@@ -17,6 +18,9 @@ import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+
+import static pl.edu.pw.app.api.service.ProjectService.ProjectMapper.map;
 
 @Service
 @AllArgsConstructor
@@ -57,6 +61,17 @@ public class TeamServiceImpl implements TeamService {
 
 
         }
+    }
+
+    @Override
+    public List<ProjectCompleteInfo> getTeamProjects(Long id) {
+        Team team = teamRepository.findById(id).orElseThrow(()->
+                new IllegalArgumentException("Team with id "+id+" does not exist"));
+        List<ProjectCompleteInfo> projects =  team.getProjects().stream().map(m->{
+            return pl.edu.pw.app.api.service.ProjectService.ProjectMapper.map(m);
+        }).collect(Collectors.toList());
+
+        return projects;
     }
 
     public void deleteTeam(Long id) {
