@@ -48,6 +48,9 @@ public class Task {
     @Enumerated(EnumType.STRING)
     private Status status = Status.UNDONE;
 
+    @Column
+    private int totalTime;
+
     @ManyToMany(cascade = {
         CascadeType.PERSIST,
         CascadeType.MERGE
@@ -58,12 +61,13 @@ public class Task {
     private Set<ProjectMember> taskAssignees = new HashSet<>();
 
     public Task(Project project, String name, String description, LocalDateTime startDate, LocalDateTime deadLine, Priority priority) {
-        this.project=project;
+        this.project = project;
         this.name = name;
         this.description = description;
         this.startDate = startDate;
         this.deadLine = deadLine;
         this.priority = priority;
+        this.totalTime = 0;
     }
 
     public void addAssignee(ProjectMember taskAssignee) {

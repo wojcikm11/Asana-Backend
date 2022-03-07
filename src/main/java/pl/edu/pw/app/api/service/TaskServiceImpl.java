@@ -46,7 +46,7 @@ public class TaskServiceImpl implements TaskService {
         return project.getTasks().stream().map(this::map).toList();
     }
 
-//    todo naprawic
+    //    todo naprawic
     @Override
     public List<TaskDetails> getTasksDetails(Long id) {
         Project project = projectRepository.findById(id).orElseThrow(() -> {
@@ -57,11 +57,11 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public void addAssignee(AddAssigneeRequest addAssignee) {
-        Task task = taskRepository.findById(addAssignee.getTaskId()).orElseThrow(()->{
+        Task task = taskRepository.findById(addAssignee.getTaskId()).orElseThrow(() -> {
             throw new IllegalArgumentException(NO_TASK_FOUND);
         });
         Project project = task.getProject();
-        project.getMembers().forEach(m-> {
+        project.getMembers().forEach(m -> {
             if (!m.getId().getMemberId().equals(addAssignee.getUserId())) {
                 throw new RuntimeException(NO_PROJECT_MEMBER_FOUND);
             }
@@ -80,14 +80,14 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public TaskDetails getTaskById(Long id) {
-        Task task = taskRepository.findById(id).orElseThrow(()->
+        Task task = taskRepository.findById(id).orElseThrow(() ->
                 new IllegalArgumentException(NO_TASK_FOUND));
         return mapTaskDetails(task);
     }
 
     @Override
     public void deleteTask(Long id) {
-        Task task = taskRepository.findById(id).orElseThrow(()->{
+        Task task = taskRepository.findById(id).orElseThrow(() -> {
             throw new IllegalArgumentException(NO_TASK_FOUND);
         });
         task.getProject().getTasks().remove(task);
@@ -96,7 +96,7 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public void updateTask(TaskUpdateRequest updatedTask, Long id) {
-        Task task = taskRepository.findById(id).orElseThrow(()->
+        Task task = taskRepository.findById(id).orElseThrow(() ->
                 new IllegalArgumentException(TASK_NOT_FOUND_EXCEPTION));
         task.setName(updatedTask.getName());
         task.setDescription(updatedTask.getDescription());
@@ -109,7 +109,7 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public void updateTaskStatus(TaskStatusUpdateRequest taskStatus, Long id) {
-        Task task = taskRepository.findById(id).orElseThrow(()->
+        Task task = taskRepository.findById(id).orElseThrow(() ->
                 new IllegalArgumentException(TASK_NOT_FOUND_EXCEPTION));
         Status taskUpdatedStatus = Status.valueOf(taskStatus.getUpdatedTask());
         task.setStatus(taskUpdatedStatus);
@@ -131,8 +131,6 @@ public class TaskServiceImpl implements TaskService {
                 task.getName(),
                 task.getDeadLine(),
                 task.getStatus().toString()
-
-
         );
     }
 
@@ -146,8 +144,9 @@ public class TaskServiceImpl implements TaskService {
                 task.getDeadLine(),
                 task.getStatus().toString(),
                 task.getPriority().toString(),
-                task.getTaskAssignees().stream().map(m->{
-                   return mapToBasicInfo(m.getUser());
+                task.getTotalTime(),
+                task.getTaskAssignees().stream().map(m -> {
+                    return mapToBasicInfo(m.getUser());
                 }).collect(Collectors.toList())
         );
     }

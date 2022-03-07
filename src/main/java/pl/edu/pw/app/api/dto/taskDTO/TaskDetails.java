@@ -21,5 +21,6 @@ public class TaskDetails {
     private LocalDateTime deadLine;
     private String status;
     private String priority;
+    private int totalTime;
     private List<UserBasicInfo> assignees;
 }
