@@ -86,6 +86,13 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
+    public void addTime(Long id, TaskTimeAdd taskTimeAdd) {
+        Task task = taskRepository.findById(id).orElseThrow(() ->
+                new IllegalArgumentException(NO_TASK_FOUND));
+        task.addTime(taskTimeAdd.getTimeToAdd());
+    }
+
+    @Override
     public void deleteTask(Long id) {
         Task task = taskRepository.findById(id).orElseThrow(() -> {
             throw new IllegalArgumentException(NO_TASK_FOUND);

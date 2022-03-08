@@ -83,4 +83,10 @@ public class Task {
             taskAssignee.getTasks().remove(this);
         }
     }
+
+    public void addTime(int timeToAdd) {
+        if (timeToAdd > 0) {
+            setTotalTime(totalTime + timeToAdd);
+        }
+    }
 }
