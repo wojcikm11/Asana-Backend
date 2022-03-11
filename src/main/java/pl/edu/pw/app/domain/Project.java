@@ -46,7 +46,7 @@ public class Project {
     @ManyToMany(mappedBy = "favoriteProjects")
     private Set<User> usersFavouritePosts = new HashSet<>();
 
-    @ManyToMany(mappedBy = "projects")
+    @ManyToMany(mappedBy = "projects",cascade = CascadeType.ALL)
     private Set<Team> teams = new HashSet<>();
 
     @OneToMany(
