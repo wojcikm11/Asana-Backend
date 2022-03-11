@@ -1,16 +1,20 @@
 package pl.edu.pw.app.api.dto.teamDTO;
 
-import lombok.*;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import pl.edu.pw.app.api.dto.teamMemberDTO.TeamMemberBasicInfo;
-import pl.edu.pw.app.domain.TeamMember;
 
 import java.util.List;
 
-@Getter
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
 public class TeamBasicInfo {
     private Long id;
     private String name;
-    private List<TeamMemberBasicInfo> members;
+    private boolean isOwner =false;
 }

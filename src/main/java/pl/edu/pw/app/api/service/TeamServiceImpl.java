@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import pl.edu.pw.app.api.dto.projectDTO.ProjectCompleteInfo;
 import pl.edu.pw.app.api.dto.teamDTO.TeamBasicInfo;
+import pl.edu.pw.app.api.dto.teamDTO.TeamCompleteInfo;
 import pl.edu.pw.app.api.dto.teamDTO.TeamCreateRequest;
 import pl.edu.pw.app.api.dto.teamMemberDTO.AddTeamMemberRequest;
 import pl.edu.pw.app.api.dto.teamMemberDTO.DeleteTeamMemberRequest;
@@ -20,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static java.util.stream.Collectors.toList;
 import static pl.edu.pw.app.api.service.ProjectService.ProjectMapper.map;
 
 @Service
@@ -69,7 +71,7 @@ public class TeamServiceImpl implements TeamService {
                 new IllegalArgumentException("Team with id "+id+" does not exist"));
         List<ProjectCompleteInfo> projects =  team.getProjects().stream().map(m->{
             return pl.edu.pw.app.api.service.ProjectService.ProjectMapper.map(m);
-        }).collect(Collectors.toList());
+        }).collect(toList());
 
         return projects;
     }
@@ -92,12 +94,19 @@ public class TeamServiceImpl implements TeamService {
 
     @Override
     public List<TeamBasicInfo> getUserTeams(Long userId) {
+        boolean isOwner;
         User user = userRepository.findById(userId).orElseThrow();
-        return user.getTeams().stream().map(this::map).toList();
+        return user.getTeams().stream().map(teamMember ->{
+           if(teamMember.getRole() == TeamMember.Role.OWNER){
+               return mapToBasic(teamMember.getTeam(),true);
+           }
+           return mapToBasic(teamMember.getTeam(),false);
+        }).collect(toList());
+
     }
 
     @Override
-    public TeamBasicInfo getTeam(Long teamId) {
+    public TeamCompleteInfo getTeam(Long teamId) {
         return map(teamRepository.getById(teamId));
     }
 
@@ -118,7 +127,7 @@ public class TeamServiceImpl implements TeamService {
     }
 
     @Override
-    public List<TeamBasicInfo> getAll() {
+    public List<TeamCompleteInfo> getAll() {
         return teamRepository.findAll().stream().map(this::map).toList();
     }
 
@@ -153,17 +162,26 @@ public class TeamServiceImpl implements TeamService {
         teamRepository.save(team);
     }
 
+    private TeamBasicInfo mapToBasic(Team team,boolean isOwner){
+
+        return new TeamBasicInfo(
+                team.getId(),
+                team.getName(),
+               isOwner
+        );
+    }
+
     private Team map(TeamCreateRequest team) {
         return new Team(team.getName());
     }
 
-    private TeamBasicInfo map(Team team) {
-        return new TeamBasicInfo(team.getId(), team.getName(), map(team.getMembers()));
+    private TeamCompleteInfo map(Team team) {
+        return new TeamCompleteInfo(team.getId(), team.getName(), map(team.getMembers()));
     }
 
-    private TeamBasicInfo map(TeamMember teamMember) {
+    private TeamCompleteInfo map(TeamMember teamMember) {
         Team userTeam = teamMember.getTeam();
-        return new TeamBasicInfo(userTeam.getId(), userTeam.getName(), map(userTeam.getMembers()));
+        return new TeamCompleteInfo(userTeam.getId(), userTeam.getName(), map(userTeam.getMembers()));
     }
 
     private List<TeamMemberBasicInfo> map(List<TeamMember> members){

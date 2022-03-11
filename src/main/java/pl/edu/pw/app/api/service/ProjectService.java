@@ -14,7 +14,6 @@ import pl.edu.pw.app.repository.UserRepository;
 import javax.transaction.Transactional;
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static pl.edu.pw.app.api.service.ProjectService.ProjectMapper.map;
 

@@ -7,6 +7,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import pl.edu.pw.app.api.dto.projectDTO.ProjectCompleteInfo;
 import pl.edu.pw.app.api.dto.teamDTO.TeamBasicInfo;
+import pl.edu.pw.app.api.dto.teamDTO.TeamCompleteInfo;
 import pl.edu.pw.app.api.dto.teamDTO.TeamCreateRequest;
 import pl.edu.pw.app.api.dto.teamMemberDTO.AddTeamMemberRequest;
 import pl.edu.pw.app.api.dto.teamMemberDTO.DeleteTeamMemberRequest;
@@ -40,7 +41,7 @@ public class TeamController {
 
 
     @GetMapping
-    public List<TeamBasicInfo> getAllTeams(){
+    public List<TeamCompleteInfo> getAllTeams(){
         return teamService.getAll();
     }
 
@@ -62,7 +63,7 @@ public class TeamController {
     }
 
     @GetMapping("/{id}")
-    public TeamBasicInfo getTeam(@PathVariable Long id) {
+    public TeamCompleteInfo getTeam(@PathVariable Long id) {
         return teamService.getTeam(id);
     }
 
