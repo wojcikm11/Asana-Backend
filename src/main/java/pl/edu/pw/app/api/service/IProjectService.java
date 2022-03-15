@@ -13,7 +13,7 @@ import java.util.Set;
 public interface IProjectService {
     ProjectCreateRequest create(ProjectCreateRequest project);
     ProjectCompleteInfo get(Long id);
-    List<ProjectCompleteInfo> getUserProjects(Long userId);
+    List<ProjectBasicInfo> getUserProjects(Long userId);
     List<ProjectCompleteInfo> getOwnerProjects(Long ownerId);
     void update(Long projectId, ProjectUpdateRequest project);
     void delete(Long id);

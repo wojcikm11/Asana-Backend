@@ -50,10 +50,12 @@ public class ProjectService implements IProjectService {
     }
 
     @Override
-    public List<ProjectCompleteInfo> getUserProjects(Long userId) {
+    public List<ProjectBasicInfo> getUserProjects(Long userId) {
         return userRepository.findById(userId).orElseThrow().getProjects().stream()
                 .map(ProjectMember::getProject)
-                .map(ProjectMapper::map).toList();
+                .map(m->{
+                    return map(m,userId);
+                }).collect(Collectors.toList());
     }
 
     @Override
@@ -181,6 +183,15 @@ public class ProjectService implements IProjectService {
                     project.getCategory(),
                     project.getDescription(),
                     project.getMembers().stream().map(ProjectMapper::map).toList()
+            );
+        }
+
+        public static ProjectBasicInfo map(Project project,Long id){
+            return new ProjectBasicInfo(
+                    Math.toIntExact(project.getId()),
+                    project.getName(),
+                    project.getDescription(),
+                    project.getProjectMemberByUserId(id).getRole().toString()=="OWNER"
             );
         }
 

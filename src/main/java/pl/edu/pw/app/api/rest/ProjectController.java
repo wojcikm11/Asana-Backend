@@ -30,7 +30,7 @@ public class ProjectController {
     }
 
     @GetMapping("/user/{id}")
-    public List<ProjectCompleteInfo> getUserProjects(@PathVariable Long id) {
+    public List<ProjectBasicInfo> getUserProjects(@PathVariable Long id) {
         return projectService.getUserProjects(id);
     }
 
