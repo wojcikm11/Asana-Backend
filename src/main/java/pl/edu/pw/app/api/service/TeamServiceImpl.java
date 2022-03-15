@@ -1,6 +1,7 @@
 package pl.edu.pw.app.api.service;
 
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import pl.edu.pw.app.api.dto.projectDTO.ProjectCompleteInfo;
 import pl.edu.pw.app.api.dto.teamDTO.TeamBasicInfo;
@@ -27,6 +28,7 @@ import static pl.edu.pw.app.api.service.ProjectService.ProjectMapper.map;
 @Service
 @AllArgsConstructor
 @Transactional
+@Slf4j
 public class TeamServiceImpl implements TeamService {
     private TeamRepository teamRepository;
     private UserRepository userRepository;
@@ -74,6 +76,26 @@ public class TeamServiceImpl implements TeamService {
         }).collect(toList());
 
         return projects;
+    }
+
+    @Override
+    public void editTeam(Long id, TeamCreateRequest team) {
+        Team t = teamRepository.findById(id).orElseThrow(()->
+                new IllegalArgumentException("Team with id "+id+" does not exist"));
+       ArrayList<User> list = new ArrayList<>();
+       t.setName(team.getName());
+       team.getMembers().forEach(m->{
+           t.getMembers().forEach(mId->{
+               if(mId.getUser().getId()!=m){
+                  list.add(userRepository.getById(m));
+               }
+           });
+       });
+
+        for(User u: list){
+            t.addMember(u);
+        }
+
     }
 
     public void deleteTeam(Long id) {

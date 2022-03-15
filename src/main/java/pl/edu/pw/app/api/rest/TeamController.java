@@ -80,4 +80,10 @@ public class TeamController {
         teamService.deleteMember(deleteTeamMember);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
+    @PutMapping("{id}")
+    public ResponseEntity<?> editTeam(@PathVariable Long id , @RequestBody TeamCreateRequest team){
+        teamService.editTeam(id,team);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
 }
