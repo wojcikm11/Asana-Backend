@@ -11,7 +11,7 @@ import pl.edu.pw.app.api.dto.teamMemberDTO.TeamMemberBasicInfo;
 import java.util.List;
 
 public interface TeamService {
-    void addTeam(TeamCreateRequest team);
+    Long addTeam(TeamCreateRequest team);
     void deleteTeam(Long id);
     List<TeamMemberBasicInfo> getTeamMembers(Long teamId);
     List<TeamBasicInfo> getUserTeams(Long userId);

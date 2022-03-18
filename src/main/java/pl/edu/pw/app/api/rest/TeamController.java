@@ -27,10 +27,9 @@ public class TeamController {
     private TeamService teamService;
 
     @PostMapping(path="/add",consumes="application/json")
-    @ResponseBody
-    public ResponseEntity<?> addTeam(@RequestBody TeamCreateRequest team){
-        teamService.addTeam(team);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+    public Long addTeam(@RequestBody TeamCreateRequest team){
+        return teamService.addTeam(team);
+
     }
 
     @GetMapping("/{id}/projects")

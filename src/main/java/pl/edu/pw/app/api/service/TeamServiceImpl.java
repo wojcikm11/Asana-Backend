@@ -40,7 +40,7 @@ public class TeamServiceImpl implements TeamService {
 
 
     @Override
-    public void addTeam(TeamCreateRequest team){
+    public Long addTeam(TeamCreateRequest team){
         if (team.getName() == null || team.getName().isBlank()) {
             throw new IllegalArgumentException(EMPTY_TEAM_NAME_EXCEPTION);
         }
@@ -64,7 +64,10 @@ public class TeamServiceImpl implements TeamService {
 
 
 
+
+
         }
+        return newTeam.getId();
     }
 
     @Override
