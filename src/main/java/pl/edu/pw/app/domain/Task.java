@@ -60,6 +60,13 @@ public class Task {
             inverseJoinColumns = { @JoinColumn(name = "user_id"), @JoinColumn(name = "project_id") })
     private Set<ProjectMember> taskAssignees = new HashSet<>();
 
+    @OneToMany(
+            mappedBy = "task",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private List<ProjectMemberTaskTime> projectMemberTaskTimes = new ArrayList<>();
+
     public Task(Project project, String name, String description, LocalDateTime startDate, LocalDateTime deadLine, Priority priority) {
         this.project = project;
         this.name = name;

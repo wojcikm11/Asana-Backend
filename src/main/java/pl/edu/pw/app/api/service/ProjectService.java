@@ -3,11 +3,13 @@ package pl.edu.pw.app.api.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.edu.pw.app.api.dto.projectDTO.*;
+import pl.edu.pw.app.api.dto.taskDTO.AddTaskTimeForProjectMember;
 import pl.edu.pw.app.api.dto.teamDTO.TeamCompleteInfo;
 import pl.edu.pw.app.api.dto.teamMemberDTO.TeamMemberBasicInfo;
 import pl.edu.pw.app.api.dto.userDTO.UserBasicInfo;
 import pl.edu.pw.app.domain.*;
 import pl.edu.pw.app.repository.ProjectRepository;
+import pl.edu.pw.app.repository.TaskRepository;
 import pl.edu.pw.app.repository.TeamRepository;
 import pl.edu.pw.app.repository.UserRepository;
 
@@ -25,12 +27,14 @@ public class ProjectService implements IProjectService {
     private ProjectRepository projectRepository;
     private UserRepository userRepository;
     private TeamRepository teamRepository;
+    private TaskRepository taskRepository;
 
     @Autowired
-    public ProjectService(ProjectRepository projectRepository, UserRepository userRepository, TeamRepository teamRepository) {
+    public ProjectService(ProjectRepository projectRepository, UserRepository userRepository, TeamRepository teamRepository, TaskRepository taskRepository) {
         this.projectRepository = projectRepository;
         this.userRepository = userRepository;
         this.teamRepository = teamRepository;
+        this.taskRepository = taskRepository;
     }
 
     @Override
@@ -84,6 +88,15 @@ public class ProjectService implements IProjectService {
         User userToAdd = userRepository.findById(addProjectMember.getUserId()).orElseThrow();
         Project project = projectRepository.findById(addProjectMember.getProjectId()).orElseThrow();
         project.addProjectMember(userToAdd);
+    }
+
+    @Override
+    public void addTimeToTask(AddTaskTimeForProjectMember addTime) {
+        Task task = taskRepository.findById(addTime.getTaskId()).orElseThrow();
+        Project project = task.getProject();
+
+        ProjectMember projectMember = project.getProjectMemberByUserId(UtilityService.getLoggedUser().getId());
+        projectMember.addTimeForTask(task, addTime.getTimeToAdd());
     }
 
     @Override

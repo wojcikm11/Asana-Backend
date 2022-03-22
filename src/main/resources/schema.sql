@@ -103,6 +103,18 @@ CREATE TABLE IF NOT EXISTS task
     FOREIGN KEY (project_id) REFERENCES project (id)
 );
 
+CREATE TABLE IF NOT EXISTS project_member_task_time
+(
+	user_id    INT NOT NULL,
+    task_id    INT NOT NULL,
+    project_id INT NOT NULL,
+    time INT NOT NULL DEFAULT 0,
+    PRIMARY KEY (user_id, task_id, project_id),
+    FOREIGN KEY (user_id) REFERENCES project_member (user_id),
+    FOREIGN KEY (task_id) REFERENCES task (id),
+    FOREIGN KEY (project_id) REFERENCES project_member (project_id)
+);
+
 CREATE TABLE IF NOT EXISTS task_assignees
 (
     user_id    INT NOT NULL,

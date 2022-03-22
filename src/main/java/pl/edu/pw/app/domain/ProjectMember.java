@@ -15,6 +15,11 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
+//@SecondaryTable(name = "project_member_task_time", pkJoinColumns =  {
+//        @PrimaryKeyJoinColumn(name = "task_id"),
+//        @PrimaryKeyJoinColumn(name = "user_id"),
+//        @PrimaryKeyJoinColumn(name = "project_id")
+//})
 public class ProjectMember {
     @EmbeddedId
     private ProjectMemberId id = new ProjectMemberId();
@@ -39,6 +44,13 @@ public class ProjectMember {
     @ManyToMany(mappedBy = "taskAssignees")
     private Set<Task> tasks = new HashSet<>();
 
+    @OneToMany(
+            mappedBy = "projectMember",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private List<ProjectMemberTaskTime> taskTimes = new ArrayList<>();
+
     @ManyToMany(mappedBy = "subtaskAssignees")
     private Set<Subtask> subtasks = new HashSet<>();
 
@@ -51,5 +63,22 @@ public class ProjectMember {
 
     public enum Role {
         OWNER, MEMBER;
+    }
+
+    public ProjectMemberTaskTime getTaskTime(Long taskId) {
+        return taskTimes.stream().
+                filter(taskTime -> taskTime.getId().getTaskId().equals(taskId)).findAny().orElse(null);
+    }
+
+    public void addTimeForTask(Task task, int timeToAdd) {
+        if (timeToAdd > 0) {
+            ProjectMemberTaskTime projectMemberTaskTime = getTaskTime(task.getId());
+            if (projectMemberTaskTime == null) {
+                ProjectMemberTaskTimeId taskTimeId = new ProjectMemberTaskTimeId(new ProjectMemberId(project.getId(), id.getMemberId()), task.getId());
+                ProjectMemberTaskTime newProjectMemberTaskTime = new ProjectMemberTaskTime(taskTimeId, timeToAdd,this, task);
+                projectMemberTaskTime = newProjectMemberTaskTime;
+            }
+            projectMemberTaskTime.addTime(timeToAdd);
+        }
     }
 }

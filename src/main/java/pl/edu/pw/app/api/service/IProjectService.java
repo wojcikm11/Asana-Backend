@@ -2,6 +2,7 @@ package pl.edu.pw.app.api.service;
 
 import org.springframework.stereotype.Service;
 import pl.edu.pw.app.api.dto.projectDTO.*;
+import pl.edu.pw.app.api.dto.taskDTO.AddTaskTimeForProjectMember;
 import pl.edu.pw.app.api.dto.teamDTO.TeamCompleteInfo;
 
 import javax.transaction.Transactional;
@@ -23,5 +24,5 @@ public interface IProjectService {
     void removeTeam(RemoveTeamFromProject removeTeam);
     Set<TeamCompleteInfo> getProjectTeamMembers(Long projectId);
     Set<ProjectMemberInfo> getProjectNonTeamMembers(Long projectId);
-
+    void addTimeToTask(AddTaskTimeForProjectMember addTime);
 }

@@ -6,6 +6,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import pl.edu.pw.app.api.dto.projectDTO.*;
+import pl.edu.pw.app.api.dto.taskDTO.AddAssigneeRequest;
+import pl.edu.pw.app.api.dto.taskDTO.AddTaskTimeForProjectMember;
 import pl.edu.pw.app.api.dto.teamDTO.TeamCompleteInfo;
 import pl.edu.pw.app.api.service.IProjectService;
 
@@ -80,6 +82,13 @@ public class ProjectController {
     public ResponseEntity<?> addProjectMember(@Valid @RequestBody AddProjectMember addProjectMember) {
         projectService.addUserToProject(addProjectMember);
         return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    @PostMapping("/member/time/add")
+    @PreAuthorize("@taskSecurity.isProjectMember(#addTaskTime.taskId)")
+    public ResponseEntity<?> addTaskTime(@RequestBody AddTaskTimeForProjectMember addTaskTime) {
+        projectService.addTimeToTask(addTaskTime);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
