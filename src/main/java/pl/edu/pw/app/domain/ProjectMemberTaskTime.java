@@ -1,5 +1,6 @@
 package pl.edu.pw.app.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -18,8 +19,13 @@ public class ProjectMemberTaskTime {
     @Column
     private int time;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @MapsId("projectMemberId")
+    @ManyToOne(fetch = FetchType.EAGER)
+//    @MapsId("projectMemberId")
+    @JoinColumns({
+            @JoinColumn(name = "user_id", referencedColumnName = "user_id", insertable = false, updatable = false),
+            @JoinColumn(name = "project_id", referencedColumnName = "project_id", insertable = false, updatable = false),
+    })
+
     private ProjectMember projectMember;
 
     @ManyToOne(fetch = FetchType.LAZY)

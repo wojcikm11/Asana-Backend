@@ -1,5 +1,6 @@
 package pl.edu.pw.app.api.service;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.edu.pw.app.api.dto.projectDTO.*;
@@ -19,7 +20,7 @@ import java.util.stream.Collectors;
 
 import static pl.edu.pw.app.api.service.ProjectService.ProjectMapper.map;
 
-
+@Slf4j
 @Service
 @Transactional
 public class ProjectService implements IProjectService {

@@ -1,4 +1,5 @@
 # haslo to psw
+use asana;
 INSERT INTO USER (email, password, name, enabled, locked)
 VALUES ('john_doe@email.com', '$2a$12$bAuKcWsGdU3K9eGhvGjnReAO04Np.isPinCk21JJeaSd/5rQCzWDa', 'john98', 1, 0),
        ('alice_smith@email.com', '$2a$12$bAuKcWsGdU3K9eGhvGjnReAO04Np.isPinCk21JJeaSd/5rQCzWDa', 'pinky', 1, 0),

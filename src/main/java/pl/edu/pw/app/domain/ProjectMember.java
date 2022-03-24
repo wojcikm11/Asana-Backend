@@ -1,6 +1,9 @@
 package pl.edu.pw.app.domain;
 
 import lombok.*;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import pl.edu.pw.app.repository.ProjectMemberTaskTimeRepository;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -15,6 +18,8 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
+@Slf4j
+
 //@SecondaryTable(name = "project_member_task_time", pkJoinColumns =  {
 //        @PrimaryKeyJoinColumn(name = "task_id"),
 //        @PrimaryKeyJoinColumn(name = "user_id"),
@@ -48,6 +53,7 @@ public class ProjectMember {
             mappedBy = "projectMember",
             cascade = CascadeType.ALL,
             orphanRemoval = true
+
     )
     private List<ProjectMemberTaskTime> taskTimes = new ArrayList<>();
 
@@ -60,6 +66,7 @@ public class ProjectMember {
             orphanRemoval = true
     )
     private List<Message> messages = new ArrayList<>();
+
 
     public enum Role {
         OWNER, MEMBER;
@@ -78,7 +85,12 @@ public class ProjectMember {
                 ProjectMemberTaskTime newProjectMemberTaskTime = new ProjectMemberTaskTime(taskTimeId, timeToAdd,this, task);
                 projectMemberTaskTime = newProjectMemberTaskTime;
             }
+
             projectMemberTaskTime.addTime(timeToAdd);
+          taskTimes.add(projectMemberTaskTime);
         }
     }
+
+
+
 }

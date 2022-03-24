@@ -1,6 +1,8 @@
 package pl.edu.pw.app.api.service;
 
 import lombok.AllArgsConstructor;
+import lombok.extern.java.Log;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import pl.edu.pw.app.api.dto.taskDTO.*;
 import pl.edu.pw.app.api.dto.teamMemberDTO.TeamMemberBasicInfo;
@@ -17,7 +19,7 @@ import java.util.stream.Collectors;
 
 import static pl.edu.pw.app.api.service.UserServiceImpl.UserMapper.mapToBasicInfo;
 
-
+@Slf4j
 @AllArgsConstructor
 @Service
 @Transactional
@@ -89,6 +91,7 @@ public class TaskServiceImpl implements TaskService {
     public void addTime(Long id, TaskTimeAdd taskTimeAdd) {
         Task task = taskRepository.findById(id).orElseThrow(() ->
                 new IllegalArgumentException(NO_TASK_FOUND));
+        log.warn(String.valueOf(taskTimeAdd.getTimeToAdd()));
         task.addTime(taskTimeAdd.getTimeToAdd());
     }
 
