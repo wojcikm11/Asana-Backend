@@ -3,8 +3,8 @@ package pl.edu.pw.app.api.dto.subtaskDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import pl.edu.pw.app.api.dto.projectDTO.ProjectMemberBasicInfo;
-import pl.edu.pw.app.domain.Priority;
-import pl.edu.pw.app.domain.Status;
+import pl.edu.pw.app.domain.task.Priority;
+import pl.edu.pw.app.domain.task.Status;
 
 import java.time.LocalDateTime;
 import java.util.List;

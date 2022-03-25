@@ -1,15 +1,11 @@
 package pl.edu.pw.security.access;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
-import pl.edu.pw.app.api.dto.projectDTO.AddProjectMember;
-import pl.edu.pw.app.api.dto.projectDTO.ProjectCompleteInfo;
-import pl.edu.pw.app.api.service.ProjectService;
-import pl.edu.pw.app.api.service.UtilityService;
-import pl.edu.pw.app.domain.Project;
-import pl.edu.pw.app.domain.Team;
-import pl.edu.pw.app.domain.User;
+import pl.edu.pw.app.api.service.common.UtilityService;
+import pl.edu.pw.app.domain.project.Project;
+import pl.edu.pw.app.domain.team.Team;
+import pl.edu.pw.app.domain.user.User;
 import pl.edu.pw.app.repository.ProjectRepository;
 import pl.edu.pw.app.repository.TeamRepository;
 

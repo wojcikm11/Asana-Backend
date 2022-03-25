@@ -2,8 +2,8 @@ package pl.edu.pw.app.api.dto.taskDTO;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import pl.edu.pw.app.domain.Priority;
-import pl.edu.pw.app.domain.Status;
+import pl.edu.pw.app.domain.task.Priority;
+import pl.edu.pw.app.domain.task.Status;
 
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;

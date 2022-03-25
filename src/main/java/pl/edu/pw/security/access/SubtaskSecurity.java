@@ -2,11 +2,10 @@ package pl.edu.pw.security.access;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import pl.edu.pw.app.api.service.UtilityService;
-import pl.edu.pw.app.domain.Project;
-import pl.edu.pw.app.domain.User;
+import pl.edu.pw.app.api.service.common.UtilityService;
+import pl.edu.pw.app.domain.project.Project;
+import pl.edu.pw.app.domain.user.User;
 import pl.edu.pw.app.repository.SubtaskRepository;
-import pl.edu.pw.app.repository.TaskRepository;
 
 @Component("subtaskSecurity")
 public class SubtaskSecurity {

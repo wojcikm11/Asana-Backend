@@ -2,7 +2,7 @@ package pl.edu.pw.app.api.dto.teamMemberDTO;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import pl.edu.pw.app.domain.TeamMember;
+import pl.edu.pw.app.domain.team.TeamMember;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;

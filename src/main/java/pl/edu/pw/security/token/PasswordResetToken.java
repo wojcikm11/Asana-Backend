@@ -1,14 +1,12 @@
 package pl.edu.pw.security.token;
 
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import pl.edu.pw.app.domain.User;
+import pl.edu.pw.app.domain.user.User;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @Entity(name = "password_reset_token")
 @NoArgsConstructor

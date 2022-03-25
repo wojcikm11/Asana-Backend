@@ -3,7 +3,7 @@ package pl.edu.pw.security.token;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import pl.edu.pw.app.domain.User;
+import pl.edu.pw.app.domain.user.User;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;

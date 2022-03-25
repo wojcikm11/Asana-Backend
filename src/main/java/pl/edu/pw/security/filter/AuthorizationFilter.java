@@ -8,7 +8,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
-import pl.edu.pw.app.domain.User;
+import pl.edu.pw.app.domain.user.User;
 import pl.edu.pw.app.repository.UserRepository;
 
 import javax.servlet.FilterChain;
