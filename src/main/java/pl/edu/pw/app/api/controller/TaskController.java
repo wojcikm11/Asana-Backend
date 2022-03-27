@@ -76,10 +76,5 @@ public class TaskController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @PutMapping("/{id}/time/add")
-    @PreAuthorize("@taskSecurity.isProjectMember(#id)")
-    public ResponseEntity<?> addTime(@PathVariable Long id, @RequestBody TaskTimeAdd taskTimeAdd) {
-        taskService.addTime(id, taskTimeAdd);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    }
+
 }
