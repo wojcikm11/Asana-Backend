@@ -33,14 +33,12 @@ public class ProjectServiceImpl implements ProjectService {
     private ProjectRepository projectRepository;
     private UserRepository userRepository;
     private TeamRepository teamRepository;
-    private TaskRepository taskRepository;
 
     @Autowired
     public ProjectServiceImpl(ProjectRepository projectRepository, UserRepository userRepository, TeamRepository teamRepository, TaskRepository taskRepository) {
         this.projectRepository = projectRepository;
         this.userRepository = userRepository;
         this.teamRepository = teamRepository;
-        this.taskRepository = taskRepository;
     }
 
     @Override

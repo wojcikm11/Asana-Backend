@@ -20,12 +20,6 @@ import java.util.Set;
 @AllArgsConstructor
 @EqualsAndHashCode
 @Slf4j
-
-//@SecondaryTable(name = "project_member_task_time", pkJoinColumns =  {
-//        @PrimaryKeyJoinColumn(name = "task_id"),
-//        @PrimaryKeyJoinColumn(name = "user_id"),
-//        @PrimaryKeyJoinColumn(name = "project_id")
-//})
 public class ProjectMember {
     @EmbeddedId
     private ProjectMemberId id = new ProjectMemberId();
@@ -90,7 +84,4 @@ public class ProjectMember {
             taskTimes.add(projectMemberTaskTime);
         }
     }
-
-
-
 }

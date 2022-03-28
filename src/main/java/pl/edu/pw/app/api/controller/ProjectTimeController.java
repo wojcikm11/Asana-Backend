@@ -11,6 +11,8 @@ import pl.edu.pw.app.api.dto.timeDTO.ProjectTasksTime;
 import pl.edu.pw.app.api.service.project.ProjectTimeService;
 import pl.edu.pw.app.api.service.task.TaskService;
 
+import java.util.List;
+
 @RestController
 @RequestMapping(path="/api/project")
 public class ProjectTimeController {
@@ -35,6 +37,11 @@ public class ProjectTimeController {
     @PreAuthorize("@projectSecurity.isProjectMember(#projectId)")
     public ProjectTasksTime getProjectTasksTime(@PathVariable Long projectId) {
         return projectTimeService.getProjectTasksTime(projectId);
+    }
+
+    @GetMapping("/all/time")
+    public List<ProjectTasksTime> getAllUserProjectTasksTime() {
+        return projectTimeService.getAllProjectTasksTime();
     }
 
     @PutMapping("/task/{id}/time/add")
