@@ -18,6 +18,15 @@ public class TaskController {
 
     private TaskService taskService;
 
+
+    @PutMapping("/postponedeadlines/{projectId}")
+    @PreAuthorize("@projectSecurity.isProjectMember(#projectId)")
+    public ResponseEntity postponeeProjectTasksDeadlines(@PathVariable Long projectId,@RequestBody PostponeDeadlinesRequest time ){
+        taskService.postponeDeadlines(projectId,time);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+
     @PostMapping("/add")
     @PreAuthorize("@projectSecurity.isProjectMember(#task.projectId)")
     public ResponseEntity<?> addTask(@RequestBody @Valid TaskCreateRequest task){

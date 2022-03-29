@@ -95,6 +95,15 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
+    public void postponeDeadlines(Long projectId, PostponeDeadlinesRequest time) {
+        Project project = projectRepository.getById(projectId);
+        List<Task> tasks = project.getTasks();
+        tasks.stream().forEach(t-> {
+            t.setDeadLine(t.getDeadLine().plusSeconds(time.getTime()));
+        });
+    }
+
+    @Override
     public void deleteTask(Long id) {
         Task task = taskRepository.findById(id).orElseThrow(() -> {
             throw new IllegalArgumentException(NO_TASK_FOUND);

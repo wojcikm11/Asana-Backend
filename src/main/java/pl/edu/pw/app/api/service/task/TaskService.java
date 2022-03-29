@@ -15,4 +15,5 @@ public interface TaskService {
     void removeAssignee(Long taskId, Long assigneeId);
     TaskDetails getTaskById(Long id);
     void addTime(Long id, TaskTimeAdd taskTimeAdd);
+    void postponeDeadlines(Long projectId,PostponeDeadlinesRequest time);
 }
