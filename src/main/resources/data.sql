@@ -38,17 +38,30 @@ INSERT INTO PROJECT (name, category, description) VALUE
 
 INSERT INTO PROJECT_MEMBER(user_id, project_id, role)
 VALUES (1, 1, 'OWNER'),
+       (2, 1, 'MEMBER'),
+       (4, 1, 'MEMBER'),
        (2, 2, 'OWNER'),
        (3, 3, 'OWNER'),
        (4, 4, 'OWNER'),
        (1, 2, 'MEMBER'),
+       (4, 2, 'MEMBER'),
        (6, 3, 'MEMBER'),
        (6, 1, 'MEMBER'),
+       (1, 5, 'OWNER'),
+       (2, 5, 'MEMBER'),
+       (4, 5, 'MEMBER'),
+       (1, 3, 'MEMBER'),
+       (2, 3, 'MEMBER'),
+       (4, 3, 'MEMBER'),
+       (2, 4, 'MEMBER'),
        (1, 4, 'MEMBER');
 
 
 INSERT INTO PROJECT_TEAM(team_id, project_id)
 VALUES (1, 2),
+       (1, 1),
+       (1, 3),
+       (1, 4),
        (3, 5);
 
 INSERT INTO FAVORITES(user_id, project_id)

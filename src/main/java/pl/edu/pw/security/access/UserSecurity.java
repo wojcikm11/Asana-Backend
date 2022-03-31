@@ -25,4 +25,8 @@ public class UserSecurity {
         Project project = projectRepository.findById(favoriteProjectId).orElseThrow();
         return user.inUserFavorites(project);
     }
+
+    public boolean isLoggedInUser(Long id){
+        return UtilityService.getLoggedUser().getId()==id;
+    }
 }

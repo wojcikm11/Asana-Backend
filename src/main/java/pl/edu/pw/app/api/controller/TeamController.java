@@ -56,12 +56,15 @@ public class TeamController {
         return teamService.getTeamMembers(id);
     }
 
+
+    @PreAuthorize("@userSecurity.isLoggedInUser(#id)")
     @GetMapping("/user/{id}/teams")
     public List<TeamBasicInfo> getUserTeams(@PathVariable Long id) {
         return teamService.getUserTeams(id);
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize(("@teamSecurity.isTeamMember(#id)"))
     public TeamCompleteInfo getTeam(@PathVariable Long id) {
         return teamService.getTeam(id);
     }

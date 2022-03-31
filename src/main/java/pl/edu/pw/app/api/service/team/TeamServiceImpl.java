@@ -202,7 +202,11 @@ public class TeamServiceImpl implements TeamService {
     }
 
     private TeamCompleteInfo map(Team team) {
-        return new TeamCompleteInfo(team.getId(), team.getName(), map(team.getMembers()));
+        return new TeamCompleteInfo(team.getId(), team.getName(), map(team.getMembers()),
+                team.getProjects().stream().map(p->{
+                    return ProjectServiceImpl.ProjectMapper.map(p,UtilityService.getLoggedUser().getId());
+                }).collect(toList())
+                );
     }
 
     private TeamCompleteInfo map(TeamMember teamMember) {
