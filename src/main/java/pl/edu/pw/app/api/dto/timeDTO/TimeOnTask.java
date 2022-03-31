@@ -7,5 +7,6 @@ import lombok.*;
 public class TimeOnTask {
     private Long taskId;
     private String taskName;
+    private String taskStatus;
     private int timeSpent;
 }

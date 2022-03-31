@@ -77,6 +77,7 @@ public class ProjectTimeServiceImpl implements ProjectTimeService {
             return new TimeOnTask(
                 taskTime.getTask().getId(),
                 taskTime.getTask().getName(),
+                taskTime.getTask().getStatus().name(),
                 taskTime.getTime()
             );
         }
