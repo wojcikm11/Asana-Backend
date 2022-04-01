@@ -102,4 +102,10 @@ public class ProjectController {
         projectService.delete(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
+    @GetMapping("/{projectId}/members/all")
+    @PreAuthorize("@projectSecurity.isProjectMember(#projectId)")
+    public List<ProjectMemberInfo> getAllProjectMembers(@PathVariable Long projectId){
+        return projectService.getAllProjectMembers(projectId);
+    }
 }

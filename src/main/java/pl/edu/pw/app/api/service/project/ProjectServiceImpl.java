@@ -163,6 +163,11 @@ public class ProjectServiceImpl implements ProjectService {
         return projectMembersFiltered.stream().map(ProjectMapper::map).collect(Collectors.toSet());
     }
 
+    @Override
+    public List<ProjectMemberInfo> getAllProjectMembers(Long projectId) {
+        Project project = projectRepository.getById(projectId);
+        return project.getMembers().stream().map(ProjectMapper::map).collect(Collectors.toList());
+    }
 
 
     private void removeTeamMembersFromProject(Project project, Team team) {
