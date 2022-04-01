@@ -1,6 +1,7 @@
 package pl.edu.pw.app.api.service.task;
 
 import pl.edu.pw.app.api.dto.taskDTO.*;
+import pl.edu.pw.app.api.dto.timeDTO.SetTimeRequest;
 
 import java.util.List;
 
@@ -16,4 +17,5 @@ public interface TaskService {
     TaskDetails getTaskById(Long id);
     void addTime(Long id, TaskTimeAdd taskTimeAdd);
     void postponeDeadlines(Long projectId,PostponeDeadlinesRequest time);
+    void setTime(Long taskId, SetTimeRequest time);
 }

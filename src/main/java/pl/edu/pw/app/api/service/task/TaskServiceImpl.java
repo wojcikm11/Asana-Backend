@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import pl.edu.pw.app.api.dto.taskDTO.*;
+import pl.edu.pw.app.api.dto.timeDTO.SetTimeRequest;
 import pl.edu.pw.app.domain.project.Project;
 import pl.edu.pw.app.domain.project.ProjectMember;
 import pl.edu.pw.app.domain.task.Priority;
@@ -13,6 +14,7 @@ import pl.edu.pw.app.repository.ProjectRepository;
 import pl.edu.pw.app.repository.TaskRepository;
 
 import javax.transaction.Transactional;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -101,6 +103,14 @@ public class TaskServiceImpl implements TaskService {
         tasks.stream().forEach(t-> {
             t.setDeadLine(t.getDeadLine().plusSeconds(time.getTime()));
         });
+    }
+
+    @Override
+    public void setTime(Long taskId, SetTimeRequest time) {
+        Task task = taskRepository.getById(taskId);
+        if(time.getTime()>=0){
+          task.setTotalTime(Math.toIntExact(time.getTime()));
+        }
     }
 
     @Override

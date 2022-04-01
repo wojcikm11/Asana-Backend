@@ -98,5 +98,8 @@ public class Task {
         if (timeToAdd > 0) {
             setTotalTime(totalTime + timeToAdd);
         }
+
     }
+
+
 }

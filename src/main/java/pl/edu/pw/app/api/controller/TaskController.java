@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import pl.edu.pw.app.api.dto.taskDTO.*;
+import pl.edu.pw.app.api.dto.timeDTO.SetTimeRequest;
 import pl.edu.pw.app.api.service.task.TaskService;
 
 import javax.validation.Valid;
@@ -85,5 +86,11 @@ public class TaskController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    @PutMapping("/{taskId}/settime")
+    @PreAuthorize("@taskSecurity.isProjectMember(#taskId)")
+    public ResponseEntity setTimer(@PathVariable Long taskId, @RequestBody SetTimeRequest time){
+        taskService.setTime(taskId,time);
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
+    }
 
 }
