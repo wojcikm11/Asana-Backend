@@ -30,7 +30,7 @@ public class ProjectMember {
         this.role = role;
     }
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.DETACH)
     @MapsId("memberId")
     private User user;
 
