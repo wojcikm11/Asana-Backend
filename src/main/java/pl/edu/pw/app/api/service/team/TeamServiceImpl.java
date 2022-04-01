@@ -20,8 +20,7 @@ import pl.edu.pw.app.repository.UserRepository;
 
 import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import static java.util.stream.Collectors.toList;
 import static pl.edu.pw.app.api.service.project.ProjectServiceImpl.ProjectMapper.map;
@@ -86,18 +85,24 @@ public class TeamServiceImpl implements TeamService {
     public void editTeam(Long id, TeamCreateRequest team) {
         Team t = teamRepository.findById(id).orElseThrow(()->
                 new IllegalArgumentException("Team with id "+id+" does not exist"));
-       ArrayList<User> list = new ArrayList<>();
+       Set<User> list = new HashSet<>();
        t.setName(team.getName());
-       team.getMembers().forEach(m->{
-           t.getMembers().forEach(mId->{
-               if(mId.getUser().getId()!=m){
-                  list.add(userRepository.getById(m));
+
+       Set<Long> members = new HashSet(team.getMembers());
+       Set<Long> membersToAdd=new HashSet(team.getMembers());
+
+       t.getMembers().forEach(m->{
+           members.forEach(newMember->{
+               if(m.getUser().getId()==newMember){
+                   membersToAdd.remove(newMember);
                }
            });
+
        });
 
-        for(User u: list){
-            t.addMember(u);
+        for(Long u: membersToAdd){
+
+            t.addMember(userRepository.getById(u));
         }
 
     }
