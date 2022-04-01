@@ -11,6 +11,7 @@ import pl.edu.pw.app.api.service.team.TeamServiceImpl;
 import pl.edu.pw.app.api.service.common.UtilityService;
 import pl.edu.pw.app.domain.project.Project;
 import pl.edu.pw.app.domain.project.ProjectMember;
+import pl.edu.pw.app.domain.task.Task;
 import pl.edu.pw.app.domain.team.Team;
 import pl.edu.pw.app.domain.team.TeamMember;
 import pl.edu.pw.app.domain.user.User;
@@ -84,7 +85,14 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public void delete(Long id) {
+        Project project = projectRepository.findById(id).orElseThrow();
         projectRepository.deleteById(id);
+        for (User user : project.getUsersFavouritePosts()) {
+            user.removeFromFavorites(project);
+        }
+        for (Team team : project.getTeams()) {
+            team.removeProject(project);
+        }
     }
 
     @Override

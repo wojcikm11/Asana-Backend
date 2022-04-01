@@ -84,4 +84,11 @@ public class ProjectMember {
             taskTimes.add(projectMemberTaskTime);
         }
     }
+
+    public void removeTaskAssignment(Task task) {
+        if (task != null) {
+            tasks.remove(task);
+            task.getTaskAssignees().remove(this);
+        }
+    }
 }

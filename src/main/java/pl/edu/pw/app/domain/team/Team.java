@@ -89,6 +89,13 @@ public class Team {
 
     }
 
+    public void removeProject(Project project) {
+        if (project != null) {
+            projects.remove(project);
+            project.getTeams().remove(this);
+        }
+    }
+
     private class ErrorMessage{
         public static final String NOT_TEAM_MEMBER_EXCEPTION = "User with the given email is not a member of this team";
         private static final String NOT_PROJECT_MEMBER_EXCEPTION ="User with the given email is not a member of this project";
