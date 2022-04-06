@@ -18,4 +18,5 @@ public interface TaskService {
     void addTime(Long id, TaskTimeAdd taskTimeAdd);
     void postponeDeadlines(Long projectId,PostponeDeadlinesRequest time);
     void setTime(Long taskId, SetTimeRequest time);
+    List<TaskDetails> getUserAssignedTasks();
 }

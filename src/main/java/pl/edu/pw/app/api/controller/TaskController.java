@@ -22,7 +22,7 @@ public class TaskController {
 
     @PutMapping("/postponedeadlines/{projectId}")
     @PreAuthorize("@projectSecurity.isProjectMember(#projectId)")
-    public ResponseEntity postponeeProjectTasksDeadlines(@PathVariable Long projectId,@RequestBody PostponeDeadlinesRequest time ){
+    public ResponseEntity<?> postponeProjectTasksDeadlines(@PathVariable Long projectId,@RequestBody PostponeDeadlinesRequest time ){
         taskService.postponeDeadlines(projectId,time);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
@@ -88,9 +88,13 @@ public class TaskController {
 
     @PutMapping("/{taskId}/settime")
     @PreAuthorize("@taskSecurity.isProjectMember(#taskId)")
-    public ResponseEntity setTimer(@PathVariable Long taskId, @RequestBody SetTimeRequest time){
+    public ResponseEntity<?> setTimer(@PathVariable Long taskId, @RequestBody SetTimeRequest time){
         taskService.setTime(taskId,time);
-        return new ResponseEntity(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    @GetMapping("/all/assigned")
+    public List<TaskDetails> getUserAssignedTasks() {
+        return taskService.getUserAssignedTasks();
+    }
 }
