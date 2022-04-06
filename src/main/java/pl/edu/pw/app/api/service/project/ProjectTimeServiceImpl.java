@@ -58,7 +58,9 @@ public class ProjectTimeServiceImpl implements ProjectTimeService {
         List<ProjectTasksTime> totalProjectsTime = new ArrayList<>();
         for (ProjectMember projectMember : userProjects) {
             ProjectTasksTime timeOnProject = findTimeOnProject(projectMember);
-            totalProjectsTime.add(timeOnProject);
+            if(timeOnProject.getTotalTimeOnProject() > 0) {
+                totalProjectsTime.add(timeOnProject);
+            }
         }
         return totalProjectsTime;
     }
