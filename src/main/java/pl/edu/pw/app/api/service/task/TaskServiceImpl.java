@@ -5,17 +5,22 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import pl.edu.pw.app.api.dto.taskDTO.*;
 import pl.edu.pw.app.api.dto.timeDTO.SetTimeRequest;
+import pl.edu.pw.app.api.service.common.UtilityService;
 import pl.edu.pw.app.domain.project.Project;
 import pl.edu.pw.app.domain.project.ProjectMember;
 import pl.edu.pw.app.domain.task.Priority;
 import pl.edu.pw.app.domain.task.Status;
 import pl.edu.pw.app.domain.task.Task;
+import pl.edu.pw.app.domain.user.User;
 import pl.edu.pw.app.repository.ProjectRepository;
 import pl.edu.pw.app.repository.TaskRepository;
+import pl.edu.pw.app.repository.UserRepository;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static pl.edu.pw.app.api.service.user.UserServiceImpl.UserMapper.mapToBasicInfo;
@@ -29,6 +34,7 @@ public class TaskServiceImpl implements TaskService {
     private static final String TASK_NOT_FOUND_EXCEPTION = "Task with given id not found";
     private ProjectRepository projectRepository;
     private TaskRepository taskRepository;
+    private UserRepository userRepository;
 
     private final String NO_PROJECT_FOUND = "Project with the given id not found";
     private final String NO_TASK_FOUND = "Task with the given id not found";
@@ -111,6 +117,17 @@ public class TaskServiceImpl implements TaskService {
         if(time.getTime()>=0){
           task.setTotalTime(Math.toIntExact(time.getTime()));
         }
+    }
+
+    @Override
+    public List<TaskDetails> getUserAssignedTasks() {
+        User user = userRepository.getById(UtilityService.getLoggedUser().getId());
+        List<TaskDetails> userAssignedTasks = new ArrayList<>();
+        for (ProjectMember projectMember : user.getProjects()) {
+            Set<TaskDetails> assignedTasks = projectMember.getTasks().stream().map(this::mapTaskDetails).collect(Collectors.toSet());
+            userAssignedTasks.addAll(assignedTasks);
+        }
+        return userAssignedTasks;
     }
 
     @Override
