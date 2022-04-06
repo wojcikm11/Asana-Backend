@@ -3,12 +3,14 @@ package pl.edu.pw.app.api.controller;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import pl.edu.pw.app.api.dto.projectDTO.AddFavoriteProject;
 import pl.edu.pw.app.api.dto.projectDTO.ProjectCompleteInfo;
 import pl.edu.pw.app.api.dto.userDTO.ResetPasswordRequest;
 import pl.edu.pw.app.api.dto.userDTO.UserBasicInfo;
+import pl.edu.pw.app.api.dto.userDTO.UserCompleteInfo;
 import pl.edu.pw.app.api.dto.userDTO.UserCreateRequest;
 import pl.edu.pw.app.api.service.user.account.PasswordResetService;
 import pl.edu.pw.app.api.service.user.account.RegistrationService;
@@ -65,6 +67,12 @@ public class UserController {
     @GetMapping("/user/{id}")
     public UserBasicInfo getUserById(@PathVariable Long id){
         return userService.getUserById(id);
+    }
+
+    @PreAuthorize("@userSecurity.doesExist(#id)")
+    @GetMapping("/user/all/{id}")
+    public UserCompleteInfo getUserCompleteInfoById(@PathVariable Long id){
+        return userService.getUserCompleteInfoById(id);
     }
 
     @GetMapping("/registration/whoami")

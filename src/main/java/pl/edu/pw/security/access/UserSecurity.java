@@ -8,6 +8,8 @@ import pl.edu.pw.app.domain.user.User;
 import pl.edu.pw.app.repository.ProjectRepository;
 import pl.edu.pw.app.repository.UserRepository;
 
+import java.util.Optional;
+
 @Component("userSecurity")
 public class UserSecurity {
 
@@ -28,5 +30,13 @@ public class UserSecurity {
 
     public boolean isLoggedInUser(Long id){
         return UtilityService.getLoggedUser().getId()==id;
+    }
+
+    public boolean doesExist(Long id){
+        Optional<User> u = userRepository.findById(id);
+        if(u==null){
+            return false;
+        }
+        return true;
     }
 }

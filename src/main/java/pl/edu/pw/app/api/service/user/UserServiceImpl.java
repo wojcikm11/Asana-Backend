@@ -9,13 +9,19 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import pl.edu.pw.app.api.dto.projectDTO.AddFavoriteProject;
+import pl.edu.pw.app.api.dto.projectDTO.ProjectBasicInfo;
 import pl.edu.pw.app.api.dto.projectDTO.ProjectCompleteInfo;
+import pl.edu.pw.app.api.dto.teamDTO.TeamBasicInfo;
 import pl.edu.pw.app.api.dto.userDTO.UserBasicInfo;
+import pl.edu.pw.app.api.dto.userDTO.UserCompleteInfo;
 import pl.edu.pw.app.api.dto.userDTO.UserUpdateRequest;
+import pl.edu.pw.app.api.service.team.TeamServiceImpl;
 import pl.edu.pw.app.api.service.user.account.ConfirmationTokenServiceImpl;
 import pl.edu.pw.app.api.service.common.UtilityService;
 import pl.edu.pw.app.api.service.project.ProjectServiceImpl;
 import pl.edu.pw.app.domain.project.Project;
+import pl.edu.pw.app.domain.project.ProjectMember;
+import pl.edu.pw.app.domain.team.TeamMember;
 import pl.edu.pw.app.repository.ProjectRepository;
 import pl.edu.pw.app.repository.UserRepository;
 import pl.edu.pw.app.domain.user.User;
@@ -154,6 +160,21 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         );
 
         return UserMapper.mapToBasicInfo(user);
+    }
+
+    @Override
+    public UserCompleteInfo getUserCompleteInfoById(Long id) {
+        User user = userRepository.getById(id);
+        List<ProjectBasicInfo> projects  = user.getProjects().stream().map(p->{
+           return  ProjectServiceImpl.ProjectMapper.map(p.getProject(),id);
+        }).collect(Collectors.toList());
+
+        List<TeamBasicInfo> teams = user.getTeams().stream().map(t->{
+            return TeamServiceImpl.TeamMapper.mapToBasic(t.getTeam(),t.getRole().toString()=="OWNER");
+        }).collect(Collectors.toList());
+
+        return new UserCompleteInfo(id,user.getEmail(),user.getName(),teams,projects);
+
     }
 
     public static class UserMapper {

@@ -24,6 +24,7 @@ import java.util.*;
 
 import static java.util.stream.Collectors.toList;
 import static pl.edu.pw.app.api.service.project.ProjectServiceImpl.ProjectMapper.map;
+import static pl.edu.pw.app.api.service.team.TeamServiceImpl.TeamMapper.mapToBasic;
 
 @Service
 @AllArgsConstructor
@@ -85,25 +86,35 @@ public class TeamServiceImpl implements TeamService {
     public void editTeam(Long id, TeamCreateRequest team) {
         Team t = teamRepository.findById(id).orElseThrow(()->
                 new IllegalArgumentException("Team with id "+id+" does not exist"));
-       Set<User> list = new HashSet<>();
-       t.setName(team.getName());
 
-       Set<Long> members = new HashSet(team.getMembers());
-       Set<Long> membersToAdd=new HashSet(team.getMembers());
-
-       t.getMembers().forEach(m->{
-           members.forEach(newMember->{
-               if(m.getUser().getId()==newMember){
-                   membersToAdd.remove(newMember);
-               }
-           });
-
-       });
-
-        for(Long u: membersToAdd){
-
-            t.addMember(userRepository.getById(u));
+        if(team.getMembers().size()==0){
+            teamRepository.deleteById(id);
+            return;
         }
+
+        t.setName(team.getName());
+
+        Map<Long, TeamMember.Role> newMembers=new HashMap();
+
+
+        t.getMembers().forEach(m->{
+            team.getMembers().forEach(newMember->{
+                if(m.getUser().getId()==newMember){
+                    if(m.getRole().toString()=="OWNER"){
+                        newMembers.put(newMember, TeamMember.Role.OWNER);
+                    }
+                }
+                newMembers.put(newMember, TeamMember.Role.MEMBER);
+            });
+
+        });
+
+        List<TeamMember> members = new ArrayList<>();
+              for(Map.Entry<Long, TeamMember.Role> m :newMembers.entrySet()){
+                  members.add(new TeamMember(userRepository.getById(m.getKey()),t,m.getValue()));
+        }
+
+         t.setMembers(members);
 
     }
 
@@ -193,14 +204,6 @@ public class TeamServiceImpl implements TeamService {
         teamRepository.save(team);
     }
 
-    private TeamBasicInfo mapToBasic(Team team,boolean isOwner){
-
-        return new TeamBasicInfo(
-                team.getId(),
-                team.getName(),
-               isOwner
-        );
-    }
 
     private Team map(TeamCreateRequest team) {
         return new Team(team.getName());
@@ -236,6 +239,16 @@ public class TeamServiceImpl implements TeamService {
                     teamMember.getUser().getName(),
                     teamMember.getUser().getEmail(),
                     teamMember.getRole()
+            );
+        }
+
+
+        public static TeamBasicInfo mapToBasic(Team team,boolean isOwner){
+
+            return new TeamBasicInfo(
+                    team.getId(),
+                    team.getName(),
+                    isOwner
             );
         }
     }

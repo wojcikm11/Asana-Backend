@@ -3,6 +3,7 @@ package pl.edu.pw.app.api.service.user;
 import pl.edu.pw.app.api.dto.projectDTO.AddFavoriteProject;
 import pl.edu.pw.app.api.dto.projectDTO.ProjectCompleteInfo;
 import pl.edu.pw.app.api.dto.userDTO.UserBasicInfo;
+import pl.edu.pw.app.api.dto.userDTO.UserCompleteInfo;
 import pl.edu.pw.app.api.dto.userDTO.UserUpdateRequest;
 import javassist.NotFoundException;
 import pl.edu.pw.app.domain.user.User;
@@ -33,4 +34,6 @@ public interface UserService {
     Set<ProjectCompleteInfo> getAllFavorites();
 
     UserBasicInfo getUserById(Long id);
+
+    UserCompleteInfo getUserCompleteInfoById(Long id);
 }
