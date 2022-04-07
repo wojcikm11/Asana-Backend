@@ -94,10 +94,11 @@ public class TeamServiceImpl implements TeamService {
 
         team.setName(createTeam.getName());
         List<Long> actualTeamMembersIds = createTeam.getMembers();
-        List<TeamMember> teamMembersCopy = new ArrayList<>(team.getMembers());
-        for (TeamMember teamMember : teamMembersCopy) {
-            if(currentTeamMemberNotInNewTeam(actualTeamMembersIds, teamMember)) {
-                team.removeMember(teamMember);
+        Iterator<TeamMember> teamMemberIterator = team.getMembers().iterator();
+        while (teamMemberIterator.hasNext()) {
+            TeamMember teamMember = teamMemberIterator.next();
+            if (currentTeamMemberNotInNewTeam(actualTeamMembersIds, teamMember)) {
+                teamMemberIterator.remove();
             } else {
                 actualTeamMembersIds.remove(teamMember.getId().getMemberId()); // teamMember jest już w teamie i ma w nim być, więc usuwamy go by nie dodać go w następnej pętli
             }
