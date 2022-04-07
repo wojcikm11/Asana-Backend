@@ -69,6 +69,21 @@ public class Team {
 //        teamMember.setTeam(null);
 //        teamMember.setUser(null);
     }
+    public void removeMember(User user, TeamMember teamMember) {
+        members.remove(teamMember);
+        user.getTeams().remove(teamMember);
+//        teamMember.setTeam(null);
+//        teamMember.setUser(null);
+    }
+
+    public void removeMember(User user, TeamMember.Role role) {
+        TeamMember teamMember = new TeamMember(user, this,role);
+        members.remove(teamMember);
+        user.getTeams().remove(teamMember);
+//        teamMember.setTeam(null);
+//        teamMember.setUser(null);
+    }
+
 
     public TeamMember getTeamMemberByUserId(Long userId) {
         return members.stream().filter(member -> member.getId().getMemberId().equals(userId)).findAny().orElse(null);

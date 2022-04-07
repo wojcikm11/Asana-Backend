@@ -95,26 +95,56 @@ public class TeamServiceImpl implements TeamService {
         t.setName(team.getName());
 
         Map<Long, TeamMember.Role> newMembers=new HashMap();
+        Set<Long> mm =new HashSet(team.getMembers());
 
+       team.getMembers().forEach(m->{
+           log.info("memeber id: {}",m);
+       });
 
-        t.getMembers().forEach(m->{
-            team.getMembers().forEach(newMember->{
-                if(m.getUser().getId()==newMember){
-                    if(m.getRole().toString()=="OWNER"){
-                        newMembers.put(newMember, TeamMember.Role.OWNER);
+        team.getMembers().forEach(m->{
+            t.getMembers().forEach(mem->{
+                if(m==mem.getUser().getId()){
+                    if(mem.getRole().toString()=="OWNER"){
+                        newMembers.put(m, TeamMember.Role.OWNER);
+                        mm.remove(m);
+                        log.info("Found owner: {}",mem.getUser().getEmail());
+                    }else{
+                        log.info("Found member: {}",mem.getUser().getEmail());
+                        newMembers.put(m, TeamMember.Role.MEMBER);
+                        mm.remove(m);
                     }
+
                 }
-                newMembers.put(newMember, TeamMember.Role.MEMBER);
+
             });
+
 
         });
 
-        List<TeamMember> members = new ArrayList<>();
-              for(Map.Entry<Long, TeamMember.Role> m :newMembers.entrySet()){
-                  members.add(new TeamMember(userRepository.getById(m.getKey()),t,m.getValue()));
+        for(Map.Entry<Long, TeamMember.Role> m :newMembers.entrySet()){
+          log.info("New set of members: "+userRepository.getById(m.getKey()).getEmail());
         }
+        for(Long i : mm)
+            log.info("New set of members: "+userRepository.getById(i).getEmail());
 
-         t.setMembers(members);
+
+        for(Map.Entry<Long, TeamMember.Role> m :newMembers.entrySet()){
+            log.info("Deleting member: "+userRepository.getById(m.getKey()).getEmail());
+            t.removeMember(userRepository.getById(m.getKey()),m.getValue());
+        }
+//        List<TeamMember> membersToDelete = new ArrayList(newMembers.values());
+//        membersToDelete.stream().forEach(m->{
+//            log.info("Deleting "+m.getUser().getEmail());
+//            t.removeMember(userRepository.getById(m.getUser().getId()),m);
+//        });
+
+
+//        List<TeamMember> members = new ArrayList<>();
+//              for(Map.Entry<Long, TeamMember.Role> m :newMembers.entrySet()){
+//                  members.add(new TeamMember(userRepository.getById(m.getKey()),t,m.getValue()));
+//        }
+
+//         t.setMembers(members);
 
     }
 
