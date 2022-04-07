@@ -83,69 +83,87 @@ public class TeamServiceImpl implements TeamService {
     }
 
     @Override
-    public void editTeam(Long id, TeamCreateRequest team) {
-        Team t = teamRepository.findById(id).orElseThrow(()->
+    public void editTeam(Long id, TeamCreateRequest createTeam) {
+        Team team = teamRepository.findById(id).orElseThrow(()->
                 new IllegalArgumentException("Team with id "+id+" does not exist"));
 
-        if(team.getMembers().size()==0){
+        if(createTeam.getMembers().size()==0){
             teamRepository.deleteById(id);
             return;
         }
 
-        t.setName(team.getName());
-
-        Map<Long, TeamMember.Role> newMembers=new HashMap();
-        Set<Long> mm =new HashSet(team.getMembers());
-
-       team.getMembers().forEach(m->{
-           log.info("memeber id: {}",m);
-       });
-
-        team.getMembers().forEach(m->{
-            t.getMembers().forEach(mem->{
-                if(m==mem.getUser().getId()){
-                    if(mem.getRole().toString()=="OWNER"){
-                        newMembers.put(m, TeamMember.Role.OWNER);
-                        mm.remove(m);
-                        log.info("Found owner: {}",mem.getUser().getEmail());
-                    }else{
-                        log.info("Found member: {}",mem.getUser().getEmail());
-                        newMembers.put(m, TeamMember.Role.MEMBER);
-                        mm.remove(m);
-                    }
-
-                }
-
-            });
-
-
-        });
-
-        for(Map.Entry<Long, TeamMember.Role> m :newMembers.entrySet()){
-          log.info("New set of members: "+userRepository.getById(m.getKey()).getEmail());
+        team.setName(createTeam.getName());
+        List<Long> actualTeamMembersIds = createTeam.getMembers();
+        List<TeamMember> teamMembersCopy = new ArrayList<>(team.getMembers());
+        for (TeamMember teamMember : teamMembersCopy) {
+            if(currentTeamMemberNotInNewTeam(actualTeamMembersIds, teamMember)) {
+                team.removeMember(teamMember);
+            } else {
+                actualTeamMembersIds.remove(teamMember.getId().getMemberId()); // teamMember jest już w teamie i ma w nim być, więc usuwamy go by nie dodać go w następnej pętli
+            }
         }
-        for(Long i : mm)
-            log.info("New set of members: "+userRepository.getById(i).getEmail());
-
-
-        for(Map.Entry<Long, TeamMember.Role> m :newMembers.entrySet()){
-            log.info("Deleting member: "+userRepository.getById(m.getKey()).getEmail());
-            t.removeMember(userRepository.getById(m.getKey()),m.getValue());
+        for (Long userId : actualTeamMembersIds) {
+            User userToAddToTeam = userRepository.findById(userId).orElseThrow();
+            team.addMember(userToAddToTeam);
         }
+
+
+//        Map<Long, TeamMember.Role> newMembers=new HashMap();
+//        Set<Long> mm =new HashSet(createTeam.getMembers());
+//
+//       createTeam.getMembers().forEach(m->{
+//           log.info("memeber id: {}",m);
+//       });
+//
+//        createTeam.getMembers().forEach(m->{
+//            team.getMembers().forEach(mem->{
+//                if(m==mem.getUser().getId()){
+//                    if(mem.getRole().toString()=="OWNER"){
+//                        newMembers.put(m, TeamMember.Role.OWNER);
+//                        mm.remove(m);
+//                        log.info("Found owner: {}",mem.getUser().getEmail());
+//                    }else{
+//                        log.info("Found member: {}",mem.getUser().getEmail());
+//                        newMembers.put(m, TeamMember.Role.MEMBER);
+//                        mm.remove(m);
+//                    }
+//
+//                }
+//
+//            });
+//
+//
+//        });
+//
+//        for(Map.Entry<Long, TeamMember.Role> m :newMembers.entrySet()){
+//          log.info("New set of members: "+userRepository.getById(m.getKey()).getEmail());
+//        }
+//        for(Long i : mm)
+//            log.info("New set of members: "+userRepository.getById(i).getEmail());
+//
+//
+//        for(Map.Entry<Long, TeamMember.Role> m :newMembers.entrySet()){
+//            log.info("Deleting member: "+userRepository.getById(m.getKey()).getEmail());
+//            team.removeMember(userRepository.getById(m.getKey()),m.getValue());
+//        }
 //        List<TeamMember> membersToDelete = new ArrayList(newMembers.values());
 //        membersToDelete.stream().forEach(m->{
 //            log.info("Deleting "+m.getUser().getEmail());
-//            t.removeMember(userRepository.getById(m.getUser().getId()),m);
+//            team.removeMember(userRepository.getById(m.getUser().getId()),m);
 //        });
 
 
 //        List<TeamMember> members = new ArrayList<>();
 //              for(Map.Entry<Long, TeamMember.Role> m :newMembers.entrySet()){
-//                  members.add(new TeamMember(userRepository.getById(m.getKey()),t,m.getValue()));
+//                  members.add(new TeamMember(userRepository.getById(m.getKey()),team,m.getValue()));
 //        }
 
-//         t.setMembers(members);
+//         team.setMembers(members);
 
+    }
+
+    private boolean currentTeamMemberNotInNewTeam(List<Long> actualTeamMembersIds, TeamMember teamMember) {
+        return !actualTeamMembersIds.contains(teamMember.getId().getMemberId());
     }
 
     public void deleteTeam(Long id) {

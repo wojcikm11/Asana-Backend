@@ -69,9 +69,9 @@ public class Team {
 //        teamMember.setTeam(null);
 //        teamMember.setUser(null);
     }
-    public void removeMember(User user, TeamMember teamMember) {
+    public void removeMember(TeamMember teamMember) {
         members.remove(teamMember);
-        user.getTeams().remove(teamMember);
+        teamMember.getUser().getTeams().remove(teamMember);
 //        teamMember.setTeam(null);
 //        teamMember.setUser(null);
     }
