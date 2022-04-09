@@ -28,4 +28,7 @@ public class TaskCreateRequest {
     @NotNull
     private String priority;
 
+
+    private Long assigneeId;
+
 }

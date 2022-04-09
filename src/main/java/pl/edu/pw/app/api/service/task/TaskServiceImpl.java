@@ -44,7 +44,9 @@ public class TaskServiceImpl implements TaskService {
     public void addTask(TaskCreateRequest task) {
         Task newTask = map(task);
         taskRepository.save(newTask);
-//      TODO spr. czy projekt istnieje
+       if(task.getAssigneeId()!=null)
+           newTask.addAssignee(projectRepository.getById(task.getProjectId()).getProjectMemberByUserId(task.getAssigneeId()));
+
     }
 
     @Override
@@ -70,11 +72,6 @@ public class TaskServiceImpl implements TaskService {
             throw new IllegalArgumentException(NO_TASK_FOUND);
         });
         Project project = task.getProject();
-        project.getMembers().forEach(m -> {
-            if (!m.getId().getMemberId().equals(addAssignee.getUserId())) {
-                throw new RuntimeException(NO_PROJECT_MEMBER_FOUND);
-            }
-        });
         ProjectMember taskAssignee = project.getProjectMemberByUserId(addAssignee.getUserId());
         task.addAssignee(taskAssignee);
         taskRepository.save(task);
@@ -149,6 +146,8 @@ public class TaskServiceImpl implements TaskService {
         task.setDeadLine(updatedTask.getDeadLine());
         task.setStatus(updatedTask.getStatus());
         task.setPriority(updatedTask.getPriority());
+        if(updatedTask.getAssigneeId()!=null)
+            task.addAssignee(task.getProject().getProjectMemberByUserId(updatedTask.getAssigneeId()));
         taskRepository.save(task);
     }
 

@@ -23,4 +23,6 @@ public class TaskUpdateRequest {
     private Priority priority;
 
     private Status status;
+
+    private Long assigneeId;
 }
