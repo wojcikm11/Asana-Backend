@@ -146,8 +146,13 @@ public class TaskServiceImpl implements TaskService {
         task.setDeadLine(updatedTask.getDeadLine());
         task.setStatus(updatedTask.getStatus());
         task.setPriority(updatedTask.getPriority());
-        if(updatedTask.getAssigneeId()!=null)
+        task.getTaskAssignees().stream().forEach(a->{
+            task.removeAssignee(a);
+        });
+        if(updatedTask.getAssigneeId()!=null) {
+            log.info("assignee: {}", (updatedTask.getAssigneeId()));
             task.addAssignee(task.getProject().getProjectMemberByUserId(updatedTask.getAssigneeId()));
+        }
         taskRepository.save(task);
     }
 
