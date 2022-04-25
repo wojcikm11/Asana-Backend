@@ -108,4 +108,11 @@ public class ProjectController {
     public List<ProjectMemberInfo> getAllProjectMembers(@PathVariable Long projectId){
         return projectService.getAllProjectMembers(projectId);
     }
+
+    @DeleteMapping("/{projectId}/leave/{userId}")
+    @PreAuthorize("@projectSecurity.isProjectMember(#projectId)")
+    public ResponseEntity<?> leaveProject(@PathVariable Long projectId, @PathVariable Long userId){
+        projectService.leaveProject(projectId, userId);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
 }

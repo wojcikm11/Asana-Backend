@@ -177,6 +177,14 @@ public class ProjectServiceImpl implements ProjectService {
         return project.getMembers().stream().map(ProjectMapper::map).collect(Collectors.toList());
     }
 
+    @Override
+    public void leaveProject(Long projectId, Long userId) {
+        Project project = projectRepository.getById(projectId);
+        ProjectMember projectMember = project.getProjectMemberByUserId(userId);
+        if (projectMember != null && projectMember.getRole().equals(ProjectMember.Role.MEMBER)) {
+            project.removeProjectMember(projectMember.getUser());
+        }
+    }
 
     private void removeTeamMembersFromProject(Project project, Team team) {
         for (TeamMember teamMember : team.getMembers()) {

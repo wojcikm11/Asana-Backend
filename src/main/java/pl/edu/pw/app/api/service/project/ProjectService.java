@@ -25,4 +25,5 @@ public interface ProjectService {
     Set<TeamCompleteInfo> getProjectTeamMembers(Long projectId);
     Set<ProjectMemberInfo> getProjectNonTeamMembers(Long projectId);
     List<ProjectMemberInfo> getAllProjectMembers(Long projectId);
+    void leaveProject(Long projectId, Long userId);
 }
