@@ -216,11 +216,33 @@ public class ProjectServiceImpl implements ProjectService {
         }
 
         public static ProjectBasicInfo map(Project project,Long id){
+            ProjectMember projectMember = project.getProjectMemberByUserId(id);
+            boolean isOwner = false;
+            Long teamId = null;
+            String teamName = null;
+            Set<Team> teams = project.getTeams();
+
+            if(teams.size() > 0) {
+                Team mainTeam = teams.stream().findFirst().orElse(null);;
+                if(mainTeam != null)
+                {
+                    teamId = mainTeam.getId();
+                    teamName = mainTeam.getName();
+                }
+            }
+
+            if(projectMember != null)
+            {
+                isOwner = projectMember.getRole().toString()=="OWNER";
+            }
+
             return new ProjectBasicInfo(
                     Math.toIntExact(project.getId()),
                     project.getName(),
                     project.getDescription(),
-                    project.getProjectMemberByUserId(id).getRole().toString()=="OWNER"
+                    isOwner,
+                    teamId,
+                    teamName
             );
         }
 

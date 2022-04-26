@@ -24,5 +24,7 @@ public class ProjectBasicInfo {
     @NotNull
     private boolean isOwner;
 
+    private Long teamId;
 
+    private String teamName;
 }
