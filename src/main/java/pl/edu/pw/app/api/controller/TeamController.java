@@ -88,4 +88,11 @@ public class TeamController {
         teamService.editTeam(id,team);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
+    @DeleteMapping("/{teamId}/leave/{userId}")
+    @PreAuthorize("@teamSecurity.isTeamMember(#teamId)")
+    public ResponseEntity<?> leaveTeam(@PathVariable Long teamId, @PathVariable Long userId){
+        teamService.leaveTeam(teamId, userId);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
 }

@@ -19,6 +19,7 @@ public interface TeamService {
     TeamCompleteInfo getTeam(Long teamId);
     List<TeamCompleteInfo> getAll();
     void deleteMember(DeleteTeamMemberRequest deleteTeamMember);
+    void leaveTeam(Long teamId, Long userId);
     List<ProjectCompleteInfo> getTeamProjects(Long id);
     void editTeam(Long id, TeamCreateRequest team);
 }
