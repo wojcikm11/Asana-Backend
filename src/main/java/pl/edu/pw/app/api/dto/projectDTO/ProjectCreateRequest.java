@@ -1,9 +1,12 @@
 package pl.edu.pw.app.api.dto.projectDTO;
 
 import lombok.*;
+import pl.edu.pw.app.api.dto.teamDTO.AddTeamToProject;
+import pl.edu.pw.app.api.dto.teamMemberDTO.AddMember;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.List;
 
 @Data
 @Setter
@@ -26,6 +29,10 @@ public class ProjectCreateRequest {
         this.name = name;
         this.category = category;
     }
+
+    private List<AddTeamToProject> projectTeamsToAdd;
+
+    private List<AddMember> membersToAdd;
 
     public ProjectCreateRequest(String name) {
         this.name=name;

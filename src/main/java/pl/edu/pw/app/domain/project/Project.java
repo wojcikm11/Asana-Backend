@@ -83,11 +83,15 @@ public class Project {
     }
 
     public void addProjectMember(User user) {
-        if (user != null) {
+        if (user != null && !getProjectUsers().contains(user)) {
             ProjectMember projectMember = new ProjectMember(user, this, ProjectMember.Role.MEMBER);
             members.add(projectMember);
             user.getProjects().add(projectMember);
         }
+    }
+
+    private List<User> getProjectUsers() {
+        return members.stream().map(ProjectMember::getUser).toList();
     }
 
     public void removeProjectMember(User user) {
@@ -113,6 +117,9 @@ public class Project {
         if (team != null) {
             teams.add(team);
             team.getProjects().add(this);
+            for (TeamMember member : team.getMembers()) {
+                addProjectMember(member.getUser());
+            }
         }
     }
 

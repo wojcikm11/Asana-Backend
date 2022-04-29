@@ -12,8 +12,6 @@ import pl.edu.pw.app.api.dto.teamMemberDTO.DeleteTeamMemberRequest;
 import pl.edu.pw.app.api.dto.teamMemberDTO.TeamMemberBasicInfo;
 import pl.edu.pw.app.api.service.common.UtilityService;
 import pl.edu.pw.app.api.service.project.ProjectServiceImpl;
-import pl.edu.pw.app.domain.project.Project;
-import pl.edu.pw.app.domain.project.ProjectMember;
 import pl.edu.pw.app.domain.team.Team;
 import pl.edu.pw.app.domain.team.TeamMember;
 import pl.edu.pw.app.domain.user.User;

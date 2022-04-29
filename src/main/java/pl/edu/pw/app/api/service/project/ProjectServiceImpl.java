@@ -4,14 +4,15 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.edu.pw.app.api.dto.projectDTO.*;
+import pl.edu.pw.app.api.dto.teamDTO.AddTeamToProject;
 import pl.edu.pw.app.api.dto.teamDTO.TeamCompleteInfo;
+import pl.edu.pw.app.api.dto.teamMemberDTO.AddMember;
 import pl.edu.pw.app.api.dto.teamMemberDTO.TeamMemberBasicInfo;
 import pl.edu.pw.app.api.dto.userDTO.UserBasicInfo;
 import pl.edu.pw.app.api.service.team.TeamServiceImpl;
 import pl.edu.pw.app.api.service.common.UtilityService;
 import pl.edu.pw.app.domain.project.Project;
 import pl.edu.pw.app.domain.project.ProjectMember;
-import pl.edu.pw.app.domain.task.Task;
 import pl.edu.pw.app.domain.team.Team;
 import pl.edu.pw.app.domain.team.TeamMember;
 import pl.edu.pw.app.domain.user.User;
@@ -43,13 +44,31 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public ProjectCreateRequest create(ProjectCreateRequest project) {
+    public ProjectCreateRequest create(ProjectCreateRequest createProject) {
         User user = userRepository.findByEmail(UtilityService.getCurrentUser()).orElseThrow(()->{
             throw new IllegalArgumentException("User with given id does not exist");
         });
-        Long createdProjectId = projectRepository.save(map(project, user)).getId();
-        project.setId(createdProjectId);
-        return project;
+
+        System.out.println(user);
+
+        Set<Team> teamsToAdd = new HashSet<>();
+        if (createProject.getProjectTeamsToAdd() != null) {
+            for (AddTeamToProject projectTeamToAdd : createProject.getProjectTeamsToAdd()) {
+                Team team = teamRepository.findById(projectTeamToAdd.getTeamId()).orElseThrow();
+                teamsToAdd.add(team);
+            }
+        }
+
+        Set<User> usersToAdd = new HashSet<>();
+        if (createProject.getMembersToAdd() != null) {
+            for (AddMember memberToAdd : createProject.getMembersToAdd()) {
+                User userToAdd = userRepository.findById(memberToAdd.getId()).orElseThrow();
+                usersToAdd.add(userToAdd);
+            }
+        }
+        Long createdProjectId = projectRepository.save(map(createProject, user, teamsToAdd, usersToAdd)).getId();
+        createProject.setId(createdProjectId);
+        return createProject;
     }
 
     @Override
@@ -207,11 +226,11 @@ public class ProjectServiceImpl implements ProjectService {
     public static class ProjectMapper {
         public static ProjectCompleteInfo map(Project project) {
             return new ProjectCompleteInfo(
-                    project.getId(),
-                    project.getName(),
-                    project.getCategory(),
-                    project.getDescription(),
-                    project.getMembers().stream().map(ProjectMapper::map).toList()
+                project.getId(),
+                project.getName(),
+                project.getCategory(),
+                project.getDescription(),
+                project.getMembers().stream().map(ProjectMapper::map).toList()
             );
         }
 
@@ -253,13 +272,30 @@ public class ProjectServiceImpl implements ProjectService {
             return new ProjectMemberInfo(userBasicInfo, projectMember.getRole().name());
         }
 
-        public static Project map(ProjectCreateRequest project, User owner) {
-            return new Project(
+        public static Project map(ProjectCreateRequest project, User owner, Set<Team> teamsToAdd, Set<User> usersToAdd) {
+            Project createdProject = new Project(
                     owner,
                     project.getName(),
                     project.getCategory(),
                     project.getDescription()
             );
+
+            if (teamsToAdd != null) {
+                for (Team team : teamsToAdd) {
+                    createdProject.addTeam(team);
+                }
+            }
+
+            if (usersToAdd != null) {
+                for (User user : usersToAdd) {
+                    createdProject.addProjectMember(user);
+                }
+            }
+
+            System.out.println(createdProject.getOwner());
+            System.out.println(createdProject.getTeams());
+
+            return createdProject;
         }
 
         public static TeamCompleteInfo map(Team team) {
