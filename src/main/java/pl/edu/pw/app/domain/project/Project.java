@@ -102,6 +102,13 @@ public class Project {
         }
     }
 
+    public void removeProjectMember(ProjectMember projectMember) {
+        if (projectMember != null) {
+            members.remove(projectMember);
+            projectMember.getProject().getMembers().remove(projectMember);
+        }
+    }
+
     public List<TeamMember> getTeamMembersByTeamId(Long teamId) {
 //        teams.stream().filter(team -> )
         return null;

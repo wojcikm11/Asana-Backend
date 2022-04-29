@@ -62,7 +62,7 @@ public class ProjectServiceImpl implements ProjectService {
         Set<User> usersToAdd = new HashSet<>();
         if (createProject.getMembersToAdd() != null) {
             for (AddMember memberToAdd : createProject.getMembersToAdd()) {
-                User userToAdd = userRepository.findById(memberToAdd.getId()).orElseThrow();
+                User userToAdd = userRepository.findById(memberToAdd.getMemberId()).orElseThrow();
                 usersToAdd.add(userToAdd);
             }
         }
@@ -105,13 +105,16 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public void delete(Long id) {
         Project project = projectRepository.findById(id).orElseThrow();
-        projectRepository.deleteById(id);
+
         for (User user : project.getUsersFavouritePosts()) {
             user.removeFromFavorites(project);
         }
-        for (Team team : project.getTeams()) {
+
+        List<Team> teamsToRemove = new ArrayList<>(project.getTeams());
+        for (Team team : teamsToRemove) {
             team.removeProject(project);
         }
+        projectRepository.deleteById(id);
     }
 
     @Override

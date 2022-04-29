@@ -91,4 +91,11 @@ public class ProjectMember {
             task.getTaskAssignees().remove(this);
         }
     }
+
+    public void removeProject(Project project) {
+        if (project != null) {
+            project.getMembers().remove(this);
+            setProject(null);
+        }
+    }
 }
