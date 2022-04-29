@@ -49,12 +49,13 @@ public class ProjectServiceImpl implements ProjectService {
             throw new IllegalArgumentException("User with given id does not exist");
         });
 
-        System.out.println(user);
+
 
         Set<Team> teamsToAdd = new HashSet<>();
         if (createProject.getProjectTeamsToAdd() != null) {
             for (AddTeamToProject projectTeamToAdd : createProject.getProjectTeamsToAdd()) {
                 Team team = teamRepository.findById(projectTeamToAdd.getTeamId()).orElseThrow();
+                System.out.println("Dodaje team id " + team.getId());
                 teamsToAdd.add(team);
             }
         }
@@ -96,10 +97,71 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public void update(Long projectId, ProjectUpdateRequest projectUpdate) {
         Project project = projectRepository.findById(projectId).orElseThrow();
+
+        List<Long> actualMembersIds = projectUpdate.getMembersToAdd().stream().map(AddMember::getMemberId).collect(Collectors.toList());
+        List<Long> actualTeamsIds = projectUpdate.getProjectTeamsToAdd().stream().map(AddTeamToProject::getTeamId).collect(Collectors.toList());
+
+        Iterator<ProjectMember> memberIterator = project.getMembers().iterator();
+        while (memberIterator.hasNext()) {
+            ProjectMember projectMember = memberIterator.next();
+            if (currentProjectMemberNotInNewMembers(actualMembersIds, projectMember) &&
+                    projectMember.getUser().getTeams().stream().map(teamMember -> teamMember.getTeam().getId()).noneMatch(actualTeamsIds::contains)) {
+                memberIterator.remove();
+            } else {
+                actualMembersIds.remove(projectMember.getId().getMemberId());
+            }
+        }
+
+        Set<Team> teamsCopy = new HashSet<>(project.getTeams());
+        for (Team team : teamsCopy) {
+            if (currentTeamNotInNewTeams(actualTeamsIds, team)) {
+                project.detachTeam(team);
+            }
+        }
+
+//        Iterator<Team> teamIterator = project.getTeams().iterator();
+//        while (teamIterator.hasNext()) {
+//            Team team = teamIterator.next();
+//            if (currentTeamNotInNewTeams(actualTeamsIds, team)) {
+//                teamIterator.remove();
+//            }
+//        }
+
+        System.out.println(actualTeamsIds);
+        project.getTeams().forEach(team -> System.out.println(team.getId()));
+//        project.getMembers().forEach(member -> System.out.println(member.getUser().getId()));
+
+        for (Long teamId : actualTeamsIds) {
+            Team teamToAddToProject = teamRepository.findById(teamId).orElseThrow();
+            System.out.println("Dodaje team" + teamToAddToProject.getId());
+            project.addTeam(teamToAddToProject);
+        }
+
+        for (Long memberId : actualMembersIds) {
+            User userToAdd = userRepository.findById(memberId).orElseThrow();
+            project.addProjectMember(userToAdd);
+        }
+
+//        for (AddTeamToProject projectTeam : projectUpdate.getProjectTeamsToAdd()) {
+//            Team team = teamRepository.findById(projectTeam.getTeamId()).orElseThrow();
+//            project.addTeam(team);
+//        }
+//        for (AddMember member : projectUpdate.getMembersToAdd()) {
+//            User user = userRepository.findById(member.getMemberId()).orElseThrow();
+//            project.addProjectMember(user);
+//        }
+
         project.setName(projectUpdate.getName());
         project.setCategory(projectUpdate.getCategory());
         project.setDescription(projectUpdate.getDescription());
-        projectRepository.save(project);
+    }
+
+    private boolean currentProjectMemberNotInNewMembers(List<Long> actualMembersIds, ProjectMember projectMember) {
+        return !actualMembersIds.contains(projectMember.getId().getMemberId());
+    }
+
+    private boolean currentTeamNotInNewTeams(List<Long> actualTeamsIds, Team team) {
+        return !actualTeamsIds.contains(team.getId());
     }
 
     @Override

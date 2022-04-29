@@ -84,10 +84,22 @@ public class Project {
 
     public void addProjectMember(User user) {
         if (user != null && !getProjectUsers().contains(user)) {
+            System.out.println("Dodaje użytkownika o id " + user.getId());
             ProjectMember projectMember = new ProjectMember(user, this, ProjectMember.Role.MEMBER);
             members.add(projectMember);
             user.getProjects().add(projectMember);
         }
+    }
+
+    public void addProjectMember(ProjectMember projectMember) {
+        if (projectMember != null && !members.contains(projectMember)) {
+            members.add(projectMember);
+        }
+    }
+
+    public void addOwner(ProjectMember projectOwner) {
+        this.members.add(projectOwner);
+        projectOwner.setProject(this);
     }
 
     private List<User> getProjectUsers() {
@@ -122,11 +134,20 @@ public class Project {
 
     public void addTeam(Team team) {
         if (team != null) {
-            teams.add(team);
-            team.getProjects().add(this);
+            if (!teams.contains(team)) {
+                teams.add(team);
+                team.getProjects().add(this);
+            }
             for (TeamMember member : team.getMembers()) {
                 addProjectMember(member.getUser());
             }
+        }
+    }
+
+    public void detachTeam(Team team) {
+        if (team != null) {
+            teams.remove(team);
+            team.getProjects().remove(this);
         }
     }
 
@@ -134,6 +155,9 @@ public class Project {
         if (team != null) {
             teams.remove(team);
             team.getProjects().remove(this);
+            for (TeamMember member : team.getMembers()) {
+                removeProjectMember(member.getUser());
+            }
         }
     }
 }
