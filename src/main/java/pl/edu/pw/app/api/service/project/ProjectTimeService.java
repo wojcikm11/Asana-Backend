@@ -13,4 +13,5 @@ public interface ProjectTimeService {
     void addTimeToTask(AddTaskTimeForProjectMember addTime);
     ProjectTasksTime getProjectTasksTime(Long projectId);
     List<ProjectTasksTime> getAllProjectTasksTime();
+    List<ProjectTasksTime> getProjectAllTasksTime(Long projectId);
 }

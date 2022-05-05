@@ -17,6 +17,7 @@ import pl.edu.pw.app.repository.UserRepository;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
+import java.util.Dictionary;
 import java.util.List;
 
 @Service
@@ -49,6 +50,19 @@ public class ProjectTimeServiceImpl implements ProjectTimeService {
         ProjectMember projectMember = project.getProjectMemberByUserId(UtilityService.getLoggedUser().getId());
 
         return findTimeOnProject(projectMember);
+    }
+
+    @Override
+    public List<ProjectTasksTime> getProjectAllTasksTime(Long projectId) {
+        Project project = projectRepository.findById(projectId).orElseThrow();
+        List<ProjectMember> members = project.getMembers();
+        List<ProjectTasksTime> tasksTimes = new ArrayList<>();
+        for(ProjectMember member : members) {
+            ProjectTasksTime timeOnProject = findTimeOnProject(member);
+            timeOnProject.setProjectName(member.getUser().getName());
+            tasksTimes.add(timeOnProject);
+        }
+        return tasksTimes;
     }
 
     @Override

@@ -39,6 +39,12 @@ public class ProjectTimeController {
         return projectTimeService.getProjectTasksTime(projectId);
     }
 
+    @GetMapping("/{projectId}/owner/time")
+    @PreAuthorize("@projectSecurity.isProjectOwner(#projectId)")
+    public List<ProjectTasksTime> getProjectAllTasksTime(@PathVariable Long projectId) {
+        return projectTimeService.getProjectAllTasksTime(projectId);
+    }
+
     @GetMapping("/all/time")
     public List<ProjectTasksTime> getAllUserProjectTasksTime() {
         return projectTimeService.getAllProjectTasksTime();
