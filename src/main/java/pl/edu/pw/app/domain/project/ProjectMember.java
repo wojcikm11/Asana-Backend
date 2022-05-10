@@ -41,7 +41,7 @@ public class ProjectMember {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @ManyToMany(mappedBy = "taskAssignees")
+    @ManyToMany(mappedBy = "taskAssignees", cascade = CascadeType.ALL)
     private Set<Task> tasks = new HashSet<>();
 
     @OneToMany(
@@ -52,7 +52,7 @@ public class ProjectMember {
     )
     private List<ProjectMemberTaskTime> taskTimes = new ArrayList<>();
 
-    @ManyToMany(mappedBy = "subtaskAssignees")
+    @ManyToMany(mappedBy = "subtaskAssignees", cascade = CascadeType.ALL)
     private Set<Subtask> subtasks = new HashSet<>();
 
     @OneToMany(

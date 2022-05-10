@@ -98,6 +98,11 @@ public class ProjectServiceImpl implements ProjectService {
     public void update(Long projectId, ProjectUpdateRequest projectUpdate) {
         Project project = projectRepository.findById(projectId).orElseThrow();
 
+        System.out.println(projectUpdate.getProjectTeamsToAdd().isEmpty());
+        System.out.println(projectUpdate.getMembersToAdd().isEmpty());
+        if(projectUpdate.getProjectTeamsToAdd().isEmpty()&&projectUpdate.getMembersToAdd().isEmpty())
+            projectRepository.delete(project);
+
         List<Long> actualMembersIds = projectUpdate.getMembersToAdd().stream().map(AddMember::getMemberId).collect(Collectors.toList());
         List<Long> actualTeamsIds = projectUpdate.getProjectTeamsToAdd().stream().map(AddTeamToProject::getTeamId).collect(Collectors.toList());
 
@@ -154,6 +159,10 @@ public class ProjectServiceImpl implements ProjectService {
         project.setName(projectUpdate.getName());
         project.setCategory(projectUpdate.getCategory());
         project.setDescription(projectUpdate.getDescription());
+
+        if(project.getMembers().size()==1){
+            project.getMembers().get(0).setRole(ProjectMember.Role.OWNER);
+        }
     }
 
     private boolean currentProjectMemberNotInNewMembers(List<Long> actualMembersIds, ProjectMember projectMember) {
