@@ -83,7 +83,7 @@ public class ProjectController {
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("@projectSecurity.isProjectOwner(#id)")
+    @PreAuthorize("@projectSecurity.isProjectOwner(#id) and @projectSecurity.isTeamMember(#projectUpdateRequest.projectTeamsToAdd)")
     public ResponseEntity<?> updateProject(@Valid @RequestBody ProjectUpdateRequest projectUpdateRequest, @PathVariable Long id) {
         projectService.update(id, projectUpdateRequest);
         return new ResponseEntity<>(HttpStatus.OK);

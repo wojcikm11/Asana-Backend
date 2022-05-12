@@ -100,7 +100,7 @@ public class ProjectServiceImpl implements ProjectService {
 
         System.out.println(projectUpdate.getProjectTeamsToAdd().isEmpty());
         System.out.println(projectUpdate.getMembersToAdd().isEmpty());
-        if(projectUpdate.getProjectTeamsToAdd().isEmpty()&&projectUpdate.getMembersToAdd().isEmpty())
+        if (projectUpdate.getProjectTeamsToAdd().isEmpty() && projectUpdate.getMembersToAdd().isEmpty())
             projectRepository.delete(project);
 
         List<Long> actualMembersIds = projectUpdate.getMembersToAdd().stream().map(AddMember::getMemberId).collect(Collectors.toList());
@@ -124,21 +124,8 @@ public class ProjectServiceImpl implements ProjectService {
             }
         }
 
-//        Iterator<Team> teamIterator = project.getTeams().iterator();
-//        while (teamIterator.hasNext()) {
-//            Team team = teamIterator.next();
-//            if (currentTeamNotInNewTeams(actualTeamsIds, team)) {
-//                teamIterator.remove();
-//            }
-//        }
-
-        System.out.println(actualTeamsIds);
-        project.getTeams().forEach(team -> System.out.println(team.getId()));
-//        project.getMembers().forEach(member -> System.out.println(member.getUser().getId()));
-
         for (Long teamId : actualTeamsIds) {
             Team teamToAddToProject = teamRepository.findById(teamId).orElseThrow();
-            System.out.println("Dodaje team" + teamToAddToProject.getId());
             project.addTeam(teamToAddToProject);
         }
 
@@ -147,20 +134,11 @@ public class ProjectServiceImpl implements ProjectService {
             project.addProjectMember(userToAdd);
         }
 
-//        for (AddTeamToProject projectTeam : projectUpdate.getProjectTeamsToAdd()) {
-//            Team team = teamRepository.findById(projectTeam.getTeamId()).orElseThrow();
-//            project.addTeam(team);
-//        }
-//        for (AddMember member : projectUpdate.getMembersToAdd()) {
-//            User user = userRepository.findById(member.getMemberId()).orElseThrow();
-//            project.addProjectMember(user);
-//        }
-
         project.setName(projectUpdate.getName());
         project.setCategory(projectUpdate.getCategory());
         project.setDescription(projectUpdate.getDescription());
 
-        if(project.getMembers().size()==1){
+        if (project.getMembers().size() == 1){
             project.getMembers().get(0).setRole(ProjectMember.Role.OWNER);
         }
     }
